@@ -1,44 +1,46 @@
 const version = "1.0";
 
 import express from 'express';
-// import * as databaseCMDS from './sql.mjs';
+import * as databaseCMDS from './sql.mjs';
 import bodyParser from 'body-parser';
 
 const app = express();
 app.use(express.static('main'));
 app.use(bodyParser.json());
 
-// async function getPets(req, res) {
-//   const pets = await safe.listPets();
-//   res.send(pets);
-// }
+function asyncWrap(f) {
+    return (req, res, next) => {
+        Promise.resolve(f(req,res,next))
+      .catch((e) => next(e || new Error()));
+  };
+}
 
-// async function getPet(req, res) {
-//   const pets = await safe.getPet(req.params.id);
-//   res.send(pets);
-// }
+async function getAllUsers(req, res){
+    const allUsers = await databaseCMDS.listUsers();
+    res.send(allUsers);
+    console.log(allUsers);
+};
 
-// async function postPet(req) {
-//   const data = req.body;
-//   await console.log('Received pet data:', data);
-//   safe.addPet(data);
-// }
+async function sendNewUser(req){
+    const data = req.body;
+    await console.log("Recieved User Data: ", data);
+    databaseCMDS.createUser(data);
+}
 
-// function asyncWrap(f) {
-//   return (req, res, next) => {
-//     Promise.resolve(f(req, res, next))
-//       .catch((e) => next(e || new Error()));
-//   };
-// }
+async function login(req, res){
+    const data = req.body;
+    const user = await databaseCMDS.getUser(data.username, data.password);
+    if (user) {
+        res.status(200).send('Login successful');
+    } else {
+        res.status(401).send('Login failed');
+    }
+}
+app.get('/allUsers', asyncWrap(getAllUsers));
+app.post('/signup', asyncWrap(sendNewUser));
+app.post('/login', asyncWrap(login));
 
-// app.get('/pets', getPets);
-// app.post('/pets', postPet);
-// app.get('/pets/:id', asyncWrap(getPet));
 
 app.listen(8080);
 
-console.log(`
-Database Initialized
-Connected
-App running om Version: ${version}
-`);
+console.log(`App running om Version: ${version}`);
