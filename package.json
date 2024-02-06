@@ -1,0 +1,18 @@
+{
+    "name": "Web Programming - HIIT Web App",
+    "version": "1.0.0",
+    "description": "High Intensity Interval Tranining Web Application for Second year Web Programming.",
+    "type": "module",
+    "main": "server.mjs",
+    "scripts": {
+        "start": "node server.mjs"
+    },
+    "keywords": [
+        "HIIT"
+    ],
+    "author": "UP2115783 - jibzdev",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+      }
+  }
