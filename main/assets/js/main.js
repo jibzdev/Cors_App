@@ -1,13 +1,5 @@
 import { notify } from './notification.mjs';
-
-async function homepage() {
-    const main = document.querySelector("main");
-    main.innerHTML = `
-        <h1>Welcome to the Homepage</h1>
-    `;
-
-    history.pushState({ page: "homepage" }, "homepage", "homepage");
-}
+import { homepage } from './home.mjs';
 
 async function signup() {
     const main = document.querySelector("main");
@@ -40,8 +32,8 @@ async function signup() {
         <p id="sText">Already have an account?<br><button id="login">LOGIN</button></p>
     </div>`;
     let sText = document.querySelector("#sText");
-    sText.style.top = "95%";
-    sText.style.transform = "translateY(-95%)";
+    sText.style.top = "105%";
+    sText.style.transform = "translateY(-105%)";
     const loginButton = main.querySelector("#login");
     loginButton.addEventListener("click", login);
 
@@ -103,15 +95,15 @@ async function login() {
         <a href="index"><img src="assets/img/logo1.png" alt="Cors App Logo 1" style="width: 7.5vh;"></a>
         <div class="input-with-icon">
         <i class="fas fa-user"></i>
-        <input type="text" placeholder="Username" id="username">
+        <input type="text" placeholder="Username" id="username" required>
         </div>
         <div class="input-with-icon">
         <i class="fas fa-lock"></i>
-        <input type="password" placeholder="Password" id="password">
+        <input type="password" placeholder="Password" id="password" required>
         </div>
             <button id="confirmLogin" class="buttonStyle2" style="margin-top: 15px;">Login</button>
         </div>
-        <p id="sText">Dont have an Account?<br><button id="signup">REGISTER</button></p>
+        <p id="sText">Don't have an Account?<br><button id="signup">REGISTER</button></p>
         </div>
         `;
         const signupButton = main.querySelector("#signup");
@@ -128,9 +120,17 @@ async function login() {
 
         const confirmLoginButton = main.querySelector("#confirmLogin");
         confirmLoginButton.addEventListener("click", async () => {
+            const username = main.querySelector("#username").value.trim();
+            const password = main.querySelector("#password").value.trim();
+
+            if (!username || !password) {
+                notify("All fields Required", "red");
+                return;
+            }
+
             const payload = {
-                username: main.querySelector("#username").value,
-                password: main.querySelector("#password").value,
+                username,
+                password,
             };
     
             const response = await fetch('/login', {
@@ -140,9 +140,11 @@ async function login() {
             });
     
             if (response.ok) {
-                homepage();
+                localStorage.setItem("userLoggedIn","true");
+                localStorage.setItem("userName",payload.username);
+                homepage(payload.username);
             } else {
-                console.log("Login failed");
+                notify("Incorrect Details.", "red");
             }
         });
     history.pushState({page: "login"}, "login", "login");
@@ -172,12 +174,21 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const loginButton = document.querySelector("#begin");
-    if (loginButton) {
-        loginButton.addEventListener("click", login);
+    const check = localStorage.getItem("userLoggedIn");
+    const name = localStorage.getItem("userName");
+
+    if (check  === 'true'){
+        homepage(name);
     }
-    const signupButton = document.querySelector("#signup");
-    if (signupButton) {
-        signupButton.addEventListener("click", signup);
+    else{
+        const loginButton = document.querySelector("#begin");
+        if (loginButton) {
+            loginButton.addEventListener("click", login);
+        }
+        const signupButton = document.querySelector("#signup");
+        if (signupButton) {
+            signupButton.addEventListener("click", signup);
+        }
     }
+
 });

@@ -10,6 +10,7 @@
 }
 body{
     background-color: #121212;
+    color: white;
 }
 main{
     position: absolute;
@@ -42,10 +43,10 @@ main h1{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #121212c9;
     width: 35vh;
     height: 50vh;
     border-radius: 10px;
+    color: white;
 }
 
 .input-container {
@@ -70,6 +71,16 @@ main h1{
     color: white;
     background: none;
     border-bottom: 1px solid white;
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: white;
+        opacity: 1; /* Firefox */
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: white;
+    }
+    ::-ms-input-placeholder { /* Microsoft Edge */
+        color: white;
+    }
 }
 
 .input-with-icon {
@@ -79,7 +90,7 @@ main h1{
 
 .input-with-icon i {
     margin-right: 10px;
-    color: #555;
+    color: white;
 }
 
 .input-container button{
@@ -120,8 +131,35 @@ main h1{
     text-transform: uppercase;
 }
 
-
 .notification.slide-in {
     right: 10px;
 }
 
+
+#userArea {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 50px;
+}
+
+#userArea img {
+margin-right: 10px;
+}
+
+#selection{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#workoutOptions{
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%,-75%);
+    text-align: center;
+}
