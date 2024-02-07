@@ -1,12 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit');
+
 *{
     margin: 0;
     padding: 0;
 }
 
+::-webkit-scrollbar{
+    display: none;
+}
+body{
+    background-color: #121212;
+}
 main{
     position: absolute;
     text-align: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+    color: white;
+    font-family: "Kanit";
 }
+
+main h1{
+    font-size: 5vh;
+}
+
+
+#bgVideo
+{
+	height: 99.7vh;
+  object-fit: cover;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: -9999;
+  filter: blur(7px);
+}
+
+#inputCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #121212c9;
+    width: 35vh;
+    height: 50vh;
+    border-radius: 10px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#sText {
+    position: absolute;
+    top: 85%;
+    transform: translateY(-85%);
+}
+
+.input-container input{
+    outline: none;
+    border: none;
+    height: 2.7vh;
+    width: 22vh;
+    font-family: "Kanit";
+    color: white;
+    background: none;
+    border-bottom: 1px solid white;
+}
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    margin-right: 10px;
+    color: #555;
+}
+
+.input-container button{
+    background: none;
+    color: white;
+}
+
+#signup,#login{
+    border: none;
+    background: none;
+    color: rgb(9, 97, 168);
+    font-family: "Kanit";
+    transition: .2s ease-in-out all;
+    cursor: pointer;
+}
+
+#signup:hover, #login:hover{
+    color: rgb(64, 110, 148);
+    text-decoration: underline;
+}
+
+.notification{
+    position: absolute;
+    margin-top: 30px;
+    margin-right: 10px;
+    top: 0;
+    right: -300px;
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.5s ease;
+    color: white;
+    font-family: "Kanit";
+    text-transform: uppercase;
+}
+
+
+.notification.slide-in {
+    right: 10px;
+}
+

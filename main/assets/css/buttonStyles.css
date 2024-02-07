@@ -1,0 +1,51 @@
+.fade {
+    animation: fade-in 1s;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+.buttonStyle1{
+    font-family: "Kanit";
+    font-size: 1.5vh;
+    border: none;
+    outline: 1px white solid;
+    padding: 15px;
+    width: 100px;
+    border-radius: 5px;
+    background: none;
+    color: white;
+    cursor: pointer;
+    transition: .2s ease-in-out all;
+}
+
+.buttonStyle1:hover{
+    background: white;
+    transform: translateY(-10px);
+    color: black;
+}
+
+.buttonStyle2{
+  font-family: "Kanit";
+  font-size: 1.5vh;
+  border: none;
+  outline: 1px white solid;
+  padding: 5px;
+  width: 75px;
+  border-radius: 5px;
+  background: none;
+  color: white;
+  cursor: pointer;
+  transition: .2s ease-in-out all;
+}
+
+.buttonStyle2:hover{
+  background: white;
+  color: black;
+}
