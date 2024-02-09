@@ -31,6 +31,18 @@ async function login(req, res){
     const data = req.body;
     const user = await databaseCMDS.getUser(data.username, data.password);
     if (user) {
+        console.log(data.username, "Logged in at: ", new Date().toLocaleString());
+        res.status(200).send('Login successful');
+    } else {
+        res.status(401).send('Login failed');
+    }
+}
+
+async function checkLogin(req,res) {
+    const data = req.body;
+    const user = await databaseCMDS.checkUser(data.username);
+    if (user) {
+        console.log(data.username, "Logged in at: ", new Date().toLocaleString());
         res.status(200).send('Login successful');
     } else {
         res.status(401).send('Login failed');
@@ -39,6 +51,7 @@ async function login(req, res){
 app.get('/allUsers', asyncWrap(getAllUsers));
 app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
+app.post('/login', asyncWrap(checkLogin));
 
 
 app.listen(8080);

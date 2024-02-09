@@ -19,6 +19,11 @@ export async function getUser(username, password){
     return db.get("SELECT * FROM Users WHERE User_Name = ? AND User_Password = ?", [username, password]);
 }
 
+export async function checkUser(username){
+    const db = await connectDB;
+    return db.get("SELECT * FROM Users WHERE User_Name = ?", [username]);
+}
+
 export async function listUsers(){
     const db = await connectDB;
     return db.all("SELECT * FROM Users");
@@ -33,4 +38,13 @@ export async function createUser(userData){
     }
   
     return db.run('INSERT INTO Users (User_Name, User_Email, User_Password, User_DOB) VALUES (?, ?, ?, ?)', [userData.username, userData.email, userData.password, userData.dob]);
+}
+
+export async function createWorkout(data){
+    const db = await connectDB;
+    const checkForExistingUser = await db.get('SELECT * FROM Users WHERE User_ID = ?', data.id);
+
+    if (checkForExistingUser) {
+        return db.run('INSERT INTO Workouts (User_ID, Workouts) VALUES (?, ?)', [data.id, data.workouts]);
+    }
 }
