@@ -48,10 +48,10 @@ async function checkLogin(req,res) {
         res.status(401).send('Login failed');
     }
 }
+
 app.get('/allUsers', asyncWrap(getAllUsers));
 app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
-app.post('/login', asyncWrap(checkLogin));
 
 
 app.listen(8080);

@@ -71,14 +71,14 @@ main h1{
     color: white;
     background: none;
     border-bottom: 1px solid white;
-    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    ::placeholder {
         color: white;
         opacity: 1; /* Firefox */
     }
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    :-ms-input-placeholder { 
         color: white;
     }
-    ::-ms-input-placeholder { /* Microsoft Edge */
+    ::-ms-input-placeholder {
         color: white;
     }
 }
@@ -136,31 +136,68 @@ main h1{
 }
 
 
-#userArea {
-    position: fixed;
-    top: 0;
-    left: 0;
+#user{
     display: flex;
     align-items: center;
-    padding: 50px;
+}
+#userArea {
+    padding: 25px;
+    background-color: #1f1f1f;
+    margin: 8px;
+    border-radius: 15px;
+    height: 4vh;
 }
 
-#userArea img {
-margin-right: 10px;
+#user img {
+    margin-right: 10px;
+    max-width: 45px;
+}
+
+#userArea{
+    font-family: 'Kanit';
+
+}
+
+.sidebar {
+    top: 4.25vh;
+    left: 95%;
+    transform: translateX(-95%);
+    width: 25px;
+    height: 2px;
+    background-color: #ffffff;
+    position: absolute;
+    cursor: pointer;
+}
+
+.sidebar::before,
+.sidebar::after {
+    content: "W|W|W";
+    color: transparent;
+    width: 25px;
+    height: 2px;
+    background-color: #ffffff;
+    position: absolute;
+    transition: transform 0.3s ease;
+}
+
+.sidebar::before {
+    top: -10px;
+}
+
+.sidebar::after {
+    top: 10px;
+}
+
+#userLogo{
+    position: absolute;
+    left: 50%;
+    top: 2%;
+    transform: translate(-50%,-2%);
 }
 
 #selection{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-}
-
-#userSelection{
-    position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate(-50%,-65%);
-    text-align: center;
+    padding: 25px;
+    background-color: #1f1f1f;
+    margin: 8px;
+    border-radius: 15px;
 }

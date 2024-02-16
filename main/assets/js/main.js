@@ -147,7 +147,7 @@ async function login() {
                 notify("Incorrect Details.", "red");
             }
         });
-    history.pushState({page: "login"}, "login", "login");
+    // history.pushState({page: "login"}, "login", "login");
 };
 
 window.addEventListener('popstate', function(event) {

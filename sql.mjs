@@ -8,7 +8,7 @@ async function connect() {
         verbose: true,
     });
     await database.migrate({ migrationsPath: './database'});
-    console.log("Database Initialized.");
+    console.log("Database Initialized.\n--------------Logs-----------\n");
     return database;
 };
 
@@ -42,9 +42,6 @@ export async function createUser(userData){
 
 export async function createWorkout(data){
     const db = await connectDB;
-    const checkForExistingUser = await db.get('SELECT * FROM Users WHERE User_ID = ?', data.id);
-
-    if (checkForExistingUser) {
         return db.run('INSERT INTO Workouts (User_ID, Workouts) VALUES (?, ?)', [data.id, data.workouts]);
-    }
+
 }
