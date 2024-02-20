@@ -195,9 +195,100 @@ main h1{
     transform: translate(-50%,-2%);
 }
 
-#selection{
+#selection {
     padding: 25px;
     background-color: #1f1f1f;
     margin: 8px;
     border-radius: 15px;
+    height: 100%;
+    font-family: "Kanit";
+}
+
+#selection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#options {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+#miniNav{
+    text-align: center;
+    background-color: #252525;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 15vh;
+    width: 6vh;
+    position: absolute;
+    top: 5%;
+    left: 90%;
+    transform: translate(-90%, -5%);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#miniNav button{
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: white;
+    position: relative;
+    margin: 5px;
+}
+
+#options h1{
+    font-size: 2vh;
+}
+
+.workoutCards{
+    color: #b8b8b8;
+    width: 20vh;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out all;
+    overflow: hidden;
+}
+
+.workoutCards a{
+    color: #b67806;
+
+}
+
+
+.workoutCards img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container{
+    height: auto;
+    padding: 20px;
+    text-align: left;
+    bottom: 0;
+    background-color: #2b2b2b;
+    border-radius: 0 0 10px 10px;
+}
+
+.workoutCards:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    color: #ffffff;
+    box-shadow: 0 16px 36px 0 rgba(0,0,0,0.7);
+}
+
+@media (max-width: 768px) {
+    #options{
+        display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    }
 }

@@ -1,40 +1,66 @@
 import { notify } from './notification.mjs';
 import { homepage } from './home.mjs';
 
+function createInputWithIcon(iconClass, type, placeholder, id) {
+    const div = document.createElement('div');
+    div.className = 'input-with-icon';
+    const i = document.createElement('i');
+    i.className = iconClass;
+    const input = document.createElement('input');
+    input.type = type;
+    input.placeholder = placeholder;
+    input.id = id;
+    input.required = true;
+    div.appendChild(i);
+    div.appendChild(input);
+    return div;
+}
+
+function createButton(id, className, text) {
+    const button = document.createElement('button');
+    button.id = id;
+    button.className = className;
+    button.textContent = text;
+    return button;
+}
+
 async function signup() {
     const main = document.querySelector("main");
-    main.innerHTML = `
-    <div id="inputCard" class="fade">
-        <div class="input-container">
-            <a href="index"><img src="assets/img/logo1.png" alt="Cors App Logo 1" style="width: 7.5vh;"></a>
-            <div class="input-with-icon">
-                <i class="fas fa-user"></i>
-                <input type="text" placeholder="Username" id="username" required>
-            </div>
-            <div class="input-with-icon">
-                <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="Email" id="email" required>
-            </div>
-            <div class="input-with-icon">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" id="password" required>
-            </div>
-            <div class="input-with-icon">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
-            </div>
-            <div class="input-with-icon">
-                <i class="fas fa-cake"></i>
-                <input type="date" placeholder="Date Of Birth" id="dob" required>
-            </div>
-            <button id="confirmSignup" class="buttonStyle2" style="margin-top: 15px;">Sign Up</button>
-        </div>
-        <p id="sText">Already have an account?<br><button id="login">LOGIN</button></p>
-    </div>`;
-    let sText = document.querySelector("#sText");
-    sText.style.top = "105%";
-    sText.style.transform = "translateY(-105%)";
-    const loginButton = main.querySelector("#login");
+    main.innerHTML = '';
+
+    const inputCard = document.createElement('div');
+    inputCard.id = 'inputCard';
+    inputCard.className = 'fade';
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container';
+
+    const logoLink = document.createElement('a');
+    logoLink.href = 'index';
+    const logoImg = document.createElement('img');
+    logoImg.src = 'assets/img/logo1.png';
+    logoImg.alt = 'Cors App Logo 1';
+    logoImg.style.width = '7.5vh';
+    logoLink.appendChild(logoImg);
+
+    inputContainer.appendChild(logoLink);
+    inputContainer.appendChild(createInputWithIcon('fas fa-user', 'text', 'Username', 'username'));
+    inputContainer.appendChild(createInputWithIcon('fas fa-envelope', 'email', 'Email', 'email'));
+    inputContainer.appendChild(createInputWithIcon('fas fa-lock', 'password', 'Password', 'password'));
+    inputContainer.appendChild(createInputWithIcon('fas fa-lock', 'password', 'Confirm Password', 'confirmPassword'));
+    inputContainer.appendChild(createInputWithIcon('fas fa-cake', 'date', 'Date Of Birth', 'dob'));
+    inputContainer.appendChild(createButton('confirmSignup', 'buttonStyle2', 'Sign Up'));
+
+    const sTextP = document.createElement('p');
+    sTextP.id = 'sText';
+    sTextP.innerHTML = 'Already have an account?<br>';
+    const loginButton = createButton('login', '', 'LOGIN');
+    sTextP.appendChild(loginButton);
+
+    inputCard.appendChild(inputContainer);
+    inputCard.appendChild(sTextP);
+    main.appendChild(inputCard);
+
     loginButton.addEventListener("click", login);
 
     function validateSignUp() {
@@ -89,64 +115,76 @@ async function signup() {
 
 async function login() {
     const main = document.querySelector("main");
-    main.innerHTML = `
-        <div id="inputCard" class="fade">
-        <div class="input-container">
-        <a href="index"><img src="assets/img/logo1.png" alt="Cors App Logo 1" style="width: 7.5vh;"></a>
-        <div class="input-with-icon">
-        <i class="fas fa-user"></i>
-        <input type="text" placeholder="Username" id="username" required>
-        </div>
-        <div class="input-with-icon">
-        <i class="fas fa-lock"></i>
-        <input type="password" placeholder="Password" id="password" required>
-        </div>
-            <button id="confirmLogin" class="buttonStyle2" style="margin-top: 15px;">Login</button>
-        </div>
-        <p id="sText">Don't have an Account?<br><button id="signup">REGISTER</button></p>
-        </div>
-        `;
-        const signupButton = main.querySelector("#signup");
-        signupButton.addEventListener("click", signup);
-        let showUsers = document.createElement("button");
-        showUsers.setAttribute("id","showUsers");
-        showUsers.textContent = "Show Users";
-        main.appendChild(showUsers);
-        showUsers.addEventListener("click", async () => {
+    main.innerHTML = '';
+    const inputCard = document.createElement('div');
+    inputCard.id = 'inputCard';
+    inputCard.className = 'fade';
+
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container';
+
+    const logoLink = document.createElement('a');
+    logoLink.href = 'index';
+    const logoImg = document.createElement('img');
+    logoImg.src = 'assets/img/logo1.png';
+    logoImg.alt = 'Cors App Logo 1';
+    logoImg.style.width = '7.5vh';
+    logoLink.appendChild(logoImg);
+
+    inputContainer.appendChild(logoLink);
+    inputContainer.appendChild(createInputWithIcon('fas fa-user', 'text', 'Username', 'username'));
+    inputContainer.appendChild(createInputWithIcon('fas fa-lock', 'password', 'Password', 'password'));
+    inputContainer.appendChild(createButton('confirmLogin', 'buttonStyle2', 'Login'));
+
+    const sTextP = document.createElement('p');
+    sTextP.id = 'sText';
+    sTextP.innerHTML = "Don't have an Account?<br>";
+    const signupButton = createButton('signup', '', 'REGISTER');
+    sTextP.appendChild(signupButton);
+
+    inputCard.appendChild(inputContainer);
+    inputCard.appendChild(sTextP);
+    main.appendChild(inputCard);
+
+    signupButton.addEventListener("click", signup);
+
+    let showUsers = createButton('showUsers', '', 'Show Users');
+    main.appendChild(showUsers);
+    showUsers.addEventListener("click", async () => {
         const response = await fetch('/allUsers');
         const users = await response.json();
-        notify("All Users Logged","green");
+        notify("All Users Logged", "green");
+    });
+
+    const confirmLoginButton = main.querySelector("#confirmLogin");
+    confirmLoginButton.addEventListener("click", async () => {
+        const username = main.querySelector("#username").value.trim();
+        const password = main.querySelector("#password").value.trim();
+
+        if (!username || !password) {
+            notify("All fields Required", "red");
+            return;
+        }
+
+        const payload = {
+            username,
+            password,
+        };
+
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
         });
 
-        const confirmLoginButton = main.querySelector("#confirmLogin");
-        confirmLoginButton.addEventListener("click", async () => {
-            const username = main.querySelector("#username").value.trim();
-            const password = main.querySelector("#password").value.trim();
-
-            if (!username || !password) {
-                notify("All fields Required", "red");
-                return;
-            }
-
-            const payload = {
-                username,
-                password,
-            };
-    
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-    
-            if (response.ok) {
-                localStorage.setItem("userLoggedIn","true");
-                localStorage.setItem("userName",payload.username);
-                homepage(payload.username);
-            } else {
-                notify("Incorrect Details.", "red");
-            }
-        });
+        if (response.ok) {
+            localStorage.setItem("userLoggedIn", "true");
+            localStorage.setItem("userName", payload.username);
+            homepage(payload.username);
+        } else {
+            notify("Incorrect Details.", "red");
+        }
+    });
     // history.pushState({page: "login"}, "login", "login");
 };
 
