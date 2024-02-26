@@ -8,6 +8,7 @@ export async function notify(message, colour) {
 
     let notification = document.createElement("div");
     notification.setAttribute("class", "notification");
+    notification.style.position = "fixed";
     notification.style.top = `${80 + notificationStack.length * 60}px`;
     let icon;
     if (colour === "red") {

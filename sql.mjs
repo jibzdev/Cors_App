@@ -19,6 +19,13 @@ export async function getUser(username, password){
     return db.get("SELECT * FROM Users WHERE User_Name = ? AND User_Password = ?", [username, password]);
 }
 
+export async function getUserID(username){
+    const db = await connectDB;
+    const user = await db.get("SELECT * FROM Users WHERE User_Name = ?", [username]);
+    return user ? user.User_ID : null;
+}
+
+
 export async function checkUser(username){
     const db = await connectDB;
     return db.get("SELECT * FROM Users WHERE User_Name = ?", [username]);

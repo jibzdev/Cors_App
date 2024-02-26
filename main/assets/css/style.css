@@ -137,6 +137,7 @@ main h1{
 
 
 #user{
+    position: absolute;
     display: flex;
     align-items: center;
 }
@@ -158,41 +159,10 @@ main h1{
 
 }
 
-.sidebar {
-    top: 4.25vh;
-    left: 95%;
-    transform: translateX(-95%);
-    width: 25px;
-    height: 2px;
-    background-color: #ffffff;
-    position: absolute;
-    cursor: pointer;
-}
-
-.sidebar::before,
-.sidebar::after {
-    content: "W|W|W";
-    color: transparent;
-    width: 25px;
-    height: 2px;
-    background-color: #ffffff;
-    position: absolute;
-    transition: transform 0.3s ease;
-}
-
-.sidebar::before {
-    top: -10px;
-}
-
-.sidebar::after {
-    top: 10px;
-}
-
 #userLogo{
     position: absolute;
     left: 50%;
-    top: 2%;
-    transform: translate(-50%,-2%);
+    transform: translateX(-50%);
 }
 
 #selection {
@@ -230,8 +200,8 @@ main h1{
     width: 6vh;
     position: absolute;
     top: 5%;
-    left: 90%;
-    transform: translate(-90%, -5%);
+    left: 15%;
+    transform: translate(-15%, -5%);
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -271,7 +241,7 @@ main h1{
 }
 
 .container{
-    height: auto;
+    height: 50%;
     padding: 20px;
     text-align: left;
     bottom: 0;
@@ -291,4 +261,39 @@ main h1{
         display: grid;
     grid-template-columns: repeat(2, 1fr);
     }
+}
+
+#info{
+    text-align: center;
+    margin: 50px;
+}
+
+#selectedWorkouts{
+    position: fixed;
+    bottom: 0;
+    padding: 15px;
+    max-height: 25vh;
+    width: 100%;
+    background-color: #b67806;
+    color: white;
+    font-family: "Kanit";
+    display: flex;
+    align-content: left;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+    overflow: scroll;
+    flex-wrap: wrap;
+}
+
+#options{
+    margin-bottom: 50px;
+}
+
+#workoutInfo{
+    display: flex;
+}
+
+#selectedWorkouts h1{
+
 }

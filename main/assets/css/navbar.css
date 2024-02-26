@@ -145,3 +145,42 @@
     text-align: center;
     font-size: 3vh;
   }
+
+  .menu-icon {
+    top: 4vh;
+    left: 5%;
+    transform: translateX(-5%);
+    width: 25px;
+    height: 2px;
+    background-color: #ffffff;
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  .menu-icon::before,
+  .menu-icon::after {
+    content: "";
+    width: 25px;
+    height: 2px;
+    background-color: #ffffff;
+    position: absolute;
+    transition: transform 0.3s ease;
+  }
+  
+  .menu-icon::before {
+    top: -10px;
+  }
+  
+  .menu-icon::after {
+    top: 10px;
+  }
+  
+  .menu-icon.open::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  
+  .menu-icon.open::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }

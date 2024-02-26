@@ -1,10 +1,22 @@
 import { notify } from './notification.mjs';
 
+document.addEventListener("DOMContentLoaded", () => {
+    const check = localStorage.getItem("userLoggedIn");
+    const name = localStorage.getItem("userName");
 
-function createWorkoutCard(imageSrc, category, title, description) {
+    if (check  === 'true'){
+        homepage(name);
+    }
+    else{
+        alert("not logged in");
+    }
+
+});
+
+function createWorkoutCard(imageSrc, category, title, description, workoutDuration, id) {
     let workoutCard = document.createElement('div');
     workoutCard.classList.add('workoutCards');
-    workoutCard.id = 'savedWorkout';
+    workoutCard.id = id;
 
     let image = document.createElement('img');
     image.src = imageSrc;
@@ -21,11 +33,15 @@ function createWorkoutCard(imageSrc, category, title, description) {
     let descriptionElement = document.createElement('p');
     descriptionElement.textContent = description;
 
+    let duration = document.createElement('p');
+    duration.textContent = `DURATION: ${workoutDuration}`;
+
     container.appendChild(categoryLink);
     container.appendChild(titleElement);
     container.appendChild(descriptionElement);
 
     workoutCard.appendChild(image);
+    workoutCard.appendChild(duration);
     workoutCard.appendChild(container);
 
     return workoutCard;
@@ -37,25 +53,24 @@ export async function homepage(username) {
     <div id="userArea">
 
     <div id="user">
-        <img src="./assets/img/user.png" alt="Cors App Logo 1">
+        <img src="./assets/img/user.png" alt="Cors App Logo 1" class="sidebar" style="width: 4vh;">
         <p>${username}</p>
     </div>
 
     <img src="./assets/img/logo1.png" alt="Cors App Logo 1" style="width: 4vh;" id="userLogo">
-
-    <div class="sidebar"></div>
     </div>
 
     <div id="selection">
         
+        <div id="info">
         <h1>Hello <span style="color: #b67806">${username}</span></h1>
-        <p>Choose from one of the options bellow.</p><br><br><br>
+        <p>Choose from one of the options bellow.</p>
+        </div>
         <div id="options">
 
         <div class="workoutCards" id="newWorkout">
         <img src="./assets/img/selection1.png">
             <div class="container">
-            <a>CATEGORY</a>
             <h1>New Workout</h1>
             <p>Create your own HIIT workout plan.</p>
             </div>
@@ -64,7 +79,6 @@ export async function homepage(username) {
             <div class="workoutCards" id="savedWorkout">
             <img src="./assets/img/selection2.png">
                 <div class="container">
-                <a>CATEGORY</a>
                 <h1>Saved Workouts</h1>
                 <p>View all of your saved workouts.</p>
                 </div>
@@ -74,12 +88,12 @@ export async function homepage(username) {
             <div class="workoutCards" id="shareWorkout">
             <img src="./assets/img/selection3.png">
                 <div class="container">
-                <a>CATEGORY</a>
                 <h1>Share Workouts</h1>
                 <p>Share your workouts so people can follow your plan.</p>
                 </div>
             </div>
         </div>
+
     </div>
     `;
 
@@ -119,29 +133,83 @@ export async function homepage(username) {
     });
 
     const newWorkoutButton = document.querySelector("#newWorkout");
+    const savedWorkoutsButton = document.querySelector("#savedWorkout");
+
+    savedWorkoutsButton.addEventListener("click", () => {
+
+    });
 
     newWorkoutButton.addEventListener("click", () => {
         const selectionArea = document.querySelector("#options");
+        const info = document.querySelector("#info");
 
         selectionArea.innerHTML = ``;
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah"));
-        selectionArea.append(createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah"));
+        info.innerHTML = `
+        <div>
+            <label for="workoutName">Name your workout plan:</label>
+            <input type="text" id="workoutName" name="workoutName" placeholder="My Workout Plan">
+        </div>
+        <h1>Create your own Workout Plan.</h1>
+        <p>Workout intensity can be altered.</p>
+        `;
+        const workoutNameInput = document.querySelector("#workoutName");
+        workoutNameInput.addEventListener("change", () => {
+            const workoutName = workoutNameInput.value.trim();
+            if(workoutName) {
+                info.innerHTML = `
+                <h1>Create your own Workout Plan.</h1>
+                <p>Workout intensity can be altered.</p>`;
+                const selection = document.querySelector("#selection");
+                let selected = document.createElement("div");
+                selected.setAttribute("id","selectedWorkouts");
+                selection.append(selected);
+                let workoutInfo = document.createElement("div");
+                workoutInfo.setAttribute("id","workoutInfo");
+                workoutInfo.innerHTML = `<p>Workout Name: ${workoutName}</p><br><button id="createWorkout">Create</button>`;
+                selected.append(workoutInfo);
+
+                const workoutCards = [
+                    createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah","60s","1"),
+                    createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah","60s","2"),
+                    createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah","60s","3")
+                ];
+
+                const addedWorkouts = new Set();
+
+                workoutCards.forEach(card => {
+                    selectionArea.append(card);
+                    card.addEventListener("click", () => {
+                        const workoutTitle = card.querySelector("h1").textContent;
+                        if (!addedWorkouts.has(workoutTitle)) {
+                            addedWorkouts.add(workoutTitle);
+                            let title = document.createElement("h1");
+                            title.textContent = workoutTitle;
+                            selected.append(title);
+
+                            let time = document.createElement("p");
+                            time.textContent = card.querySelector("p").textContent;
+                            selected.append(time);
+                            notify(`Added ${workoutTitle}`,"green");
+                        } else {
+                            notify(`${workoutTitle} has already been added.`, "red");
+                        }
+                    });
+                });
+
+                document.querySelector("#createWorkout").addEventListener("click", async () =>{
+                    const payload = {
+                        username
+                    };
+                    const response = await fetch('/user', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+                    const data = await response.text();
+                    console.log(data);
+                });
+            }
+        });
     });
 
     notify("Successfully Logged In.", "green");

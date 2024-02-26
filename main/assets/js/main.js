@@ -1,5 +1,4 @@
 import { notify } from './notification.mjs';
-import { homepage } from './home.mjs';
 
 function createInputWithIcon(iconClass, type, placeholder, id) {
     const div = document.createElement('div');
@@ -180,7 +179,7 @@ async function login() {
         if (response.ok) {
             localStorage.setItem("userLoggedIn", "true");
             localStorage.setItem("userName", payload.username);
-            homepage(payload.username);
+            location.href = "home.html";
         } else {
             notify("Incorrect Details.", "red");
         }
@@ -212,21 +211,13 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const check = localStorage.getItem("userLoggedIn");
-    const name = localStorage.getItem("userName");
-
-    if (check  === 'true'){
-        homepage(name);
+    const loginButton = document.querySelector("#begin");
+    if (loginButton) {
+        loginButton.addEventListener("click", login);
     }
-    else{
-        const loginButton = document.querySelector("#begin");
-        if (loginButton) {
-            loginButton.addEventListener("click", login);
-        }
-        const signupButton = document.querySelector("#signup");
-        if (signupButton) {
-            signupButton.addEventListener("click", signup);
-        }
+    const signupButton = document.querySelector("#signup");
+    if (signupButton) {
+        signupButton.addEventListener("click", signup);
     }
 
 });

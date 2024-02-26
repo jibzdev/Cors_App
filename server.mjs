@@ -38,21 +38,30 @@ async function login(req, res){
     }
 }
 
-async function checkLogin(req,res) {
+async function getUserID(req, res){
     const data = req.body;
-    const user = await databaseCMDS.checkUser(data.username);
+    const user = await databaseCMDS.getUserID(data.username);
     if (user) {
-        console.log(data.username, "Logged in at: ", new Date().toLocaleString());
-        res.status(200).send('Login successful');
+        res.status(200).send(user);
     } else {
-        res.status(401).send('Login failed');
+        res.status(401).send('ID FETCH failed');
+    }
+}
+
+async function createUserWorkout(req, res){
+    const data = req.body;
+    const user = await databaseCMDS.getUserID(data.username);
+    if (user) {
+        res.status(200).send(user);
+    } else {
+        res.status(401).send('ID FETCH failed');
     }
 }
 
 app.get('/allUsers', asyncWrap(getAllUsers));
 app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
-
+app.post('/user', asyncWrap(getUserID));
 
 app.listen(8080);
 
