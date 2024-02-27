@@ -222,10 +222,11 @@ main h1{
 
 .workoutCards{
     color: #b8b8b8;
-    width: 20vh;
+    width: 25vh;
     border-radius: 10px;
     transition: 0.2s ease-in-out all;
     overflow: hidden;
+    height: auto;
 }
 
 .workoutCards a{
@@ -233,10 +234,14 @@ main h1{
 
 }
 
+#workoutCardTimer{
+    background-color: #b67806;
+
+}
+
 
 .workoutCards img {
     max-width: 100%;
-    height: auto;
     display: block;
 }
 
@@ -274,7 +279,7 @@ main h1{
     padding: 15px;
     max-height: 25vh;
     width: 100%;
-    background-color: #b67806;
+    background-color: #121212bb;
     color: white;
     font-family: "Kanit";
     display: flex;
@@ -292,8 +297,4 @@ main h1{
 
 #workoutInfo{
     display: flex;
-}
-
-#selectedWorkouts h1{
-
 }

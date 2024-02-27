@@ -14,6 +14,24 @@ async function connect() {
 
 const connectDB = connect();
 
+// Test Functions
+export async function listUsers(){
+    const db = await connectDB;
+    return db.all("SELECT * FROM Users");
+}
+
+export async function fetchWorkouts(){
+    const db = await connectDB;
+    return db.all("SELECT * FROM Workouts");
+}
+
+export async function WorkoutPlans(){
+    const db = await connectDB;
+    return db.all("SELECT * FROM WorkoutPlans");
+}
+////////////////
+
+
 export async function getUser(username, password){
     const db = await connectDB;
     return db.get("SELECT * FROM Users WHERE User_Name = ? AND User_Password = ?", [username, password]);
@@ -31,11 +49,6 @@ export async function checkUser(username){
     return db.get("SELECT * FROM Users WHERE User_Name = ?", [username]);
 }
 
-export async function listUsers(){
-    const db = await connectDB;
-    return db.all("SELECT * FROM Users");
-}
-
 export async function createUser(userData){
     const db = await connectDB;
     const checkForExistingUser = await db.get('SELECT * FROM Users WHERE User_Name = ?', userData.username);
@@ -47,8 +60,14 @@ export async function createUser(userData){
     return db.run('INSERT INTO Users (User_Name, User_Email, User_Password, User_DOB) VALUES (?, ?, ?, ?)', [userData.username, userData.email, userData.password, userData.dob]);
 }
 
-export async function createWorkout(data){
-    const db = await connectDB;
-        return db.run('INSERT INTO Workouts (User_ID, Workouts) VALUES (?, ?)', [data.id, data.workouts]);
 
+export async function createPlan(userData){
+    const db = await connectDB;
+    const workouts = userData.Workouts.join(',');
+    return db.run('INSERT INTO WorkoutPlans (User_ID, Workouts) VALUES (?, ?)', [userData.User_ID, workouts]);
+}
+
+export async function showUserPlans(userData){
+    const db = await connectDB;
+    return db.get("SELECT * FROM WorkoutPlans WHERE User_ID = ?", [userData.User_ID]); 
 }

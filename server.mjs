@@ -15,11 +15,21 @@ function asyncWrap(f) {
   };
 }
 
+// Test Functions
 async function getAllUsers(req, res){
     const allUsers = await databaseCMDS.listUsers();
     res.send(allUsers);
-    console.log(allUsers);
 };
+async function fetchWorkouts(req, res){
+    const workouts = await databaseCMDS.fetchWorkouts();
+    res.send(workouts);
+}
+
+async function getAllPlans(req, res){
+    const allUsers = await databaseCMDS.WorkoutPlans();
+    res.send(allUsers);
+};
+////////////////////////////////////
 
 async function sendNewUser(req){
     const data = req.body;
@@ -38,30 +48,42 @@ async function login(req, res){
     }
 }
 
-async function getUserID(req, res){
+async function getUserIDHandler(req, res){
     const data = req.body;
     const user = await databaseCMDS.getUserID(data.username);
-    if (user) {
-        res.status(200).send(user);
+    if (user !== null) {
+        res.status(200).json({ userID: user });
     } else {
-        res.status(401).send('ID FETCH failed');
+        res.status(404).json({ error: "User not found" });
     }
 }
 
-async function createUserWorkout(req, res){
+async function sendNewWorkoutPlan(req){
     const data = req.body;
-    const user = await databaseCMDS.getUserID(data.username);
-    if (user) {
-        res.status(200).send(user);
+    await console.log("Recieved User Plan: ", data);
+    databaseCMDS.createPlan(data);
+}
+
+async function showUserPlans(req,res){
+    const data = req.body;
+    const userPlan = await databaseCMDS.showUserPlans(data);
+    if (userPlan) {
+        res.status(200).send(userPlan);
     } else {
-        res.status(401).send('ID FETCH failed');
+        res.status(401).send('Failed to fetch plans');
     }
 }
 
-app.get('/allUsers', asyncWrap(getAllUsers));
 app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
-app.post('/user', asyncWrap(getUserID));
+
+app.post('/user', asyncWrap(getUserIDHandler));
+app.get('/allUsers', asyncWrap(getAllUsers));
+app.get('/getAllPlans', asyncWrap(getAllPlans));
+
+app.get('/workouts', asyncWrap(fetchWorkouts));
+app.post('/fetchWorkouts', asyncWrap(showUserPlans));
+app.post('/workouts', asyncWrap(sendNewWorkoutPlan));
 
 app.listen(8080);
 

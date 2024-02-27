@@ -34,7 +34,8 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
     descriptionElement.textContent = description;
 
     let duration = document.createElement('p');
-    duration.textContent = `DURATION: ${workoutDuration}`;
+    duration.setAttribute("id","workoutCardTimer");
+    duration.textContent = `${workoutDuration}`;
 
     container.appendChild(categoryLink);
     container.appendChild(titleElement);
@@ -47,7 +48,7 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
     return workoutCard;
 }
 
-export async function homepage(username) {
+async function homepage(username) {
     const main = document.querySelector("body");
     main.innerHTML = `
     <div id="userArea">
@@ -67,31 +68,9 @@ export async function homepage(username) {
         <p>Choose from one of the options bellow.</p>
         </div>
         <div id="options">
-
-        <div class="workoutCards" id="newWorkout">
-        <img src="./assets/img/selection1.png">
-            <div class="container">
-            <h1>New Workout</h1>
-            <p>Create your own HIIT workout plan.</p>
-            </div>
-        </div>
-
-            <div class="workoutCards" id="savedWorkout">
-            <img src="./assets/img/selection2.png">
-                <div class="container">
-                <h1>Saved Workouts</h1>
-                <p>View all of your saved workouts.</p>
-                </div>
-            </div>
-
-
-            <div class="workoutCards" id="shareWorkout">
-            <img src="./assets/img/selection3.png">
-                <div class="container">
-                <h1>Share Workouts</h1>
-                <p>Share your workouts so people can follow your plan.</p>
-                </div>
-            </div>
+        ${createWorkoutCard("./assets/img/selection1.png","","New Workout","Create your own HIIT workout plan.","","newWorkout").outerHTML}
+        ${createWorkoutCard("./assets/img/selection2.png","","Saved Workout","Access your saved HIIT workout plans.","","savedWorkout").outerHTML}
+        ${createWorkoutCard("./assets/img/selection3.png","","Share Workout","Share your HIIT workout plan with friends.","","shareWorkout").outerHTML}
         </div>
 
     </div>
@@ -139,7 +118,7 @@ export async function homepage(username) {
 
     });
 
-    newWorkoutButton.addEventListener("click", () => {
+    newWorkoutButton.addEventListener("click", async () => {
         const selectionArea = document.querySelector("#options");
         const info = document.querySelector("#info");
 
@@ -153,7 +132,7 @@ export async function homepage(username) {
         <p>Workout intensity can be altered.</p>
         `;
         const workoutNameInput = document.querySelector("#workoutName");
-        workoutNameInput.addEventListener("change", () => {
+        workoutNameInput.addEventListener("change", async () => {
             const workoutName = workoutNameInput.value.trim();
             if(workoutName) {
                 info.innerHTML = `
@@ -168,20 +147,30 @@ export async function homepage(username) {
                 workoutInfo.innerHTML = `<p>Workout Name: ${workoutName}</p><br><button id="createWorkout">Create</button>`;
                 selected.append(workoutInfo);
 
-                const workoutCards = [
-                    createWorkoutCard("./assets/img/selection2.png","CARDIO","Jump Rope","Blah Blah","60s","1"),
-                    createWorkoutCard("./assets/img/selection3.png","STRENGTH","Squats","Blah Blah","60s","2"),
-                    createWorkoutCard("./assets/img/selection1.png","FLEXIBILITY","Yoga","Blah Blah","60s","3")
-                ];
+                const workouts = await fetch('/workouts');
+                let workoutData = await workouts.json();
+                
+                console.log(workoutData);
+                const workoutCards = workoutData.map((workout, index) => {
+                    return createWorkoutCard(
+                        `./assets/img/selection1.png`,
+                        'CATEGORY',
+                        workout.Workout_Name,
+                        workout.Workout_Description,
+                        `${workout.Workout_Duration}`,
+                        `${workout.Workout_ID}`
+                    );
+                });
 
-                const addedWorkouts = new Set();
+                const addedWorkouts = new Map();
 
                 workoutCards.forEach(card => {
                     selectionArea.append(card);
                     card.addEventListener("click", () => {
                         const workoutTitle = card.querySelector("h1").textContent;
+                        const workoutId = card.id;
                         if (!addedWorkouts.has(workoutTitle)) {
-                            addedWorkouts.add(workoutTitle);
+                            addedWorkouts.set(workoutTitle, workoutId);
                             let title = document.createElement("h1");
                             title.textContent = workoutTitle;
                             selected.append(title);
@@ -197,16 +186,35 @@ export async function homepage(username) {
                 });
 
                 document.querySelector("#createWorkout").addEventListener("click", async () =>{
-                    const payload = {
+                    if (addedWorkouts.size === 0) {
+                        notify("No workouts added. Please add workouts before creating a plan.", "red");
+                        return;
+                    }
+
+                    const payload1 = {
                         username
                     };
                     const response = await fetch('/user', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
+                        body: JSON.stringify(payload1),
                     });
-                    const data = await response.text();
-                    console.log(data);
+                    const userData = await response.json();
+                    const User_ID = `${userData.userID}`;
+                    console.log(User_ID);
+
+                    const workoutIds = Array.from(addedWorkouts.values());
+                    const payload2 = {
+                        User_ID,
+                        Workouts: workoutIds
+                    };
+                    const response2 = await fetch('/workouts', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload2),
+                    });
+                    const workoutPlanID = await response2.text();
+                    console.log(workoutPlanID);
                 });
             }
         });

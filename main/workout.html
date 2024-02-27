@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function(){
+            let res = await fetch("/getAllPlans");
+            console.log(res.json())
+            let username = localStorage.getItem("userName");
+        const payload1 = {
+                    username
+                };
+                const response = await fetch('/user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload1),
+                });
+                const userData = await response.json();
+                const User_ID = `${userData.userID}`;
+                console.log(User_ID);
+
+                const payload2 = {
+                        User_ID
+                    };
+                    const response2 = await fetch('/fetchWorkouts', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload2),
+                    });
+                    const workoutPlanID = await response2.text();
+                    console.log(workoutPlanID);
+            document.body.innerHTML = JSON.stringify(workoutPlanID);
+        });
+    </script>
+</body>
+</html>
