@@ -6,6 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (check  === 'true'){
         homepage(name);
+        let sidebarIcon = document.querySelector("#userSideBar");
+        sidebarIcon.addEventListener("click", () => {
+            const nav = document.querySelector("nav");
+            if (nav.style.transform === "translateX(0%)") {
+                nav.style.transform = "translateX(-100%)";
+            } else {
+                nav.style.transform = "translateX(0%)";
+            }
+        });
+        document.addEventListener("click", (e) => {
+            const nav = document.querySelector("nav");
+            if (!sidebarIcon.contains(e.target) && !nav.contains(e.target)) {
+                nav.style.transform = "translateX(-100%)";
+            }
+        });
     }
     else{
         alert("not logged in");
@@ -51,59 +66,37 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
 async function homepage(username) {
     const main = document.querySelector("body");
     main.innerHTML = `
+    <div id="userSideBar"></div>
+    <nav>
+        <a id="logoutButton">Logout</a>
+    </nav>
     <div id="userArea">
-
-    <div id="user">
-        <img src="./assets/img/user.png" alt="Cors App Logo 1" class="sidebar" style="width: 4vh;">
-        <p>${username}</p>
-    </div>
-
-    <img src="./assets/img/logo1.png" alt="Cors App Logo 1" style="width: 4vh;" id="userLogo">
-    </div>
-
-    <div id="selection">
         
-        <div id="info">
-        <h1>Hello <span style="color: #b67806">${username}</span></h1>
-        <p>Choose from one of the options bellow.</p>
-        </div>
-        <div id="options">
-        ${createWorkoutCard("./assets/img/selection1.png","","New Workout","Create your own HIIT workout plan.","","newWorkout").outerHTML}
-        ${createWorkoutCard("./assets/img/selection2.png","","Saved Workout","Access your saved HIIT workout plans.","","savedWorkout").outerHTML}
-        ${createWorkoutCard("./assets/img/selection3.png","","Share Workout","Share your HIIT workout plan with friends.","","shareWorkout").outerHTML}
+        <div id="greet">
+        <p>Welcome back to CORS APP.</p>
         </div>
 
+        <div id="weather">
+        <p>Mon</p>
+        <p>Tue</p>
+        <p>Wed</p>
+        <p>Thu</p>
+        <p>Fri</p>
+        <p>Sat</p>
+        <p>Sun</p>
+        </div>
+
+        <div id="greet2">
+        <h1>Hello, ${username}</h1>
+        </div>
     </div>
+
+    <section id="content">
+    ${createWorkoutCard("./assets/img/selection1.png","","New Workout","Create your own HIIT workout plan.","","newWorkout").outerHTML}
+    ${createWorkoutCard("./assets/img/selection2.png","","Saved Workout","Access your saved HIIT workout plans.","","savedWorkout").outerHTML}
+    </section>
+    <div id="selectedWorkouts"></div>
     `;
-
-    let mininav = document.createElement("div");
-    mininav.setAttribute("id", "miniNav");
-    mininav.style.display = "none";
-
-    let miniNavSelection1 = document.createElement("button");
-    miniNavSelection1.setAttribute("id", "logoutButton");
-    miniNavSelection1.textContent = "Logout";
-    let miniNavSelection2 = document.createElement("button");
-    miniNavSelection2.setAttribute("id", "settingsButton");
-    miniNavSelection2.textContent = "Home";
-    let miniNavSelection3 = document.createElement("button");
-    miniNavSelection3.setAttribute("id", "homeButton");
-    miniNavSelection3.textContent = "Settings";
-
-    mininav.appendChild(miniNavSelection2);
-    mininav.appendChild(miniNavSelection3);
-    mininav.appendChild(miniNavSelection1);
-    main.append(mininav);
-
-    document.querySelector('.sidebar').addEventListener("click", () => {
-        mininav.style.display = mininav.style.display === "none" ? "flex" : "none";
-    });
-
-    document.addEventListener("click", (event) => {
-        if (!mininav.contains(event.target) && !document.querySelector('.sidebar').contains(event.target)) {
-            mininav.style.display = "none";
-        }
-    });
 
     document.querySelector("#logoutButton").addEventListener("click", async () => {
         localStorage.removeItem("userLoggedIn");
@@ -115,30 +108,29 @@ async function homepage(username) {
     const savedWorkoutsButton = document.querySelector("#savedWorkout");
 
     savedWorkoutsButton.addEventListener("click", () => {
-
+        location.href = "workout.html"
     });
 
     newWorkoutButton.addEventListener("click", async () => {
-        const selectionArea = document.querySelector("#options");
-        const info = document.querySelector("#info");
-
+        const selectionArea = document.querySelector("#content");
         selectionArea.innerHTML = ``;
-        info.innerHTML = `
+        selectionArea.innerHTML = `
         <div>
             <label for="workoutName">Name your workout plan:</label>
             <input type="text" id="workoutName" name="workoutName" placeholder="My Workout Plan">
         </div>
-        <h1>Create your own Workout Plan.</h1>
-        <p>Workout intensity can be altered.</p>
         `;
         const workoutNameInput = document.querySelector("#workoutName");
         workoutNameInput.addEventListener("change", async () => {
             const workoutName = workoutNameInput.value.trim();
             if(workoutName) {
-                info.innerHTML = `
-                <h1>Create your own Workout Plan.</h1>
-                <p>Workout intensity can be altered.</p>`;
-                const selection = document.querySelector("#selection");
+                selectionArea.innerHTML = ``;
+                const selection = document.querySelector("#content");
+                selection.style.display = 'flex';
+                selection.style.justifyContent = 'center';
+                selection.style.alignContent = 'flex-start';
+                selection.style.flexWrap = 'wrap';
+                selection.style.alignItems = 'center';
                 let selected = document.createElement("div");
                 selected.setAttribute("id","selectedWorkouts");
                 selection.append(selected);
@@ -185,36 +177,44 @@ async function homepage(username) {
                     });
                 });
 
-                document.querySelector("#createWorkout").addEventListener("click", async () =>{
+                document.querySelector("#createWorkout").addEventListener("click", async (event) => {
                     if (addedWorkouts.size === 0) {
                         notify("No workouts added. Please add workouts before creating a plan.", "red");
                         return;
                     }
-
-                    const payload1 = {
+                
+                    const IDPayload = {
                         username
                     };
                     const response = await fetch('/user', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload1),
+                        body: JSON.stringify(IDPayload),
                     });
                     const userData = await response.json();
-                    const User_ID = `${userData.userID}`;
-                    console.log(User_ID);
-
-                    const workoutIds = Array.from(addedWorkouts.values());
-                    const payload2 = {
-                        User_ID,
-                        Workouts: workoutIds
-                    };
-                    const response2 = await fetch('/workouts', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload2),
-                    });
-                    const workoutPlanID = await response2.text();
-                    console.log(workoutPlanID);
+                    if (response.ok) {
+                        const User_ID = `${userData.userID}`;
+                        const workoutIds = Array.from(addedWorkouts.values());
+                        const planPayload = {
+                            User_ID,
+                            Plan_Name: workoutName,
+                            Workouts: workoutIds
+                        };
+                        const planResponse = await fetch('/workouts', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(planPayload),
+                        });
+                        if (planResponse.ok) {
+                            window.location.href = `/workout.html`;
+                        } else {
+                            notify("Failed to create workout plan.", "red");
+                        }
+                    }
+                    else{
+                        notify("Error fetching user data","red");
+                        return
+                    }
                 });
             }
         });

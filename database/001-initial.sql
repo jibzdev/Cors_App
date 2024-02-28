@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS Workouts (
 CREATE TABLE IF NOT EXISTS WorkoutPlans ( 
     Plan_ID INTEGER PRIMARY KEY,
     User_ID INTEGER,
+    Plan_Name TEXT,
     Workouts TEXT,
     FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
 );

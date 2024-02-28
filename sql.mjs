@@ -14,23 +14,10 @@ async function connect() {
 
 const connectDB = connect();
 
-// Test Functions
-export async function listUsers(){
-    const db = await connectDB;
-    return db.all("SELECT * FROM Users");
-}
-
 export async function fetchWorkouts(){
     const db = await connectDB;
     return db.all("SELECT * FROM Workouts");
 }
-
-export async function WorkoutPlans(){
-    const db = await connectDB;
-    return db.all("SELECT * FROM WorkoutPlans");
-}
-////////////////
-
 
 export async function getUser(username, password){
     const db = await connectDB;
@@ -61,13 +48,13 @@ export async function createUser(userData){
 }
 
 
-export async function createPlan(userData){
+export async function createPlan(userData) {
     const db = await connectDB;
-    const workouts = userData.Workouts.join(',');
-    return db.run('INSERT INTO WorkoutPlans (User_ID, Workouts) VALUES (?, ?)', [userData.User_ID, workouts]);
+    const query = `INSERT INTO WorkoutPlans (User_ID, Plan_Name, Workouts) VALUES (?, ?, ?)`;
+    return db.run(query, [userData.User_ID, userData.Plan_Name, userData.Workouts]);
 }
 
 export async function showUserPlans(userData){
     const db = await connectDB;
-    return db.get("SELECT * FROM WorkoutPlans WHERE User_ID = ?", [userData.User_ID]); 
+    return db.all("SELECT * FROM WorkoutPlans WHERE User_ID = ?", [userData.User_ID]); 
 }

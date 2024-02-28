@@ -55,6 +55,7 @@ async function signup() {
     sTextP.innerHTML = 'Already have an account?<br>';
     const loginButton = createButton('login', '', 'LOGIN');
     sTextP.appendChild(loginButton);
+    sTextP.style.top = "100%";
 
     inputCard.appendChild(inputContainer);
     inputCard.appendChild(sTextP);
@@ -140,21 +141,13 @@ async function login() {
     sTextP.innerHTML = "Don't have an Account?<br>";
     const signupButton = createButton('signup', '', 'REGISTER');
     sTextP.appendChild(signupButton);
+    sTextP.style.top = "85%";
 
     inputCard.appendChild(inputContainer);
     inputCard.appendChild(sTextP);
     main.appendChild(inputCard);
 
     signupButton.addEventListener("click", signup);
-
-    let showUsers = createButton('showUsers', '', 'Show Users');
-    main.appendChild(showUsers);
-    showUsers.addEventListener("click", async () => {
-        const response = await fetch('/allUsers');
-        const users = await response.json();
-        notify("All Users Logged", "green");
-    });
-
     const confirmLoginButton = main.querySelector("#confirmLogin");
     confirmLoginButton.addEventListener("click", async () => {
         const username = main.querySelector("#username").value.trim();
@@ -179,7 +172,7 @@ async function login() {
         if (response.ok) {
             localStorage.setItem("userLoggedIn", "true");
             localStorage.setItem("userName", payload.username);
-            location.href = "home.html";
+            location.href = "createPlan.html";
         } else {
             notify("Incorrect Details.", "red");
         }

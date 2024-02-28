@@ -15,21 +15,12 @@ function asyncWrap(f) {
   };
 }
 
-// Test Functions
-async function getAllUsers(req, res){
-    const allUsers = await databaseCMDS.listUsers();
-    res.send(allUsers);
-};
+
 async function fetchWorkouts(req, res){
     const workouts = await databaseCMDS.fetchWorkouts();
     res.send(workouts);
 }
 
-async function getAllPlans(req, res){
-    const allUsers = await databaseCMDS.WorkoutPlans();
-    res.send(allUsers);
-};
-////////////////////////////////////
 
 async function sendNewUser(req){
     const data = req.body;
@@ -58,31 +49,34 @@ async function getUserIDHandler(req, res){
     }
 }
 
-async function sendNewWorkoutPlan(req){
+async function sendNewWorkoutPlan(req, res){
     const data = req.body;
-    await console.log("Recieved User Plan: ", data);
-    databaseCMDS.createPlan(data);
+    await console.log("Received User Plan: ", data);
+    try {
+        await databaseCMDS.createPlan(data);
+        res.status(200).send("Workout plan created successfully");
+    } catch (error) {
+        console.error("Error creating workout plan:", error);
+        res.status(500).send("Failed to create workout plan");
+    }
 }
 
 async function showUserPlans(req,res){
     const data = req.body;
     const userPlan = await databaseCMDS.showUserPlans(data);
-    if (userPlan) {
-        res.status(200).send(userPlan);
-    } else {
-        res.status(401).send('Failed to fetch plans');
-    }
+    console.log(userPlan);
+    res.send(userPlan);
 }
 
 app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
 
 app.post('/user', asyncWrap(getUserIDHandler));
-app.get('/allUsers', asyncWrap(getAllUsers));
-app.get('/getAllPlans', asyncWrap(getAllPlans));
+
+app.post('/plans', asyncWrap(showUserPlans));
 
 app.get('/workouts', asyncWrap(fetchWorkouts));
-app.post('/fetchWorkouts', asyncWrap(showUserPlans));
+
 app.post('/workouts', asyncWrap(sendNewWorkoutPlan));
 
 app.listen(8080);

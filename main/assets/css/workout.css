@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit');
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+body{
+    background-color: #121212;
+    color: white;
+    font-family: "Kanit";
+}

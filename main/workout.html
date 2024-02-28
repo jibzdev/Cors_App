@@ -4,37 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/workout.css">
 </head>
 <body>
     <script>
-        document.addEventListener('DOMContentLoaded', async function(){
-            let res = await fetch("/getAllPlans");
-            console.log(res.json())
-            let username = localStorage.getItem("userName");
-        const payload1 = {
-                    username
-                };
-                const response = await fetch('/user', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload1),
-                });
-                const userData = await response.json();
-                const User_ID = `${userData.userID}`;
-                console.log(User_ID);
+document.addEventListener('DOMContentLoaded', async function(){
+    let username = localStorage.getItem("userName");
+    const payload = {
+        username
+    };
+    const response = await fetch('/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    const userData = await response.json();
+    const User_ID = `${userData.userID}`;
 
-                const payload2 = {
-                        User_ID
-                    };
-                    const response2 = await fetch('/fetchWorkouts', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload2),
-                    });
-                    const workoutPlanID = await response2.text();
-                    console.log(workoutPlanID);
-            document.body.innerHTML = JSON.stringify(workoutPlanID);
-        });
+    const payload2 = {
+        User_ID
+    };
+    const response2 = await fetch('/plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload2),
+    });
+    const workoutPlans = await response2.json();
+
+    let content = '';
+    workoutPlans.forEach(plan => {
+        content += `Workout Plan ID: ${plan.Plan_ID}<br>Workout Name: ${plan.Plan_Name}<br>Workouts Included: ${plan.Workouts}<br><br>`;
+    });
+
+    document.body.innerHTML = content;
+});
     </script>
 </body>
 </html>
