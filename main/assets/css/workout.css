@@ -13,3 +13,54 @@ body{
     color: white;
     font-family: "Kanit";
 }
+
+.notification{
+    position: absolute;
+    margin-top: 30px;
+    margin-right: 10px;
+    top: 0;
+    right: -300px;
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.5s ease;
+    color: white;
+    font-family: "Kanit";
+    text-transform: uppercase;
+}
+
+.notification.slide-in {
+    right: 10px;
+}
+
+#userControls{
+    position: fixed;
+    background-color: black;
+    bottom: 0;
+    width: 100%; /* Changed from auto to 100% to stretch across the screen */
+    display: flex;
+    justify-content: space-between;
+    padding: 25px;
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+#middleControls{
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+#leftControls{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#rightControls{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px; /* Adds margin to prevent right controls from going off-screen */
+}
