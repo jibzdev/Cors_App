@@ -51,21 +51,24 @@ async function getUserIDHandler(req, res){
 
 async function sendNewWorkoutPlan(req, res){
     const data = req.body;
-    await console.log("Received User Plan: ", data);
+    console.log("Received User Plan: ", data);
     try {
-        await databaseCMDS.createPlan(data);
-        res.status(200).send("Workout plan created successfully");
+        const planID = await databaseCMDS.createPlan(data);
+        if(planID) {
+            res.status(200).json({planID: planID});
+        } else {
+            throw new Error('Plan ID not returned');
+        }
     } catch (error) {
         console.error("Error creating workout plan:", error);
-        res.status(500).send("Failed to create workout plan");
+        res.status(500).send("Failed to create workout plan due to an internal error.");
     }
 }
 
-async function showUserPlans(req,res){
+async function showUserPlans(req, res) {
     const data = req.body;
-    const userPlan = await databaseCMDS.showUserPlans(data);
-    console.log(userPlan);
-    res.send(userPlan);
+    const userPlans = await databaseCMDS.showUserPlans(data);
+    res.send(userPlans);
 }
 
 app.post('/signup', asyncWrap(sendNewUser));
@@ -79,6 +82,12 @@ app.get('/workouts', asyncWrap(fetchWorkouts));
 
 app.post('/workouts', asyncWrap(sendNewWorkoutPlan));
 
+async function getWorkout(req, res) {
+    const plan = await databaseCMDS.getPlan(req.params.workoutID);
+    res.send(plan);
+}
+
+app.get('/getWorkout/:workoutID', asyncWrap(getWorkout));
 app.listen(8080);
 
-console.log(`App running om Version: ${version}`);
+console.log(`App running on Version: ${version}`);

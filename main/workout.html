@@ -8,36 +8,22 @@
 </head>
 <body>
     <script>
-document.addEventListener('DOMContentLoaded', async function(){
-    let username = localStorage.getItem("userName");
-    const payload = {
-        username
-    };
-    const response = await fetch('/user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+    document.addEventListener('DOMContentLoaded', async function(){
+    const params = new URLSearchParams(document.location.search);
+    const id = params.get('planID');
+    if (id) {
+        const response = await fetch(`./getWorkout/${id}`);
+        if (response.ok) {
+            const workoutDetails = await response.json();
+            let workout = JSON.stringify(workoutDetails);
+            document.body.innerHTML = `${workout}`;
+        } else {
+            console.error('Failed to fetch workout details:', response.statusText);
+        }
+    } else {
+        console.error('No PlanID provided in the query parameters.');
+    }
     });
-    const userData = await response.json();
-    const User_ID = `${userData.userID}`;
-
-    const payload2 = {
-        User_ID
-    };
-    const response2 = await fetch('/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload2),
-    });
-    const workoutPlans = await response2.json();
-
-    let content = '';
-    workoutPlans.forEach(plan => {
-        content += `Workout Plan ID: ${plan.Plan_ID}<br>Workout Name: ${plan.Plan_Name}<br>Workouts Included: ${plan.Workouts}<br><br>`;
-    });
-
-    document.body.innerHTML = content;
-});
     </script>
 </body>
 </html>

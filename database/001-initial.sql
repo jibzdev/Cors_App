@@ -15,13 +15,19 @@ CREATE TABLE IF NOT EXISTS Workouts (
     Workout_Description TEXT,
     Workout_Duration TEXT
 );
-
 CREATE TABLE IF NOT EXISTS WorkoutPlans ( 
     Plan_ID INTEGER PRIMARY KEY,
     User_ID INTEGER,
     Plan_Name TEXT,
-    Workouts TEXT,
     FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+);
+
+CREATE TABLE IF NOT EXISTS PlanWorkouts (
+    PlanWorkout_ID INTEGER PRIMARY KEY,
+    Plan_ID INTEGER,
+    Workout_ID INTEGER,
+    FOREIGN KEY (Plan_ID) REFERENCES WorkoutPlans(Plan_ID),
+    FOREIGN KEY (Workout_ID) REFERENCES Workouts(Workout_ID)
 );
 
 INSERT INTO Workouts (Workout_Name, Workout_Description, Workout_Duration) VALUES

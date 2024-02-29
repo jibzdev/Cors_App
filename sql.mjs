@@ -50,11 +50,38 @@ export async function createUser(userData){
 
 export async function createPlan(userData) {
     const db = await connectDB;
-    const query = `INSERT INTO WorkoutPlans (User_ID, Plan_Name, Workouts) VALUES (?, ?, ?)`;
-    return db.run(query, [userData.User_ID, userData.Plan_Name, userData.Workouts]);
+    const planQuery = `INSERT INTO WorkoutPlans (User_ID, Plan_Name) VALUES (?, ?)`;
+    const { lastID } = await db.run(planQuery, [userData.User_ID, userData.Plan_Name]);
+    const workoutInsertQuery = `INSERT INTO PlanWorkouts (Plan_ID, Workout_ID) VALUES (?, ?)`;
+    for (const workoutID of userData.Workouts) {
+        await db.run(workoutInsertQuery, [lastID, workoutID]);
+    }
+    return lastID; 
 }
 
 export async function showUserPlans(userData){
     const db = await connectDB;
-    return db.all("SELECT * FROM WorkoutPlans WHERE User_ID = ?", [userData.User_ID]); 
+    const plansQuery = `
+        SELECT wp.Plan_ID, wp.Plan_Name, GROUP_CONCAT(w.Workout_Name) AS Workouts
+        FROM WorkoutPlans wp
+        LEFT JOIN PlanWorkouts pw ON wp.Plan_ID = pw.Plan_ID
+        LEFT JOIN Workouts w ON pw.Workout_ID = w.Workout_ID
+        WHERE wp.User_ID = ?
+        GROUP BY wp.Plan_ID
+    `;
+    const plans = await db.all(plansQuery, [userData.User_ID]);
+    console.log(plans);
+    return plans.map(plan => ({
+        ...plan,
+        Workouts: plan.Workouts ? plan.Workouts.split(',') : []
+    })); 
+}
+
+export async function getPlan(id){
+    const db = await connectDB;
+    return db.all(`
+        SELECT pw.Plan_ID, w.Workout_ID, w.Workout_Name, w.Workout_Description, w.Workout_Duration
+        FROM PlanWorkouts pw
+        JOIN Workouts w ON pw.Workout_ID = w.Workout_ID
+        WHERE pw.Plan_ID = ?`, [id]);
 }

@@ -1,21 +1,35 @@
 #userArea{
     z-index: 100;
-    margin: 50px;
 }
 
 #selection-content {
     align-self: center;
 }
+#selectedWorkouts{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    margin: 25px;
+    border-top: #b67806 1px solid;
+    border-bottom: #b67806 1px solid;
+    flex-direction: column;
+}
 
 #greet{
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 2vw;
-    margin-top: 15px;
+    margin-bottom: 2vw;
     color: #525252;
     font-family: "Kanit";
     font-size: 1.5vh;
+}
+
+#greet h1{
+    color: white;
 }
 @media (max-width: 768px) {
     #userArea{
@@ -27,13 +41,6 @@
     }
 }
 
-#greet2{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2vw;
-    font-family: "Kanit";
-}
 
 #weather{
     display: flex;
@@ -51,7 +58,7 @@
     background-color: white;
     width: 25px;
     height: 2px;
-    position: relative;
+    position: absolute;
     transition: transform 0.3s ease;
     margin: 25px;
     cursor: pointer;
@@ -81,10 +88,21 @@ nav{
     left: -1px;
     width: 25%;
     height: 100%;
-    background-color: #121212;
+    background-color: #000000d8;
     color: #fff;
     transition: transform 0.5s ease;
+    font-family: "Kanit";
     transform: translateX(-100%);
+}
+@media (max-width: 768px) {
+    nav{
+
+        width: 50%;
+    }
+}
+
+nav a{
+    border-bottom: 1px solid white;
 }
 
 #options h1{
@@ -98,6 +116,7 @@ nav{
     transition: 0.2s ease-in-out all;
     overflow: hidden;
     font-family: "Kanit";
+    height: auto;
 }
 
 .workoutCards a{
@@ -106,7 +125,8 @@ nav{
 }
 
 #workoutCardTimer{
-    background-color: #b67806;
+    background-color: #1f1f1f;
+    text-align: center;
 
 }
 
@@ -117,7 +137,7 @@ nav{
 }
 
 .container{
-    max-height: 25%;
+    height: auto;
     padding: 20px;
     text-align: left;
     bottom: 0;
@@ -132,16 +152,80 @@ nav{
     box-shadow: 0 8px 18px 0 rgba(0,0,0,0.4);
 }
 
-#content{
-    z-index: -9;
-    height: 72vh;
-    display: grid;
-    grid-template-columns: repeat(2, 0fr);
-    gap: 25px;
+#content {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
     justify-content: center;
-    align-items: center;
+    gap: 20px;
 }
 
-#selectedWorkouts{
-    position: fixed;
+
+.selectedCards {
+    display: flex;
+    align-items: center;
+    width: 50vh;
+    height: 13vh;
+    margin-top: 10px;
+}
+
+.selectedCards img {
+    width: 13vh;
+    height: 13vh;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.selectedCards .textContent {
+    flex: 1;
+    background-color: #181818;
+    border-radius: 0 5px 5px 0;
+    padding: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    font-family: "Kanit";
+}
+@media (max-width: 768px) {
+    .selectedCards .textContent {
+        padding: 30px;
+    }
+    .selectedCards img {
+        width: 25vw;
+        height: 24vw;
+    }
+    .selectedCards {
+        width: 86vw;
+    }
+}
+
+.selectedCards h1,
+.selectedCards p {
+    margin: 0;
+    color: white;
+}
+
+.selectedCards h1{font-size: 2vh;}
+
+#nameWorkout{
+    font-family: "Kanit";
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#nameWorkout label{
+    font-size: 3vh;
+}
+
+#nameWorkout input{
+    text-align: center;
+    border: none;
+    background: none;
+    border-bottom: solid 1px white;
+    outline: none;
 }

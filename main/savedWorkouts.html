@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/workout.css">
+</head>
+<body>
+    <script>
+document.addEventListener('DOMContentLoaded', async function(){
+    let username = localStorage.getItem("userName");
+    const payload = {
+        username
+    };
+    const response = await fetch('/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    const userData = await response.json();
+    const User_ID = `${userData.userID}`;
+
+    const payload2 = {
+        User_ID
+    };
+    const response2 = await fetch('/plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload2),
+    });
+    const workoutPlans = await response2.json();
+
+    let content = '<div>';
+    workoutPlans.forEach(plan => {
+        content += `<div>Workout Plan ID: ${plan.Plan_ID}<br>Workout Name: ${plan.Plan_Name}<br>Workouts Included: ${plan.Workouts}<br><button onclick="window.location.href='workout.html?planID=${plan.Plan_ID}'">Load</button><br><br></div>`;
+    });
+    content += '</div>';
+
+    document.body.innerHTML = content;
+});
+    </script>
+</body>
+</html>

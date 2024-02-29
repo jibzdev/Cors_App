@@ -140,8 +140,18 @@ async function login() {
     sTextP.id = 'sText';
     sTextP.innerHTML = "Don't have an Account?<br>";
     const signupButton = createButton('signup', '', 'REGISTER');
+    let googleRegB = document.createElement("a");
+    googleRegB.setAttribute("id","googleRegButton");
+    googleRegB.innerHTML = `<i class="fa-brands fa-google fa-2xl"></i>`;
     sTextP.appendChild(signupButton);
+    sTextP.appendChild(googleRegB);
+    sTextP.style.display = "flex";
     sTextP.style.top = "85%";
+    sTextP.style.flexDirection = "column";
+    sTextP.style.alignItems = "center";
+    sTextP.style.flexWrap = "wrap";
+    sTextP.style.top = "100%";
+    sTextP.style.gap = "10px";
 
     inputCard.appendChild(inputContainer);
     inputCard.appendChild(sTextP);
@@ -149,7 +159,7 @@ async function login() {
 
     signupButton.addEventListener("click", signup);
     const confirmLoginButton = main.querySelector("#confirmLogin");
-    confirmLoginButton.addEventListener("click", async () => {
+    async function attemptLogin() {
         const username = main.querySelector("#username").value.trim();
         const password = main.querySelector("#password").value.trim();
 
@@ -175,6 +185,13 @@ async function login() {
             location.href = "createPlan.html";
         } else {
             notify("Incorrect Details.", "red");
+        }
+    }
+
+    confirmLoginButton.addEventListener("click", attemptLogin);
+    document.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            attemptLogin();
         }
     });
     // history.pushState({page: "login"}, "login", "login");

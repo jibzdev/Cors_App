@@ -27,3 +27,6 @@ async function addOrRemoveMenuIcon() {
       }
     }
 };
+
+document.addEventListener("DOMContentLoaded", addOrRemoveMenuIcon);
+window.addEventListener("resize", addOrRemoveMenuIcon);

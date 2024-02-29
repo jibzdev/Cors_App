@@ -134,3 +134,21 @@ main h1{
 .notification.slide-in {
     right: 10px;
 }
+
+
+#googleRegButton {
+    width: 24px;
+    height: 18px;
+    border: 1px solid white;
+    padding: 20px;
+    font-size: 1.5vh;
+    border-radius: 50%;
+    transition: .2s ease-in-out all;
+    cursor: pointer;
+}
+
+
+#googleRegButton:hover {
+    color: #3a3a3a;
+    border: 1px solid #3a3a3a;
+}
