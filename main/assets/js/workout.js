@@ -69,6 +69,7 @@ function skipToWorkout(workoutDetails, newIndex, allWorkoutsContainer) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+    document.querySelector("#userNameGreet").innerHTML = `Hello ${localStorage.getItem("userName")}`;
     notify("Workout Created!", "green");
     const params = new URLSearchParams(document.location.search);
     const id = params.get('planID');
