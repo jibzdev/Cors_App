@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./assets/css/workout.css">
+    <!-- <link rel="stylesheet" href="./assets/css/createPlan.css"> -->
     <script type="module" src="./assets/js/workout.js"></script>
     <script src="https://kit.fontawesome.com/f2057f9f44.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+    <div id="userArea">
+        <div id="controlButtons">
+        <a id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i></a>
+        <a><i class="fa-solid fa-gear"></i></a>
+        </div>
+        <div id="greet">
+        <h1>Hello,</h1><br>
+        <p>Lets get those gains!</p>
+        </div>
+    </div>
 
     <section id="allWorkouts">
 
@@ -17,13 +29,13 @@
     <section id="userControls">
 
         <div id="leftControls">
-            <button>Repeat Workout</button>
+            <input type="range" min="0" max="100" value="50" class="slider" id="volumeControl">
         </div>
 
         <div id="middleControls">
-            <button><i class="fa-solid fa-forward fa-flip-horizontal"></i></button>
-            <button><i class="fa-solid fa-play"></i></button>
-            <button><i class="fa-solid fa-forward"></i></button>
+            <button id="backwards"><i class="fa-solid fa-forward fa-flip-horizontal"></i></button>
+            <button id="playButton"><i class="fa-solid fa-play"></i></button>
+            <button id="forwards"><i class="fa-solid fa-forward"></i></button>
         </div>
 
         <div id="rightControls">

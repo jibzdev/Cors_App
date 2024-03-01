@@ -14,6 +14,49 @@ body{
     font-family: "Kanit";
 }
 
+#userArea{
+    margin-top: -2.5vh;
+    border-bottom: #b67806 1px solid;
+}
+#controlButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    flex-direction: row-reverse;
+    margin: 50px;
+    font-size: 2.5vh;
+}
+@media (max-width: 768px) {
+    #controlButtons {
+        margin: -15px;
+    }
+}
+#greet{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 2vw;
+    color: #525252;
+    font-family: "Kanit";
+    font-size: 1.5vh;
+}
+
+#greet h1{
+    border-bottom: solid 1px #b67806;
+    color: white;
+}
+@media (max-width: 768px) {
+    #userArea{
+        margin: 35px;
+    }
+    #greet{
+        margin-top: 25px;
+
+    }
+}
+
 .notification{
     position: absolute;
     margin-top: 30px;
@@ -38,29 +81,87 @@ body{
 }
 
 #userControls{
+    border-top: #b67806 1px solid;
     position: fixed;
-    background-color: black;
     bottom: 0;
-    width: 100%; /* Changed from auto to 100% to stretch across the screen */
+    width: 100%; 
     display: flex;
     justify-content: space-between;
     padding: 25px;
-    box-sizing: border-box; /* Ensures padding is included in the width */
+    box-sizing: border-box;
 }
 
 #middleControls{
     display: flex;
     justify-content: center;
     flex: 1;
+    gap: 25px;
+}
+
+#middleControls button{
+    color: #b67806;
+    background: none;
+    border: none;
+    font-size: 4vh;
+    cursor: pointer;
 }
 
 #leftControls{
     display: flex;
     justify-content: flex-start;
 }
+#leftControls button{
+    color: #b67806;
+    background: none;
+    border: none;
+    font-size: 2vh;
+    cursor: pointer;
+}
 
 #rightControls{
     display: flex;
     justify-content: flex-end;
-    margin-right: 5px; /* Adds margin to prevent right controls from going off-screen */
+    margin-right: 5px;
+}
+#rightControls button{
+    color: #b67806;
+    background: none;
+    border: none;
+    font-size: 2vh;
+    cursor: pointer;
+}
+
+.slider {
+    margin-top: 16px;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;   
+    background: #b67806;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
 }

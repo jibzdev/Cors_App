@@ -140,11 +140,11 @@ async function login() {
     sTextP.id = 'sText';
     sTextP.innerHTML = "Don't have an Account?<br>";
     const signupButton = createButton('signup', '', 'REGISTER');
-    let googleRegB = document.createElement("a");
-    googleRegB.setAttribute("id","googleRegButton");
-    googleRegB.innerHTML = `<i class="fa-brands fa-google fa-2xl"></i>`;
+    // let googleRegB = document.createElement("a");
+    // googleRegB.setAttribute("id","googleRegButton");
+    // googleRegB.innerHTML = `<i class="fa-brands fa-google fa-2xl"></i>`;
     sTextP.appendChild(signupButton);
-    sTextP.appendChild(googleRegB);
+    // sTextP.appendChild(googleRegB);
     sTextP.style.display = "flex";
     sTextP.style.top = "85%";
     sTextP.style.flexDirection = "column";

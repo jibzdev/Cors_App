@@ -1,5 +1,5 @@
 #userArea{
-    z-index: 100;
+    margin-top: 7.5vh;
 }
 
 #selection-content {
@@ -7,9 +7,6 @@
 }
 #selectedWorkouts{
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 25px;
     margin: 25px;
     border-top: #b67806 1px solid;
@@ -29,6 +26,7 @@
 }
 
 #greet h1{
+    border-bottom: solid 1px #b67806;
     color: white;
 }
 @media (max-width: 768px) {
@@ -54,55 +52,28 @@
     border-bottom: 2px solid #b67806;
 }
 
-#userSideBar{
-    background-color: white;
-    width: 25px;
-    height: 2px;
-    position: absolute;
-    transition: transform 0.3s ease;
-    margin: 25px;
-    cursor: pointer;
-}
-#userSideBar::after{
-    content: "W|W|W";
-    color: transparent;
-    background-color: white;
-    width: 15px;
-    height: 2px;
-    position: absolute;
-    top: 8px;
-    left: 0;
-    overflow: scroll;
-    transition: transform 0.3s ease;
-}
-
-#selection {
-    font-family: "Kanit";
-}
-
-nav{
+#controlButtons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    position: fixed;
-    left: -1px;
-    width: 25%;
-    height: 100%;
-    background-color: #000000d8;
-    color: #fff;
-    transition: transform 0.5s ease;
-    font-family: "Kanit";
-    transform: translateX(-100%);
+    align-content: center;
+    flex-direction: row-reverse;
+    margin: 50px;
+    font-size: 2.5vh;
 }
-@media (max-width: 768px) {
-    nav{
+#controlButtons a:hover {
+    cursor: pointer;
+    color: #525252;
+    transition: .2s ease-in-out all;
+}
 
-        width: 50%;
+@media (max-width: 768px) {
+    #controlButtons {
+        margin: -15px;
     }
 }
-
-nav a{
-    border-bottom: 1px solid white;
+#selection {
+    font-family: "Kanit";
 }
 
 #options h1{
@@ -117,6 +88,7 @@ nav a{
     overflow: hidden;
     font-family: "Kanit";
     height: auto;
+    overflow: scroll;
 }
 
 .workoutCards a{
@@ -173,22 +145,19 @@ nav a{
     width: 13vh;
     height: 13vh;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 5px 0 0 5px;
 }
 
 .selectedCards .textContent {
     flex: 1;
     background-color: #181818;
     border-radius: 0 5px 5px 0;
-    padding: 5vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    padding: 2.3vh;
     font-family: "Kanit";
 }
 @media (max-width: 768px) {
     .selectedCards .textContent {
-        padding: 30px;
+        padding: 10px;
     }
     .selectedCards img {
         width: 25vw;
@@ -197,6 +166,32 @@ nav a{
     .selectedCards {
         width: 86vw;
     }
+}
+#textContentDetails2{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#textContentDetails2 button{
+    background: none;
+    border: none;
+    color: white;
+    font-family: "Kanit";
+    font-size: 2vh;
+    cursor: pointer;
+    transition: .2s ease-in-out all;
+}
+
+#textContentDetails2 button:hover{
+    color: rgb(77, 77, 77);
+}
+
+#textContentDetails1{
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    align-items: baseline;
 }
 
 .selectedCards h1,
@@ -223,9 +218,69 @@ nav a{
 }
 
 #nameWorkout input{
+    font-family: "Kanit";
+    margin-top: 25px;
     text-align: center;
-    border: none;
-    background: none;
-    border-bottom: solid 1px white;
+    border: 2px solid transparent;
+    background-color: transparent;
     outline: none;
+    color: white;
+    padding: 18px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid white;
+}
+
+#nameWorkout input:focus {
+    border-color: #b67806;
+    box-shadow: 0 0 0 2px rgba(0, 128, 0, 0.2);
+}
+
+#nameWorkout input::placeholder {
+    color: #ffffff;
+    opacity: 1;
+    transition: transform 0.3s ease;
+}
+
+#nameWorkout input:focus::placeholder {
+    transform: translateY(-20px);
+    font-size: 0.75em;
+    color: #b67806;
+}
+
+#workoutInfo{
+    font-family: "Kanit";
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+#createWorkout{
+    background: none;
+    border: #b67806 solid 1px;
+    padding: 5px;
+    font-family: "Kanit";
+    outline: none;
+    color: #b67806;
+    border-radius: 5px;
+    transition: .2s ease-in-out all;
+    cursor: pointer;
+}
+#createWorkout:hover{
+    border: #fff solid 1px;
+    color: #fff;
+}
+
+#workoutCardsDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+#pointer{
+    font-family: "Kanit";
+    color: grey;
+    margin: 25px;
 }
