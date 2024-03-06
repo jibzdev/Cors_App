@@ -4,41 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/workout.css">
+    <link rel="stylesheet" href="./assets/css/saved.css">
+    <script type="module" src="assets/js/savedWorkouts.js"></script>
+    <script src="https://kit.fontawesome.com/f2057f9f44.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <script>
-document.addEventListener('DOMContentLoaded', async function(){
-    let username = localStorage.getItem("userName");
-    const payload = {
-        username
-    };
-    const response = await fetch('/user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-    });
-    const userData = await response.json();
-    const User_ID = `${userData.userID}`;
 
-    const payload2 = {
-        User_ID
-    };
-    const response2 = await fetch('/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload2),
-    });
-    const workoutPlans = await response2.json();
+    <div id="userArea">
+        <div id="controlButtons">
+        <a id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i></a>
+        <a><i class="fa-solid fa-gear"></i></a>
+        </div>
+        <div id="greet">
+        <h1 id="userNameGreet"></h1>
+        <p>Welcome back to CORS APP.</p>
+        </div>
 
-    let content = '<div>';
-    workoutPlans.forEach(plan => {
-        content += `<div>Workout Plan ID: ${plan.Plan_ID}<br>Workout Name: ${plan.Plan_Name}<br>Workouts Included: ${plan.Workouts}<br><button onclick="window.location.href='workout.html?planID=${plan.Plan_ID}'">Load</button><br><br></div>`;
-    });
-    content += '</div>';
+        <div id="weather">
+        <p>Mon</p>
+        <p>Tue</p>
+        <p>Wed</p>
+        <p>Thu</p>
+        <p>Fri</p>
+        <p>Sat</p>
+        <p>Sun</p>
+        </div>
+    </div>
 
-    document.body.innerHTML = content;
-});
-    </script>
+    <section id="content"></section>
+
 </body>
 </html>

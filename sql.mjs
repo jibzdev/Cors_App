@@ -8,7 +8,6 @@ async function connect() {
         verbose: true,
     });
     await database.migrate({ migrationsPath: './database'});
-    console.log("Database Initialized.\n--------------Logs-----------\n");
     return database;
 };
 
@@ -62,7 +61,7 @@ export async function createPlan(userData) {
 export async function showUserPlans(userData){
     const db = await connectDB;
     const plansQuery = `
-        SELECT wp.Plan_ID, wp.Plan_Name, GROUP_CONCAT(w.Workout_Name) AS Workouts
+        SELECT wp.Plan_ID, wp.Plan_Name, GROUP_CONCAT(w.Workout_Name) AS Workouts, SUM(w.Workout_Duration) AS Total_Workout_Time
         FROM WorkoutPlans wp
         LEFT JOIN PlanWorkouts pw ON wp.Plan_ID = pw.Plan_ID
         LEFT JOIN Workouts w ON pw.Workout_ID = w.Workout_ID
@@ -70,10 +69,10 @@ export async function showUserPlans(userData){
         GROUP BY wp.Plan_ID
     `;
     const plans = await db.all(plansQuery, [userData.User_ID]);
-    console.log(plans);
     return plans.map(plan => ({
         ...plan,
-        Workouts: plan.Workouts ? plan.Workouts.split(',') : []
+        Workouts: plan.Workouts ? plan.Workouts.split(',') : [],
+        Total_Workout_Time: plan.Total_Workout_Time ? plan.Total_Workout_Time : 0
     })); 
 }
 

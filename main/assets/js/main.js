@@ -182,7 +182,7 @@ async function login() {
         if (response.ok) {
             localStorage.setItem("userLoggedIn", "true");
             localStorage.setItem("userName", payload.username);
-            location.href = "createPlan.html";
+            location.href = "home.html";
         } else {
             notify("Incorrect Details.", "red");
         }

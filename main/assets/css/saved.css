@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit');
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+body{
+    background-color: #121212;
+    color: white;
+    font-family: "Kanit";
+}
+
+#userArea{
+    margin-top: 5.5vh;
+}
+
+#greet{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 2vw;
+    color: #525252;
+    font-family: "Kanit";
+    font-size: 1.5vh;
+}
+
+#greet h1{
+    border-bottom: solid 1px #b67806;
+    color: white;
+}
+@media (max-width: 768px) {
+    #userArea{
+        margin: 35px;
+    }
+    #greet{
+        margin-top: 25px;
+
+    }
+}
+
+.notification{
+    position: absolute;
+    margin-top: 30px;
+    margin-right: 10px;
+    top: 0;
+    right: -300px;
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.5s ease;
+    color: white;
+    font-family: "Kanit";
+    text-transform: uppercase;
+}
+
+.notification.slide-in {
+    right: 10px;
+}
+
+#weather{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3vw;
+    font-family: "Kanit";
+}
+
+#weather p{
+    border-bottom: 2px solid #b67806;
+}
+
+.cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cards img {
+    border-radius: 10px 0 0 10px;
+    max-width: 14%;
+    object-fit: cover;
+}
+@media (max-width: 768px) {
+    .cards img {
+        max-width: 26%;
+    }
+}
+
+#container {
+    width: 40vh;
+    display: flex;
+    padding: 20px;
+    border-radius: 0 10px 10px 0;
+    background-color: #fff;
+    justify-content: space-between;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    #container{
+        padding: 10px;
+    }
+}
+
+.header-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-button h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.header-button button {
+    padding: 10px 20px;
+    background-color: #b67806;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.header-button button:hover {
+    background-color: #a56705;
+}
+
+.ptexts {
+    height: 7vh;
+    display: flex;
+    color: #333;
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content{
+    margin-top: 100px;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#controlButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    flex-direction: row-reverse;
+    margin: 50px;
+    font-size: 2.5vh;
+}
+#controlButtons a:hover {
+    cursor: pointer;
+    color: #525252;
+    transition: .2s ease-in-out all;
+}
+
+@media (max-width: 768px) {
+    #controlButtons {
+        margin: -15px;
+    }
+}

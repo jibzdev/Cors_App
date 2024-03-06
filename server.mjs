@@ -1,5 +1,3 @@
-const version = "1.0";
-
 import express from 'express';
 import * as databaseCMDS from './sql.mjs';
 import bodyParser from 'body-parser';
@@ -88,6 +86,27 @@ async function getWorkout(req, res) {
 }
 
 app.get('/getWorkout/:workoutID', asyncWrap(getWorkout));
-app.listen(8080);
 
-console.log(`App running on Version: ${version}`);
+let version = 1;
+
+import { createInterface } from 'readline';
+
+const readline = createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+readline.question('Enter the new version number: ', (newVersion) => {
+    const parsedVersion = parseInt(newVersion, 10);
+    if (!isNaN(parsedVersion) && parsedVersion > version) {
+        version = parsedVersion;
+        console.log(`App running on Version: 1.0.${version}`);
+        console.log("Database Initialized.\n--------------Logs-----------\n");
+    } else {
+        console.log(`Invalid version number or version not incremented. Current Version: 1.0.${version}`);
+        console.log("Database Initialized.\n--------------Logs-----------\n");
+    }
+    readline.close();
+});
+
+app.listen(8080);

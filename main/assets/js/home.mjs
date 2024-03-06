@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     else{
         alert("not logged in");
+        window.location.href = `/`;
     }
 
 });
