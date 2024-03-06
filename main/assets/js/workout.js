@@ -1,4 +1,4 @@
-import { notify } from './notification.mjs';
+import { notify } from './notification.js';
 
 async function fetchWorkoutDetails(id) {
     const response = await fetch(`./getWorkout/${id}`);
@@ -69,6 +69,11 @@ function skipToWorkout(workoutDetails, newIndex, allWorkoutsContainer) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+    const today = new Date().toLocaleString('en-us', {weekday: 'short'});
+    const todayElement = document.getElementById(today);
+    if(todayElement) {
+        todayElement.style.color = '#b67806';
+    }
     document.querySelector("#userNameGreet").innerHTML = `Hello ${localStorage.getItem("userName")}`;
     notify("Workout Created!", "green");
     const params = new URLSearchParams(document.location.search);

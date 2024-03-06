@@ -46,6 +46,11 @@ async function fetchWorkoutPlans(User_ID) {
 }
 
 function displayWorkoutPlans(workoutPlans) {
+    const today = new Date().toLocaleString('en-us', {weekday: 'short'});
+    const todayElement = document.getElementById(today);
+    if(todayElement) {
+        todayElement.style.color = '#b67806';
+    }
     const workoutsContainer = document.querySelector("#content");
 
     workoutPlans.forEach(plan => {

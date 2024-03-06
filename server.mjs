@@ -1,6 +1,9 @@
 import express from 'express';
 import * as databaseCMDS from './sql.mjs';
 import bodyParser from 'body-parser';
+import { readFileSync, writeFileSync } from 'fs';
+
+let version;
 
 const app = express();
 app.use(express.static('main'));
@@ -87,26 +90,35 @@ async function getWorkout(req, res) {
 
 app.get('/getWorkout/:workoutID', asyncWrap(getWorkout));
 
-let version = 1;
-
 import { createInterface } from 'readline';
+import { exit } from 'process';
 
-const readline = createInterface({
+const rl = createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-readline.question('Enter the new version number: ', (newVersion) => {
-    const parsedVersion = parseInt(newVersion, 10);
-    if (!isNaN(parsedVersion) && parsedVersion > version) {
-        version = parsedVersion;
-        console.log(`App running on Version: 1.0.${version}`);
+try {
+    let data = readFileSync('readme.md', 'utf8');
+    let versionNumber = parseFloat(data.split('\n')[0].split(' ')[1]);
+
+    rl.question('New version update detected. Update? (y/n) ', (answer) => {
+        if (answer.toLowerCase() === 'y') {
+            versionNumber += 0.1;
+            let version = versionNumber.toFixed(1);
+            data = data.replace(/Version: \d+\.\d+/, `Version: ${version}`);
+            writeFileSync('readme.md', data, 'utf8');
+            console.log(`Updated to Version: 1.${version}`);
+        } else {
+            console.log("Version update canceled");
+        }
+        console.log(`App running on Version: 1.${versionNumber.toFixed(1)}`);
         console.log("Database Initialized.\n--------------Logs-----------\n");
-    } else {
-        console.log(`Invalid version number or version not incremented. Current Version: 1.0.${version}`);
-        console.log("Database Initialized.\n--------------Logs-----------\n");
-    }
-    readline.close();
-});
+        rl.close();
+    });
+} catch (err) {
+    console.error(err);
+    exit;
+}
 
 app.listen(8080);

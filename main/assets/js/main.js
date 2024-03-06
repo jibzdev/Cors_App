@@ -1,4 +1,4 @@
-import { notify } from './notification.mjs';
+import { notify } from './notification.js';
 
 function createInputWithIcon(iconClass, type, placeholder, id) {
     const div = document.createElement('div');

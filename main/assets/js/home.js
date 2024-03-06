@@ -1,4 +1,4 @@
-import { notify } from './notification.mjs';
+import { notify } from './notification.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     const check = localStorage.getItem("userLoggedIn");
@@ -50,6 +50,11 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
 }
 
 async function homepage(username) {
+    const today = new Date().toLocaleString('en-us', {weekday: 'short'});
+    const todayElement = document.getElementById(today);
+    if(todayElement) {
+        todayElement.style.color = '#b67806';
+    }
     history.pushState({page: "homepage"}, "homepage", "/homepage");
     document.querySelector("#userNameGreet").innerHTML = `Hello ${username}`;
     document.querySelector("#content").innerHTML = `
