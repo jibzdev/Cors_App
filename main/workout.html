@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Workout</title>
     <link rel="stylesheet" href="./assets/css/workout.css">
     <script type="module" src="./assets/js/workout.js"></script>
     <script src="https://kit.fontawesome.com/f2057f9f44.js" crossorigin="anonymous"></script>
@@ -12,13 +12,12 @@
 
     <div id="userArea">
         <div id="controlButtons">
-        <a id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i></a>
-        <a><i class="fa-solid fa-gear"></i></a>
-        </div>
-        <div id="greet">
         <h1 id="userNameGreet"></h1>
-        <p>Lets get those gains!</p>
+        <a id="logoutButton"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
+    </div>
+    <div id="upNext">
+
     </div>
 
     <section id="allWorkouts">
@@ -27,9 +26,9 @@
     
     <section id="userControls">
 
-        <div id="leftControls">
+        <!-- <div id="leftControls">
             <input type="range" min="0" max="100" value="50" class="slider" id="volumeControl">
-        </div>
+        </div> -->
 
         <div id="middleControls">
             <button id="backwards"><i class="fa-solid fa-forward fa-flip-horizontal"></i></button>
@@ -37,10 +36,14 @@
             <button id="forwards"><i class="fa-solid fa-forward"></i></button>
         </div>
 
-        <div id="rightControls">
+        <!-- <div id="rightControls">
             <button>+ 15s</button>
             <button>- 15s</button>
-        </div>
+        </div> -->
+    </section>
+
+    <section id="screen">
+
     </section>
 </body>
 </html>
