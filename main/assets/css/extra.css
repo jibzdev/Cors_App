@@ -49,3 +49,50 @@
   background: white;
   color: black;
 }
+
+.notification{
+  position: absolute;
+  margin-top: 30px;
+  margin-right: 10px;
+  top: 0;
+  right: -300px;
+  width: 250px;
+  height: 50px;
+  text-align: center;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: right 0.5s ease;
+  color: white;
+  font-family: "Kanit";
+  text-transform: uppercase;
+}
+
+.notification.slide-in {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .notification{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 150px;
+    height: 35px;
+    border-radius: 10px;
+    font-size: 1.3vh;
+  }
+}
+
+.fade {
+  animation: fade-in 1s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

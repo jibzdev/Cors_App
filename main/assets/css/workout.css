@@ -38,7 +38,7 @@ body{
 #controlButtons h1{
     font-size: 2.5vh;
     border-bottom: solid 1px #b67806;
-    color: #525252;
+    color: #ffffff;
 }
 @media (max-width: 768px) {
     #userArea{
@@ -48,29 +48,6 @@ body{
         margin-top: 25px;
 
     }
-}
-
-.notification{
-    position: absolute;
-    margin-top: 30px;
-    margin-right: 10px;
-    top: 0;
-    right: -300px;
-    width: 250px;
-    height: 50px;
-    text-align: center;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: right 0.5s ease;
-    color: white;
-    font-family: "Kanit";
-    text-transform: uppercase;
-}
-
-.notification.slide-in {
-    right: 10px;
 }
 
 #userControls{
@@ -91,13 +68,16 @@ body{
 }
 
 #middleControls button{
-    color: #b67806;
+    color: #ffffff;
     background: none;
     border: none;
     font-size: 4vh;
     cursor: pointer;
+    transition: .2s ease-in-out all;
 }
-
+#middleControls button:hover{
+    color: #a0540e;
+}
 #leftControls{
     display: flex;
     justify-content: flex-start;
@@ -168,9 +148,82 @@ body{
 
 #screen img{
     border-radius: 5px;
-    max-width: 55vh;
+    max-width: 50vh;
     height: 30vh;
     object-fit: cover;
     display: block;
     margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    #screen img{
+        max-width: 35vh;
+        height: 20vh;
+    }
+  }
+
+  #upNext {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    background-color: #161616;
+    border-radius: 5px;
+    width: 35vh;
+    height: 10vh;
+    align-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+#textNext{
+    text-align: center;
+    margin-right: 50px;
+}
+
+#upNext p{
+    color: #b67806;
+}
+
+#upNext img{
+    border-radius: 5px 0 0 5px;
+    max-width: 10vh;
+    height: auto;
+    display: block;
+}
+
+#allWorkoutsContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #111111;
+    height: 320px;
+    width: 500px;
+    padding: 150px;
+    border-radius: 5px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+#workoutElementCard {
+    width: 45vh;
+    background-color: #1b1b1b;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#workoutElementCard img{
+    border-radius: 5px 0 0 5px;
+    max-width: 12vh;
+    height: auto;
+    display: block;
 }
