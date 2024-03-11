@@ -10,21 +10,22 @@ async function fetchWorkoutDetails(id) {
         throw new Error('No workouts found.');
     }
     let currentWorkoutIndex = 0;
-    // displayWorkout(workoutDetails[currentWorkoutIndex]);
+    displayWorkout(workoutDetails[currentWorkoutIndex]);
 
     const PLAY = document.querySelector("#playButton");
     const BACK = document.querySelector("#backButton");
     const FORWARD = document.querySelector("#forwardButton");
     let isPlaying = false;
     let workoutInterval;
-
     PLAY.addEventListener('click', () => {
-        if (currentWorkoutIndex === workoutDetails.length + 1) {
+        if (currentWorkoutIndex >= workoutDetails.length) {
             if (confirm("Do you wish to restart the workout?")) {
                 currentWorkoutIndex = 0;
+                displayWorkout(workoutDetails[currentWorkoutIndex]);
                 startWorkout();
             } else {
                 notify("Workout Finished", "red");
+                isPlaying = false;
             }
         } else {
             document.querySelector("#screen").classList.add("fade");
@@ -38,28 +39,46 @@ async function fetchWorkoutDetails(id) {
         }
     });
 
+    let debounceBack = false;
     BACK.addEventListener('click', () => {
-        document.querySelector("#screen").classList.add("fade");
-        if (currentWorkoutIndex > 0) {
-            clearInterval(workoutInterval);
-            currentWorkoutIndex--;
-            startWorkout();
+        if (!debounceBack) {
+            debounceBack = true;
+            document.querySelector("#screen").classList.add("fade");
+            if (currentWorkoutIndex > 0) {
+                clearInterval(workoutInterval);
+                currentWorkoutIndex--;
+                displayWorkout(workoutDetails[currentWorkoutIndex]);
+                startWorkout();
+            }
+            else {
+                notify("Cannot go Back", "red");
+            }
+            setTimeout(() => debounceBack = false, 500);
         }
     });
 
+    let debounceForward = false;
     FORWARD.addEventListener('click', () => {
-        document.querySelector("#screen").classList.add("fade");
-        if (currentWorkoutIndex < workoutDetails.length - 1) {
-            clearInterval(workoutInterval);
-            currentWorkoutIndex++;
-            startWorkout();
+        if (!debounceForward) {
+            debounceForward = true;
+            document.querySelector("#screen").classList.add("fade");
+            if (currentWorkoutIndex < workoutDetails.length - 1) {
+                clearInterval(workoutInterval);
+                currentWorkoutIndex++;
+                displayWorkout(workoutDetails[currentWorkoutIndex]);
+                startWorkout();
+            }
+            else {
+                notify("Cannot go Forward", "red");
+            }
+            setTimeout(() => debounceForward = false, 500);
         }
     });
 
     async function startWorkout() {
+
         document.querySelector("#screen").innerHTML = '';
         document.querySelector("#screen").classList.add("fade");
-        // displayWorkout(workoutDetails[currentWorkoutIndex + 1]);
         let workout = workoutDetails[currentWorkoutIndex];
         let workoutNameForGif = workout.Workout_Name.toLowerCase().replace(/\s+/g, '').replace(/-/g, '');
         let workoutContainer = document.createElement("div");
@@ -68,9 +87,10 @@ async function fetchWorkoutDetails(id) {
         let countdownInterval = setInterval(() => {
             workoutDurationInSeconds--;
             if (workoutDurationInSeconds <= 0) {
+                displayWorkout(workoutDetails[currentWorkoutIndex + 1]);
                 clearInterval(countdownInterval);
                 workoutContainer.innerHTML = `
-                <img src="/assets/img/gifs/${workoutNameForGif}.png" alt="Workout In Progress"><br>
+                <img src="/assets/img/gifs/${workoutNameForGif}.gif" alt="Workout In Progress"><br>
                 <p>${workout.Workout_Description}</p>
                 `;
                 document.querySelector("#screen").innerHTML = '';
@@ -83,21 +103,29 @@ async function fetchWorkoutDetails(id) {
     }
 
     async function startActualWorkout(workout) {
+        const existingTimerContainer = document.getElementById("workoutTimer");
+        if (existingTimerContainer) {
+            existingTimerContainer.remove();
+        }
+
         // let workoutDurationInSeconds = parseInt(workout.Workout_Duration) * 60;
-        let workoutDurationInSeconds = 2;
-        let workoutTimerContainer = document.createElement("p");
+        let workoutDurationInSeconds = 5;
+        let workoutTimerContainer = document.createElement("div");
         workoutTimerContainer.id = "workoutTimer";
         workoutTimerContainer.innerHTML = `
                 <div id="sectionsForShit">
-                <p>${workout.Workout_Name}</p>
-                <p>${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}</p>
+                <p><i class="fa-solid fa-pencil"></i> ${workout.Workout_Name}</p>
+                <p><i class="fa-solid fa-clock"></i> ${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}</p>
+                <p><i class="fa-solid fa-dumbbell"></i> ${workout.Workout_Sets}</p>
                 </div>
-                <svg id="shit" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="256" height="256" xml:space="preserve"><switch><g><g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><path stroke="#EE5325" d="M215.212 39.288 142.391 113.5M142 84v30h35"/><path stroke="#BABABA" d="M38.788 216.712 112 144M112 179v-35H77"/></g></g></switch></svg>
+                <svg id="shit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 59.2"><g data-name="Layer 2"><path d="M60.75 0H3.25A3.26 3.26 0 0 0 0 3.25v39.39a3.26 3.26 0 0 0 3.25 3.26H21l-1.07 4.68-5.43 2.81a1 1 0 0 0-.54.89v3.92a1 1 0 0 0 1 1H49a1 1 0 0 0 1-1v-3.92a1 1 0 0 0-.54-.89l-5.39-2.81L43 45.9h17.7a3.26 3.26 0 0 0 3.3-3.26V3.25A3.26 3.26 0 0 0 60.75 0zM48 57.2H16v-2.32l5-2.63h22l5 2.63zm-6-6.95H22l1-4.36h18zm20-7.61a1.26 1.26 0 0 1-1.25 1.26H3.25A1.26 1.26 0 0 1 2 42.64V3.25A1.25 1.25 0 0 1 3.25 2h57.5A1.25 1.25 0 0 1 62 3.25z"/><path d="M57.17 6.31H6.83a1 1 0 0 0-1 1v31.27a1 1 0 0 0 1 1h50.34a1 1 0 0 0 1-1V7.31a1 1 0 0 0-1-1zm-1 31.28H7.83V8.31h48.34z"/><path d="M41.76 32.29h6.32a1 1 0 0 0 1-1V16.15a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v15.14a1 1 0 0 0 1 1zm1-15.13h4.32v13.13h-4.32zM28.52 32.29h6.32a1 1 0 0 0 1-1V20a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v11.3a1 1 0 0 0 1 .99zm1-11.3h4.32v9.3h-4.32zM15.63 32.29h6.32a1 1 0 0 0 1-1v-6.63a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v6.63a1 1 0 0 0 1 1zm1-6.63h4.32v4.63h-4.32z"/></g></svg>
                 `;
-        document.querySelector("#screen").append(workoutTimerContainer);
+        document.querySelector("#stats").append(workoutTimerContainer);
+
         let remainingSeconds = workoutDurationInSeconds;
         workoutInterval = setInterval(() => {
             if (remainingSeconds <= 0) {
+                workoutTimerContainer.remove();
                 clearInterval(workoutInterval);
                 notify("Keep Going!", "green");
                 currentWorkoutIndex++;
@@ -114,10 +142,11 @@ async function fetchWorkoutDetails(id) {
                 let seconds = remainingSeconds % 60;
                 document.getElementById("workoutTimer").innerHTML = `
                 <div id="sectionsForShit">
-                <p>${workout.Workout_Name}</p>
-                <p>${minutes}:${seconds.toString().padStart(2, '0')}</p>
+                <p><i class="fa-solid fa-pencil"></i> ${workout.Workout_Name}</p>
+                <p><i class="fa-solid fa-clock"></i> ${minutes}:${seconds.toString().padStart(2, '0')}</p>
+                <p><i class="fa-solid fa-dumbbell"></i> ${workout.Workout_Sets}</p>
                 </div>
-                <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="256" height="256" xml:space="preserve"><switch><g><g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><path stroke="#EE5325" d="M215.212 39.288 142.391 113.5M142 84v30h35"/><path stroke="#BABABA" d="M38.788 216.712 112 144M112 179v-35H77"/></g></g></switch></svg>
+                <svg id="shit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 59.2"><g data-name="Layer 2"><path d="M60.75 0H3.25A3.26 3.26 0 0 0 0 3.25v39.39a3.26 3.26 0 0 0 3.25 3.26H21l-1.07 4.68-5.43 2.81a1 1 0 0 0-.54.89v3.92a1 1 0 0 0 1 1H49a1 1 0 0 0 1-1v-3.92a1 1 0 0 0-.54-.89l-5.39-2.81L43 45.9h17.7a3.26 3.26 0 0 0 3.3-3.26V3.25A3.26 3.26 0 0 0 60.75 0zM48 57.2H16v-2.32l5-2.63h22l5 2.63zm-6-6.95H22l1-4.36h18zm20-7.61a1.26 1.26 0 0 1-1.25 1.26H3.25A1.26 1.26 0 0 1 2 42.64V3.25A1.25 1.25 0 0 1 3.25 2h57.5A1.25 1.25 0 0 1 62 3.25z"/><path d="M57.17 6.31H6.83a1 1 0 0 0-1 1v31.27a1 1 0 0 0 1 1h50.34a1 1 0 0 0 1-1V7.31a1 1 0 0 0-1-1zm-1 31.28H7.83V8.31h48.34z"/><path d="M41.76 32.29h6.32a1 1 0 0 0 1-1V16.15a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v15.14a1 1 0 0 0 1 1zm1-15.13h4.32v13.13h-4.32zM28.52 32.29h6.32a1 1 0 0 0 1-1V20a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v11.3a1 1 0 0 0 1 .99zm1-11.3h4.32v9.3h-4.32zM15.63 32.29h6.32a1 1 0 0 0 1-1v-6.63a1 1 0 0 0-1-1h-6.32a1 1 0 0 0-1 1v6.63a1 1 0 0 0 1 1zm1-6.63h4.32v4.63h-4.32z"/></g></svg>
                 `;
                 remainingSeconds--;
             }
@@ -125,25 +154,31 @@ async function fetchWorkoutDetails(id) {
     }
 }
 
-// function displayWorkout(workout) {
-//     if (workout === "done"){
-//         const workoutInfo = ``;
-//         document.querySelector("#upNext").classList = "fade";
-//         document.querySelector("#upNext").innerHTML = workoutInfo;  
-//     }
-//     else{
-//         const workoutInfo = `
-//         <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
-//         <div id="textNext">
-//             <h1>Up Next</h1>
-//             <p>${workout.Workout_Name}</p>
-//         </div>    
-//         `;
-//         document.querySelector("#upNext").classList = "fade";
-//         document.querySelector("#upNext").innerHTML = workoutInfo; 
-//     }
+function displayWorkout(workout) {
+    if (workout === "done"){
+        const workoutInfo = ``;
+        document.querySelector("#upNext").classList = "fade";
+        document.querySelector("#upNext").innerHTML = workoutInfo;  
+    }
+    else if (!workout){
+        document.querySelector("#upNext").style.backgroundColor = "#121212";
+        const workoutInfo = ``;
+        document.querySelector("#upNext").classList = "fade";
+        document.querySelector("#upNext").innerHTML = workoutInfo;  
+    }
+    else{
+        const workoutInfo = `
+        <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
+        <div id="textNext">
+            <h1>Up Next</h1>
+            <p>${workout.Workout_Name}</p>
+        </div>    
+        `;
+        document.querySelector("#upNext").classList = "fade";
+        document.querySelector("#upNext").innerHTML = workoutInfo; 
+    }
 
-// }
+}
 
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -185,29 +220,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 function showAllWorkoutsButton(workoutDetails){
     document.querySelector("#showAllWorkouts").addEventListener("click", function() {
         let overlay = document.createElement("div");
-        overlay.classList = "fade";
+        overlay.className = "fade";
         overlay.id = "overlay";
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-        overlay.style.zIndex = "1000";
-        
         let allWorkoutsDiv = document.createElement("div");
         allWorkoutsDiv.id = "allWorkoutsContainer";
         
-        let closeButton = document.createElement("button");
-        closeButton.innerText = "X";
-        closeButton.style.position = "fixed";
-        closeButton.style.top = "5px";
-        closeButton.style.right = "10px";
-        closeButton.onclick = function() {
-            overlay.remove();
-        };
-        
-        allWorkoutsDiv.appendChild(closeButton);
         workoutDetails.forEach(workout => {
             const workoutElement = document.createElement("div");
             workoutElement.id = "workoutElementCard";
@@ -219,42 +236,87 @@ function showAllWorkoutsButton(workoutDetails){
         });
         
         overlay.appendChild(allWorkoutsDiv);
-        document.body.append(overlay);
+        document.body.appendChild(overlay);
+
+        // Fix for overlay removal
+        overlay.addEventListener("click", function(event) {
+            if (event.target === overlay) {
+                overlay.remove();
+            }
+        });
     });
 }
 
 function activateMenus(){
     document.querySelector("#menuIcon").addEventListener("click", () => {
         const sidebar = document.querySelector("#sidebar");
-        if (sidebar.style.opacity == "0") {
-            sidebar.classList.add("fade");
-            sidebar.style.opacity = 1;
-        } else {
-            sidebar.style.opacity = 0;
-            sidebar.classList.remove("fade");
-        }
+        sidebar.style.opacity = sidebar.style.opacity == "0" ? "1" : "0";
+        sidebar.classList.toggle("fade");
     });
     document.querySelector("#arrow").addEventListener("click", () => {
         const sidebar2 = document.querySelector("#sidebar2");
-        if (sidebar2.style.opacity == "0") {
-            sidebar2.classList.add("fade");
-            sidebar2.style.opacity = 1;
-        } else {
-            sidebar2.style.opacity = 0;
-            sidebar2.classList.remove("fade");
-        }
+        sidebar2.style.opacity = sidebar2.style.opacity == "0" ? "1" : "0";
+        sidebar2.classList.toggle("fade");
     });
+    document.querySelector("#shareWorkout").addEventListener("click", () => {
+        const overlay = document.createElement("div");
+        overlay.className = "overlayStyle";
+        const text = document.createElement("h1");
+        text.textContent = "Share this workout with your friends!";
+        text.className = "overlayTextStyle";
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.value = window.location.href;
+        inputField.readOnly = true;
+        inputField.className = "overlayInputFieldStyle";
+
+        const socialMediaContainer = document.createElement("div");
+        socialMediaContainer.className = "socialMediaContainerStyle";
+
+        const facebookButton = createSocialButton("Facebook", "<i class='fab fa-facebook-f'></i>");
+        const instagramButton = createSocialButton("Instagram", "<i class='fab fa-instagram'></i>");
+        const snapchatButton = createSocialButton("Snapchat", "<i class='fab fa-snapchat-ghost'></i>");
+
+        socialMediaContainer.appendChild(facebookButton);
+        socialMediaContainer.appendChild(instagramButton);
+        socialMediaContainer.appendChild(snapchatButton);
+
+        overlay.appendChild(text);
+        overlay.appendChild(inputField);
+        overlay.appendChild(socialMediaContainer);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener("click", () => overlay.remove());
+        inputField.addEventListener("click", (e) => e.stopPropagation());
+    });
+
+    function createSocialButton(platform, iconHTML) {
+        const button = document.createElement("button");
+        button.className = "buttonStyle1";
+        button.innerHTML = iconHTML;
+        button.addEventListener("click", () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Share this workout!`,
+                    url: window.location.href
+                }).then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                console.log(`Share on ${platform}`);
+            }
+        });
+        return button;
+    }
     document.addEventListener("click", (event) => {
         if (!event.target.closest("#controlButtons")) {
             const sidebar = document.querySelector("#sidebar");
             const sidebar2 = document.querySelector("#sidebar2");
-            sidebar.style.opacity = 0;
-            sidebar2.style.opacity = 0;
+            sidebar.style.opacity = "0";
+            sidebar2.style.opacity = "0";
             setTimeout(() => {
                 sidebar.classList.remove("fade");
                 sidebar2.classList.remove("fade");
             }, 500);
         }
     });
-
 }

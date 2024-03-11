@@ -5,9 +5,6 @@
     padding: 0;
 }
 
-::-webkit-scrollbar{
-    display: none;
-}
 body{
     background-color: #121212;
     color: white;
@@ -116,9 +113,9 @@ body{
 
 #screen{
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-60%);
     text-align: center;
 }
 
@@ -139,11 +136,8 @@ body{
   }
 
   #upNext {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
-    background-color: #161616;
+    background-color: #0e0e0e;
     border-radius: 5px;
     width: 35vh;
     height: 10vh;
@@ -176,10 +170,6 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #111111;
-    height: 320px;
-    width: 500px;
-    padding: 150px;
     border-radius: 5px;
     overflow-y: scroll;
     display: flex;
@@ -187,6 +177,9 @@ body{
     justify-content: center;
     gap: 10px;
     align-items: center;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 500px;
 }
 
 #workoutElementCard {
@@ -270,25 +263,96 @@ body{
     background-color: rgba(44, 44, 44, 0.5);
 }
 
-#workoutTimer {
-    position: absolute;
-    top: 170%;
-    left: 50%;
-    transform: translate(-50%, -130%);
-    background-color: #0000009c;
-    padding: 25px;
-    width: 250px;
-    border-radius: 10px;
+#stats {
     display: flex;
-}
-#workoutTimer p{
-    border-bottom: white 1px solid;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
 }
 
-#sectionsForShit{
+@media (max-width: 768px) {
+    #stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+    }
+  }
+
+  #workoutTimer {
+    height: 77px;
+    background-color: #0e0e0e;
+    padding: 20px;
+    width: 245px;
+    border-radius: 10px;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#workoutTimer p{
+    border-bottom: rgba(255, 255, 255, 0.397) 1px solid;
+}
+
+#sectionsForShit {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+}
+#sectionsForShit i{
+    margin-right: 10px;
 }
 
 #shit{
     height: 50px;
+    fill: #b67806;
+    stroke: #b67806;
+}
+
+#overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.overlayStyle{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.overlayTextStyle{
+    color: white;
+    font-size: 2vh;
+}
+
+.overlayInputFieldStyle{
+    width: 30vh;
+    padding: 10px;
+    background-color: #1b1b1b;
+    color: white;
+    border: 1px solid #b67806;
+    border-radius: 5px; 
+}
+
+.socialMediaContainerStyle{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }

@@ -5,17 +5,6 @@
     padding: 0;
 }
 
-::-webkit-scrollbar {
-    width: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #121212;
-}
-::-webkit-scrollbar-thumb {
-    background: #b67806;
-    border-radius: 5px;
-}
-
 body{
     background-color: #121212;
     color: white;

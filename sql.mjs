@@ -79,7 +79,7 @@ export async function showUserPlans(userData){
 export async function getPlan(id){
     const db = await connectDB;
     return db.all(`
-        SELECT pw.Plan_ID, w.Workout_ID, w.Workout_Name, w.Workout_Description, w.Workout_Duration
+        SELECT pw.Plan_ID, w.Workout_ID, w.Workout_Name, w.Workout_Description, w.Workout_Duration, w.Workout_Sets
         FROM PlanWorkouts pw
         JOIN Workouts w ON pw.Workout_ID = w.Workout_ID
         WHERE pw.Plan_ID = ?`, [id]);
