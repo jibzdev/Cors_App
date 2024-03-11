@@ -109,8 +109,6 @@ async function signup() {
     }
 
     validateSignUp();
-
-    history.pushState({page: "signup"}, "signup", "signup");
 };
 
 async function login() {

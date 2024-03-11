@@ -10,7 +10,7 @@ async function fetchWorkoutDetails(id) {
         throw new Error('No workouts found.');
     }
     let currentWorkoutIndex = 0;
-    displayWorkout(workoutDetails[currentWorkoutIndex]);
+    // displayWorkout(workoutDetails[currentWorkoutIndex]);
 
     const PLAY = document.querySelector("#playButton");
     const BACK = document.querySelector("#backButton");
@@ -19,7 +19,7 @@ async function fetchWorkoutDetails(id) {
     let workoutInterval;
 
     PLAY.addEventListener('click', () => {
-        if (currentWorkoutIndex === workoutDetails.length - 1) {
+        if (currentWorkoutIndex === workoutDetails.length + 1) {
             if (confirm("Do you wish to restart the workout?")) {
                 currentWorkoutIndex = 0;
                 startWorkout();
@@ -30,7 +30,6 @@ async function fetchWorkoutDetails(id) {
             document.querySelector("#screen").classList.add("fade");
             if (isPlaying) {
                 clearInterval(workoutInterval);
-                PLAY.innerHTML = `<i class="fa-solid fa-play"></i>`;
                 isPlaying = false;
             } else {
                 startWorkout();
@@ -60,36 +59,41 @@ async function fetchWorkoutDetails(id) {
     async function startWorkout() {
         document.querySelector("#screen").innerHTML = '';
         document.querySelector("#screen").classList.add("fade");
-        PLAY.innerHTML = `<i class="fa-solid fa-pause"></i>`;
-        displayWorkout(workoutDetails[currentWorkoutIndex + 1]);
+        // displayWorkout(workoutDetails[currentWorkoutIndex + 1]);
         let workout = workoutDetails[currentWorkoutIndex];
         let workoutNameForGif = workout.Workout_Name.toLowerCase().replace(/\s+/g, '').replace(/-/g, '');
         let workoutContainer = document.createElement("div");
-        let workoutDurationInSeconds = currentWorkoutIndex === 0 ? 5 : 3; // 5 seconds for the first workout, 3 seconds for in-between workouts
-        document.querySelector("#screen").innerHTML = `<p>${workoutDurationInSeconds}</p>`;
+        let workoutDurationInSeconds = currentWorkoutIndex === 0 ? 5 : 3;
+        document.querySelector("#screen").innerHTML = `<p style="font-size:4vh;color:#b67806;">${workoutDurationInSeconds}</p>`;
         let countdownInterval = setInterval(() => {
             workoutDurationInSeconds--;
             if (workoutDurationInSeconds <= 0) {
                 clearInterval(countdownInterval);
                 workoutContainer.innerHTML = `
-                <p>Current Workout:<br>${workout.Workout_Name}</p><br>
-                <img src="/assets/img/gifs/${workoutNameForGif}.gif" alt="Workout In Progress"><br>
+                <img src="/assets/img/gifs/${workoutNameForGif}.png" alt="Workout In Progress"><br>
                 <p>${workout.Workout_Description}</p>
                 `;
                 document.querySelector("#screen").innerHTML = '';
                 document.querySelector("#screen").append(workoutContainer);
                 startActualWorkout(workout);
             } else {
-                document.querySelector("#screen").innerHTML = `<p>${workoutDurationInSeconds}</p>`;
+                document.querySelector("#screen").innerHTML = `Prepare for: <p>${workout.Workout_Name}</p><br><p style="font-size:4vh;color:#b67806;">${workoutDurationInSeconds}</p>`;
             }
         }, 1000);
     }
 
     async function startActualWorkout(workout) {
-        let workoutDurationInSeconds = parseInt(workout.Workout_Duration) * 60; // Placeholder for actual workout duration
+        // let workoutDurationInSeconds = parseInt(workout.Workout_Duration) * 60;
+        let workoutDurationInSeconds = 2;
         let workoutTimerContainer = document.createElement("p");
         workoutTimerContainer.id = "workoutTimer";
-        workoutTimerContainer.innerHTML = `${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}`;
+        workoutTimerContainer.innerHTML = `
+                <div id="sectionsForShit">
+                <p>${workout.Workout_Name}</p>
+                <p>${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}</p>
+                </div>
+                <svg id="shit" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="256" height="256" xml:space="preserve"><switch><g><g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><path stroke="#EE5325" d="M215.212 39.288 142.391 113.5M142 84v30h35"/><path stroke="#BABABA" d="M38.788 216.712 112 144M112 179v-35H77"/></g></g></switch></svg>
+                `;
         document.querySelector("#screen").append(workoutTimerContainer);
         let remainingSeconds = workoutDurationInSeconds;
         workoutInterval = setInterval(() => {
@@ -108,47 +112,44 @@ async function fetchWorkoutDetails(id) {
             } else {
                 let minutes = Math.floor(remainingSeconds / 60);
                 let seconds = remainingSeconds % 60;
-                document.getElementById("workoutTimer").innerHTML = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById("workoutTimer").innerHTML = `
+                <div id="sectionsForShit">
+                <p>${workout.Workout_Name}</p>
+                <p>${minutes}:${seconds.toString().padStart(2, '0')}</p>
+                </div>
+                <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="256" height="256" xml:space="preserve"><switch><g><g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"><path stroke="#EE5325" d="M215.212 39.288 142.391 113.5M142 84v30h35"/><path stroke="#BABABA" d="M38.788 216.712 112 144M112 179v-35H77"/></g></g></switch></svg>
+                `;
                 remainingSeconds--;
             }
         }, 1000);
     }
 }
 
-function displayWorkout(workout) {
-    if (workout === "done"){
-        const workoutInfo = ``;
-        document.querySelector("#upNext").classList = "fade";
-        document.querySelector("#upNext").innerHTML = workoutInfo;  
-    }
-    else{
-        const workoutInfo = `
-        <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
-        <div id="textNext">
-            <h1>Up Next</h1>
-            <p>${workout.Workout_Name}</p>
-        </div>    
-        `;
-        document.querySelector("#upNext").classList = "fade";
-        document.querySelector("#upNext").innerHTML = workoutInfo; 
-    }
+// function displayWorkout(workout) {
+//     if (workout === "done"){
+//         const workoutInfo = ``;
+//         document.querySelector("#upNext").classList = "fade";
+//         document.querySelector("#upNext").innerHTML = workoutInfo;  
+//     }
+//     else{
+//         const workoutInfo = `
+//         <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
+//         <div id="textNext">
+//             <h1>Up Next</h1>
+//             <p>${workout.Workout_Name}</p>
+//         </div>    
+//         `;
+//         document.querySelector("#upNext").classList = "fade";
+//         document.querySelector("#upNext").innerHTML = workoutInfo; 
+//     }
 
-}
+// }
 
 
 document.addEventListener('DOMContentLoaded', async function() {
-    document.querySelector("#menuIcon").addEventListener("click", () => {
-        document.querySelector("#sidebar").classList.add("fade");
-        document.querySelector("#sidebar").style.opacity = 1;
-    });
-
-    document.addEventListener("click", (event) => {
-        if (!event.target.closest("#controlButtons")) {
-            document.querySelector("#sidebar").style.opacity = 0;
-        }
-    });
+    activateMenus();
     document.querySelector("#userNameGreet").innerHTML = `${localStorage.getItem("userName")}`;
-    notify("Workout Created!", "green");
+    notify("Workout Loaded", "green");
     const params = new URLSearchParams(document.location.search);
     const id = params.get('planID');
     if (id) {
@@ -162,7 +163,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                 throw new Error('No workouts found.');
             }
             const totalDuration = workoutDetails.reduce((acc, workout) => acc + parseInt(workout.Workout_Duration, 10), 0);
-            document.querySelector("#screen").innerHTML = `Total Workout Duration: ${totalDuration} minutes<br>Press play to begin`;
+            let time = document.createElement("h1");
+            time.textContent = totalDuration + " Minutes";
+            time.style.fontSize = "4vh";
+            time.style.color = "#b67806"
+            let pressPlay = document.createElement("p");
+            pressPlay.style.color = "#525252"
+            pressPlay.textContent = "Press play to begin"
+            document.querySelector("#screen").append(time);
+            document.querySelector("#screen").append(pressPlay);
             fetchWorkoutDetails(id);
             showAllWorkoutsButton(workoutDetails);
         } catch (error) {
@@ -212,4 +221,40 @@ function showAllWorkoutsButton(workoutDetails){
         overlay.appendChild(allWorkoutsDiv);
         document.body.append(overlay);
     });
+}
+
+function activateMenus(){
+    document.querySelector("#menuIcon").addEventListener("click", () => {
+        const sidebar = document.querySelector("#sidebar");
+        if (sidebar.style.opacity == "0") {
+            sidebar.classList.add("fade");
+            sidebar.style.opacity = 1;
+        } else {
+            sidebar.style.opacity = 0;
+            sidebar.classList.remove("fade");
+        }
+    });
+    document.querySelector("#arrow").addEventListener("click", () => {
+        const sidebar2 = document.querySelector("#sidebar2");
+        if (sidebar2.style.opacity == "0") {
+            sidebar2.classList.add("fade");
+            sidebar2.style.opacity = 1;
+        } else {
+            sidebar2.style.opacity = 0;
+            sidebar2.classList.remove("fade");
+        }
+    });
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#controlButtons")) {
+            const sidebar = document.querySelector("#sidebar");
+            const sidebar2 = document.querySelector("#sidebar2");
+            sidebar.style.opacity = 0;
+            sidebar2.style.opacity = 0;
+            setTimeout(() => {
+                sidebar.classList.remove("fade");
+                sidebar2.classList.remove("fade");
+            }, 500);
+        }
+    });
+
 }

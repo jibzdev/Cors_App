@@ -31,16 +31,6 @@ main h1{
     margin-top: 150px;
 }
 
-#bgVideo
-{
-	height: 99.7vh;
-  object-fit: cover;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: -9999;
-  filter: blur(7px);
-}
 
 #inputCard {
     display: flex;
@@ -155,4 +145,14 @@ main h1{
 #googleRegButton:hover {
     color: #3a3a3a;
     border: 1px solid #3a3a3a;
+}
+
+#iknewit{
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    #iknewit{
+        height: 280px;
+    }
 }
