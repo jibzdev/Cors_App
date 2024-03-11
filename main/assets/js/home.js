@@ -1,6 +1,16 @@
 import { notify } from './notification.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#menuIcon").addEventListener("click", () => {
+        document.querySelector("#sidebar").classList.add("fade");
+        document.querySelector("#sidebar").style.opacity = 1;
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#controlButtons")) {
+            document.querySelector("#sidebar").style.opacity = 0;
+        }
+    });
     const check = localStorage.getItem("userLoggedIn");
     const username = localStorage.getItem("userName");
 

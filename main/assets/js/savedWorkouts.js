@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', async function(){
+    document.querySelector("#menuIcon").addEventListener("click", () => {
+        document.querySelector("#sidebar").classList.add("fade");
+        document.querySelector("#sidebar").style.opacity = 1;
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#controlButtons")) {
+            document.querySelector("#sidebar").style.opacity = 0;
+        }
+    });
     document.querySelector("#logoutButton").addEventListener("click", async () => {
         localStorage.removeItem("userLoggedIn");
         localStorage.removeItem("userName");
@@ -46,59 +56,71 @@ async function fetchWorkoutPlans(User_ID) {
 }
 
 function displayWorkoutPlans(workoutPlans) {
-    const today = new Date().toLocaleString('en-us', {weekday: 'short'});
-    const todayElement = document.getElementById(today);
-    if(todayElement) {
-        todayElement.style.color = '#b67806';
-    }
     const workoutsContainer = document.querySelector("#content");
 
     workoutPlans.forEach(plan => {
         const cardDiv = document.createElement('div');
         cardDiv.className = "cards";
 
-        const img = document.createElement('img');
-        let number =  Math.floor(Math.random() * 25) + 1;
-        img.src = `assets/img/workoutimgs/${number}.jpg`;
-        img.alt = "Workout Plan Image";
-        cardDiv.appendChild(img);
-
-        const headerAndButtonDiv = document.createElement('div');
-        headerAndButtonDiv.className = "header-button";
-
         const planName = document.createElement('h1');
         planName.textContent = plan.Plan_Name;
-        headerAndButtonDiv.appendChild(planName);
+        cardDiv.appendChild(planName);
+
+        const infoIcon = document.createElement('span');
+        infoIcon.id = "infoIcon";
+        infoIcon.innerHTML = '<i class="fa-solid fa-circle-info"></i>'
+        infoIcon.style.cursor = 'pointer';
+        infoIcon.style.marginLeft = '10px';
+        infoIcon.addEventListener('click', () => {
+            const overlay = createOverlay();
+            const workoutsList = createWorkoutsList(plan.Workouts);
+            overlay.appendChild(workoutsList);
+            document.body.appendChild(overlay);
+        });
+        planName.appendChild(infoIcon);
+
+        const duration = document.createElement('p');
+        duration.textContent = `Duration: ${plan.Total_Workout_Time} Minutes`;
+        cardDiv.appendChild(duration);
 
         const loadButton = document.createElement('button');
         loadButton.textContent = 'Load';
         loadButton.addEventListener('click', () => window.location.href = `workout.html?planID=${plan.Plan_ID}`);
-        headerAndButtonDiv.appendChild(loadButton);
-
-        const workoutsDivCard = document.createElement('div');
-        workoutsDivCard.setAttribute("class","ptexts");
-        workoutsDivCard.style.maxHeight = "10%";
-        workoutsDivCard.style.overflow = "scroll";
-        
-        if (!Array.isArray(plan.Workouts)) {
-            console.error('plan.Workouts is not an array:', plan.Workouts);
-        } else {
-            const workoutsList = document.createElement('ul');
-            plan.Workouts.forEach(workout => {
-                const workoutItem = document.createElement('li');
-                workoutItem.textContent = workout.trim();
-                workoutsList.appendChild(workoutItem);
-            });
-            workoutsDivCard.innerHTML = `<h1>Total Time: ${plan.Total_Workout_Time} Minutes</h1>`;
-            workoutsDivCard.appendChild(workoutsList);
-        }
-
-        let container = document.createElement("div");
-        container.setAttribute("id","container");
-        container.appendChild(workoutsDivCard);
-        container.appendChild(headerAndButtonDiv);
-        cardDiv.appendChild(container);
+        cardDiv.appendChild(loadButton);
 
         workoutsContainer.appendChild(cardDiv);
     });
+}
+
+function createOverlay() {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.animation = 'fade-in 0.5s';
+    overlay.addEventListener('click', () => overlay.remove());
+    return overlay;
+}
+
+function createWorkoutsList(workouts) {
+    const workoutsList = document.createElement('div');
+    workoutsList.innerHTML = `<h1>Workouts Included</h1>`;
+    workoutsList.style.height = "30vh";
+    workoutsList.style.overflowY = "scroll";
+    workoutsList.style.overflowX = "hidden";
+    workoutsList.style.padding = "25px"
+    workouts.forEach(workout => {
+        const workoutItem = document.createElement('p');
+        workoutItem.style.textAlign = "center";
+        workoutItem.textContent = workout;
+        workoutsList.appendChild(workoutItem);
+    });
+    return workoutsList;
 }

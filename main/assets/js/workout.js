@@ -19,17 +19,24 @@ async function fetchWorkoutDetails(id) {
     let workoutInterval;
 
     PLAY.addEventListener('click', () => {
-        document.querySelector("#screen").classList.add("fade");
-        if (isPlaying) {
-            clearInterval(workoutInterval);
-            PLAY.innerHTML = `<i class="fa-solid fa-play"></i>`;
-        } else {
-            if (currentWorkoutIndex >= workoutDetails.length) {
+        if (currentWorkoutIndex === workoutDetails.length - 1) {
+            if (confirm("Do you wish to restart the workout?")) {
                 currentWorkoutIndex = 0;
+                startWorkout();
+            } else {
+                notify("Workout Finished", "red");
             }
-            startWorkout();
+        } else {
+            document.querySelector("#screen").classList.add("fade");
+            if (isPlaying) {
+                clearInterval(workoutInterval);
+                PLAY.innerHTML = `<i class="fa-solid fa-play"></i>`;
+                isPlaying = false;
+            } else {
+                startWorkout();
+                isPlaying = true;
+            }
         }
-        isPlaying = !isPlaying;
     });
 
     BACK.addEventListener('click', () => {
@@ -58,26 +65,40 @@ async function fetchWorkoutDetails(id) {
         let workout = workoutDetails[currentWorkoutIndex];
         let workoutNameForGif = workout.Workout_Name.toLowerCase().replace(/\s+/g, '').replace(/-/g, '');
         let workoutContainer = document.createElement("div");
-        let workoutDurationInSeconds = parseInt(workout.Workout_Duration, 10) * 60;
-        workoutContainer.innerHTML = `
-        <p>Current Workout:<br>${workout.Workout_Name}</p><br>
-        <img src="/assets/img/gifs/${workoutNameForGif}.gif" alt="Workout In Progress"><br>
-        <p>${workout.Workout_Description}</p>
-        <p id="workoutTimer">${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}</p>
-        `;
-        document.querySelector("#screen").append(workoutContainer);
+        let workoutDurationInSeconds = currentWorkoutIndex === 0 ? 5 : 3; // 5 seconds for the first workout, 3 seconds for in-between workouts
+        document.querySelector("#screen").innerHTML = `<p>${workoutDurationInSeconds}</p>`;
+        let countdownInterval = setInterval(() => {
+            workoutDurationInSeconds--;
+            if (workoutDurationInSeconds <= 0) {
+                clearInterval(countdownInterval);
+                workoutContainer.innerHTML = `
+                <p>Current Workout:<br>${workout.Workout_Name}</p><br>
+                <img src="/assets/img/gifs/${workoutNameForGif}.gif" alt="Workout In Progress"><br>
+                <p>${workout.Workout_Description}</p>
+                `;
+                document.querySelector("#screen").innerHTML = '';
+                document.querySelector("#screen").append(workoutContainer);
+                startActualWorkout(workout);
+            } else {
+                document.querySelector("#screen").innerHTML = `<p>${workoutDurationInSeconds}</p>`;
+            }
+        }, 1000);
+    }
+
+    async function startActualWorkout(workout) {
+        let workoutDurationInSeconds = parseInt(workout.Workout_Duration) * 60; // Placeholder for actual workout duration
+        let workoutTimerContainer = document.createElement("p");
+        workoutTimerContainer.id = "workoutTimer";
+        workoutTimerContainer.innerHTML = `${Math.floor(workoutDurationInSeconds / 60)}:${(workoutDurationInSeconds % 60).toString().padStart(2, '0')}`;
+        document.querySelector("#screen").append(workoutTimerContainer);
         let remainingSeconds = workoutDurationInSeconds;
-        workoutInterval = setInterval(async () => {
+        workoutInterval = setInterval(() => {
             if (remainingSeconds <= 0) {
                 clearInterval(workoutInterval);
-                workoutContainer.remove();
                 notify("Keep Going!", "green");
                 currentWorkoutIndex++;
-                if (currentWorkoutIndex < workoutDetails.length - 1) {
+                if (currentWorkoutIndex < workoutDetails.length) {
                     startWorkout();
-                } else if (currentWorkoutIndex === workoutDetails.length - 1) {
-                    displayWorkout(workoutDetails[currentWorkoutIndex]);
-                    notify("Final Workout!", "green");
                 } else {
                     notify("Plan Completed!", "green");
                     document.querySelector("#screen").innerHTML = "<h1>Workout Plan Completed!</h1><p>Press play to replay.</p>";
@@ -95,19 +116,37 @@ async function fetchWorkoutDetails(id) {
 }
 
 function displayWorkout(workout) {
-    const workoutInfo = `
-    <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
-    <div id="textNext">
-        <h1>Up Next</h1>
-        <p>${workout.Workout_Name}</p>
-    </div>    
-    `;
-    document.querySelector("#upNext").classList = "fade";
-    document.querySelector("#upNext").innerHTML = workoutInfo;
+    if (workout === "done"){
+        const workoutInfo = ``;
+        document.querySelector("#upNext").classList = "fade";
+        document.querySelector("#upNext").innerHTML = workoutInfo;  
+    }
+    else{
+        const workoutInfo = `
+        <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
+        <div id="textNext">
+            <h1>Up Next</h1>
+            <p>${workout.Workout_Name}</p>
+        </div>    
+        `;
+        document.querySelector("#upNext").classList = "fade";
+        document.querySelector("#upNext").innerHTML = workoutInfo; 
+    }
+
 }
 
 
 document.addEventListener('DOMContentLoaded', async function() {
+    document.querySelector("#menuIcon").addEventListener("click", () => {
+        document.querySelector("#sidebar").classList.add("fade");
+        document.querySelector("#sidebar").style.opacity = 1;
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#controlButtons")) {
+            document.querySelector("#sidebar").style.opacity = 0;
+        }
+    });
     document.querySelector("#userNameGreet").innerHTML = `${localStorage.getItem("userName")}`;
     notify("Workout Created!", "green");
     const params = new URLSearchParams(document.location.search);
