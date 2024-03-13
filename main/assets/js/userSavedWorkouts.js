@@ -1,33 +1,6 @@
-document.addEventListener('DOMContentLoaded', async function(){
-    document.querySelector("#menuIcon").addEventListener("click", () => {
-        document.querySelector("#sidebar").classList.add("fade");
-        document.querySelector("#sidebar").style.opacity = 1;
-    });
+// FIXED
 
-    document.addEventListener("click", (event) => {
-        if (!event.target.closest("#controlButtons")) {
-            document.querySelector("#sidebar").style.opacity = 0;
-        }
-    });
-    document.querySelector("#logoutButton").addEventListener("click", async () => {
-        localStorage.removeItem("userLoggedIn");
-        localStorage.removeItem("userName");
-        window.location.href = `/`;
-    });
-    const check = localStorage.getItem("userLoggedIn");
-    const username = localStorage.getItem("userName");
-
-    if (check  === 'true'){
-        greetUser();
-        const userData = await fetchUserData();
-        const workoutPlans = await fetchWorkoutPlans(userData.userID);
-        displayWorkoutPlans(workoutPlans);
-    }
-    else{
-        alert("not logged in");
-        window.location.href = `/`;
-    }
-});
+import { logoutHandler, sidebarHandler } from "./assets.js";
 
 function greetUser() {
     const userName = localStorage.getItem("userName");
@@ -67,10 +40,8 @@ function displayWorkoutPlans(workoutPlans) {
         cardDiv.appendChild(planName);
 
         const infoIcon = document.createElement('span');
-        infoIcon.id = "infoIcon";
+        infoIcon.setAttribute('id','infoIcon');
         infoIcon.innerHTML = '<i class="fa-solid fa-circle-info"></i>'
-        infoIcon.style.cursor = 'pointer';
-        infoIcon.style.marginLeft = '10px';
         infoIcon.addEventListener('click', () => {
             const overlay = createOverlay();
             const workoutsList = createWorkoutsList(plan.Workouts);
@@ -85,7 +56,7 @@ function displayWorkoutPlans(workoutPlans) {
 
         const loadButton = document.createElement('button');
         loadButton.textContent = 'Load';
-        loadButton.addEventListener('click', () => window.location.href = `workout.html?planID=${plan.Plan_ID}`);
+        loadButton.addEventListener('click', () => window.location.href = `userWorkoutArea.html?planID=${plan.Plan_ID}`);
         cardDiv.appendChild(loadButton);
 
         workoutsContainer.appendChild(cardDiv);
@@ -94,28 +65,17 @@ function displayWorkoutPlans(workoutPlans) {
 
 function createOverlay() {
     const overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    overlay.style.display = 'flex';
-    overlay.style.justifyContent = 'center';
-    overlay.style.alignItems = 'center';
-    overlay.style.animation = 'fade-in 0.5s';
+    overlay.setAttribute('class','overlay');
     overlay.addEventListener('click', () => overlay.remove());
     return overlay;
 }
 
 function createWorkoutsList(workouts) {
     const workoutsList = document.createElement('div');
-    workoutsList.innerHTML = `<h1>Workouts Included</h1>`;
-    workoutsList.style.height = "30vh";
-    workoutsList.style.overflowY = "scroll";
-    workoutsList.style.overflowX = "hidden";
-    workoutsList.style.padding = "25px"
+    workoutsList.setAttribute('class','workoutLists');
+    let workoutHeader = document.createElement('h1');
+    workoutHeader.textContent = 'Workouts Included';
+    workoutsList.append(workoutHeader);
     workouts.forEach(workout => {
         const workoutItem = document.createElement('p');
         workoutItem.style.textAlign = "center";
@@ -124,3 +84,21 @@ function createWorkoutsList(workouts) {
     });
     return workoutsList;
 }
+
+document.addEventListener('DOMContentLoaded', async function(){
+    logoutHandler();
+    sidebarHandler();
+
+    const check = localStorage.getItem("userLoggedIn");
+
+    if (check  === 'true'){
+        greetUser();
+        const userData = await fetchUserData();
+        const workoutPlans = await fetchWorkoutPlans(userData.userID);
+        displayWorkoutPlans(workoutPlans);
+    }
+    else{
+        alert("not logged in");
+        window.location.href = `/`;
+    }
+});

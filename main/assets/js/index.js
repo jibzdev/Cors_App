@@ -1,4 +1,35 @@
-import { notify } from './notification.js';
+// FIXED
+
+import { notify } from './assets.js';
+
+async function addOrRemoveMenuIcon() {
+    const navbar = document.querySelector("nav");
+    const windowWidth = window.innerWidth;
+    
+    if (windowWidth <= 850) {
+      let triple = document.querySelector(".menu-icon");
+      if (!triple) {
+        triple = document.createElement("div");
+        triple.setAttribute("class", "menu-icon");
+        navbar.appendChild(triple);
+  
+        triple.addEventListener("click", () =>{
+          triple.style.opacity = "0";
+          document.body.classList.add('menu-visible');
+          let closeMenu = document.querySelector("#closeMobile");
+          closeMenu.addEventListener("click", () =>{
+            document.body.classList.remove('menu-visible');
+            triple.style.opacity = "1";
+          })
+        });
+      }
+    } else {
+      const triple = document.querySelector(".menu-icon");
+      if (triple) {
+        navbar.removeChild(triple);
+      }
+    }
+};
 
 function createInputWithIcon(iconClass, type, placeholder, id) {
     const div = document.createElement('div');
@@ -138,18 +169,7 @@ async function login() {
     sTextP.id = 'sText';
     sTextP.innerHTML = "Don't have an Account?<br>";
     const signupButton = createButton('signup', '', 'REGISTER');
-    // let googleRegB = document.createElement("a");
-    // googleRegB.setAttribute("id","googleRegButton");
-    // googleRegB.innerHTML = `<i class="fa-brands fa-google fa-2xl"></i>`;
     sTextP.appendChild(signupButton);
-    // sTextP.appendChild(googleRegB);
-    sTextP.style.display = "flex";
-    sTextP.style.top = "85%";
-    sTextP.style.flexDirection = "column";
-    sTextP.style.alignItems = "center";
-    sTextP.style.flexWrap = "wrap";
-    sTextP.style.top = "100%";
-    sTextP.style.gap = "10px";
 
     inputCard.appendChild(inputContainer);
     inputCard.appendChild(sTextP);
@@ -180,7 +200,7 @@ async function login() {
         if (response.ok) {
             localStorage.setItem("userLoggedIn", "true");
             localStorage.setItem("userName", payload.username);
-            location.href = "home.html";
+            location.href = "userArea.html";
         } else {
             notify("Incorrect Details.", "red");
         }
@@ -192,33 +212,10 @@ async function login() {
             attemptLogin();
         }
     });
-    // history.pushState({page: "login"}, "login", "login");
 };
 
-window.addEventListener('popstate', function(event) {
-    if(event.state && event.state.page === "login") {
-        login();
-    }
-    else if(event.state && event.state.page === "signup") {
-        signup();
-    }
-    else if(event.state && event.state.page === "homepage") {
-        homepage();
-    }
-    else {
-        const main = document.querySelector("main");
-        main.setAttribute("class","fade");
-        main.innerHTML = `
-        <h1>CORS App</h1>
-        <p>High Intensity Training App</p><br>
-        <button id="begin" class="buttonStyle1">Begin</button>
-        `;
-        const loginButton = document.querySelector("#begin");
-        loginButton.addEventListener("click", login);
-    }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
+    addOrRemoveMenuIcon();
     const loginButton = document.querySelector("#begin");
     if (loginButton) {
         loginButton.addEventListener("click", login);
@@ -229,3 +226,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+window.addEventListener("resize", addOrRemoveMenuIcon);

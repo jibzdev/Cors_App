@@ -1,0 +1,394 @@
+/*Scroll Bar Styling*/
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #b67806;
+  border-radius: 5px;
+}
+
+/*Fade Animation*/
+.fade {
+    animation: fade-in 1s;
+}
+  
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*Notification Styling*/
+.notification{
+  position: absolute;
+  margin-top: 30px;
+  margin-right: 10px;
+  top: 0;
+  right: -300px;
+  width: 250px;
+  height: 50px;
+  text-align: center;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: right 0.5s ease;
+  color: white;
+  font-family: "Kanit";
+  text-transform: uppercase;
+}
+
+.notification.slide-in {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .notification{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 150px;
+    height: 35px;
+    border-radius: 10px;
+    font-size: 1.3vh;
+  }
+}
+
+/*Some buttons i created*/
+.buttonStyle1{
+    font-family: "Kanit";
+    font-size: 1.5vh;
+    border: none;
+    outline: 1px white solid;
+    padding: 15px;
+    width: 100px;
+    border-radius: 5px;
+    background: none;
+    color: white;
+    cursor: pointer;
+    transition: .2s ease-in-out all;
+}
+
+.buttonStyle1:hover{
+    background: white;
+    transform: translateY(-10px);
+    color: black;
+}
+
+.buttonStyle2{
+  font-family: "Kanit";
+  font-size: 1.5vh;
+  border: none;
+  outline: 1px white solid;
+  padding: 5px;
+  width: 75px;
+  border-radius: 5px;
+  background: none;
+  color: white;
+  cursor: pointer;
+  transition: .2s ease-in-out all;
+}
+
+.buttonStyle2:hover{
+  background: white;
+  color: black;
+}
+
+/*Top Left sidebar styling (the three lines)*/
+.h-5{
+  position: absolute;
+  left: 5%;
+  transform: translateX(-5%);
+  height: 1.8rem;
+  padding: 12px;
+  border-radius: 50%;
+  transition: .1s ease-in-out all;
+}
+.h-5:hover{
+  cursor: pointer;
+  background-color: rgba(44, 44, 44, 0.5);
+}
+
+/*Dropdown menus styling and positioning*/
+#sidebar{
+  opacity: 0;
+  border-radius: 5px;
+  position: absolute;
+  top: 12%;
+  left: 5.8%;
+  transform: translate(-5.8%,-12%);
+  width: 20vh;
+  background-color: #121212;
+  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+#sidebar2{
+  opacity: 0;
+  border-radius: 5px;
+  position: absolute;
+  top: 12%;
+  left: 95%;
+  transform: translate(-95%,-12%);
+  width: 20vh;
+  background-color: #121212;
+  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+#sidebar a,
+#sidebar2 a{
+  font-family: "Kanit";
+  font-size: 1.5vh;
+  text-decoration: none;
+  color: white;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 2px;
+  transition: .1s ease-in-out all;
+}
+
+#sidebar a:hover,
+#sidebar2 a:hover{
+  color: white;
+  cursor: pointer;
+  background-color: rgba(44, 44, 44, 0.5);
+}
+
+/*User Area Styling Styling*/
+#userArea{
+  margin-top: 7.5vh;
+}
+
+@media (max-width: 768px) {
+  #sidebar{
+    top: 7%;
+    left: 5.8%;
+    transform: translate(-5.8%,-7%);
+  }
+  #sidebar2{
+    top: 6%;
+    left: 95%;
+    transform: translate(-95%,-6%);
+  }
+  #userArea{
+      margin: 9vh;
+  }
+  #greet{
+      margin-top: 25px;
+
+  }
+}
+
+
+/*Home Page Navbar Styling*/
+@media (max-width: 850px) {
+  #navLinks,
+  #icons {
+      display: none !important;
+  }
+  #homeLogo{
+      top: 1vh !important;
+      }
+  #mobileNav {
+      width: 75% !important;
+  }
+}
+
+/*Navbar*/
+nav
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 8vh;
+  margin: 0 auto;
+  transition: all 0.45s ease;
+  color: white;
+  transition: 1s ease all;
+
+}
+
+#navLinks
+{
+  z-index: 1;
+  position: absolute;
+  font-size: 1.9vh;
+  top: 3.5vh;
+  left: 5%;
+  transform: translateX(-5%)
+}
+
+#navLinks a
+{
+    font-family: "Kanit";
+    color: white;
+    text-decoration: none;
+  font-weight: 200;
+  transition: .5s ease all;
+}
+
+#navLinks a:hover
+{
+  color: #888888;
+  text-decoration: underline;
+}
+
+#icons {
+  z-index: 1;
+  position: absolute;
+  font-size: 2.5vh;
+  top: 3.5vh;
+  display: flex;
+  left: 97%;
+  transform: translateX(-97%);
+}
+
+#icons a
+{
+    font-family: "Assistant", sans-serif;
+    color: white;
+    text-decoration: none;
+  font-weight: 200;
+  transition: .5s ease all;
+}
+
+#icons a:hover
+{
+  color: #888888;
+}
+
+#homeLogo{
+  max-width: 6vh;
+  padding: 1em;
+  position: absolute;
+  top: 1vh;
+  left: 50%;
+  transform: translateX(-50%)
+}
+
+#mobileNav {
+  position: fixed;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background-color: #121212f5;
+  transition: left 0.5s;
+}
+
+.menu-visible #mobileNav {
+  left: 0;
+}
+
+#mobileNav a{
+  color: white;
+  text-decoration: none;
+  transition: 1s ease all;
+}
+
+#mobileNav a:hover{
+  color: #383838;
+}
+
+.menu-visible #mobileNav {
+  left: 0;
+}
+
+#mobileLinks{
+  display: grid;
+}
+
+#closeMobile{
+  color: white;
+  position: absolute;
+  right: 0;
+  padding: 25px;
+  font-size: 3vh;
+  font-family: "Kanit";
+  cursor: pointer;
+}
+
+#mobileLinks{
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%,-20%);
+  text-align: center;
+  font-family: "Kanit";
+  padding: 15px;
+  font-size: 3vh;
+}
+
+#mobileIcons{
+  position: relative;
+  top: 95%;
+  left: 50%;
+  transform: translate(-50%,-95%);
+  text-align: center;
+  font-size: 3vh;
+}
+
+.menu-icon {
+  top: 4vh;
+  left: 5%;
+  transform: translateX(-5%);
+  width: 25px;
+  height: 2px;
+  background-color: #ffffff;
+  position: absolute;
+  cursor: pointer;
+}
+
+.menu-icon::before,
+.menu-icon::after {
+  content: "";
+  width: 25px;
+  height: 2px;
+  background-color: #ffffff;
+  position: absolute;
+  transition: transform 0.3s ease;
+}
+
+.menu-icon::before {
+  top: -10px;
+}
+
+.menu-icon::after {
+  top: 10px;
+}
+
+.menu-icon.open::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.menu-icon.open::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/*Overlay Styling*/
+.overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fade-in 0.5s;
+}

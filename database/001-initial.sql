@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS Users (
     User_Password TEXT
 );
 
-INSERT INTO Users (User_Name, User_Email, User_DOB, User_Password) VALUES
-    ("admin", "admin@admin.com", "01/01/2000", "admin");
+-- INSERT INTO Users (User_Name, User_Email, User_DOB, User_Password) VALUES
+--     ("admin", "admin@admin.com", "01/01/2000", "admin");
 
 CREATE TABLE IF NOT EXISTS Workouts ( 
     Workout_ID INTEGER PRIMARY KEY,

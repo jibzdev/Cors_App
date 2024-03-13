@@ -1,28 +1,7 @@
-import { notify } from './notification.js';
+// FIXED
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector("#menuIcon").addEventListener("click", () => {
-        document.querySelector("#sidebar").classList.add("fade");
-        document.querySelector("#sidebar").style.opacity = 1;
-    });
-
-    document.addEventListener("click", (event) => {
-        if (!event.target.closest("#controlButtons")) {
-            document.querySelector("#sidebar").style.opacity = 0;
-        }
-    });
-    const check = localStorage.getItem("userLoggedIn");
-    const username = localStorage.getItem("userName");
-
-    if (check  === 'true'){
-        homepage(username);
-    }
-    else{
-        alert("not logged in");
-        window.location.href = `/`;
-    }
-
-});
+import { notify } from './assets.js';
+import { logoutHandler, sidebarHandler, dayHandler } from './assets.js';
 
 function createWorkoutCard(imageSrc, category, title, description, workoutDuration, id) {
     let workoutCard = document.createElement('div');
@@ -59,58 +38,56 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
     return workoutCard;
 }
 
+
 async function homepage(username) {
-    const today = new Date().toLocaleString('en-us', {weekday: 'short'});
-    const todayElement = document.getElementById(today);
-    if(todayElement) {
-        todayElement.style.color = '#b67806';
-    }
+    notify("Successfully Logged In.", "green");
     history.pushState({page: "homepage"}, "homepage", "/homepage");
+    logoutHandler();
+    dayHandler();
+
     document.querySelector("#userNameGreet").innerHTML = `Hello ${username}`;
     document.querySelector("#content").innerHTML = `
     ${createWorkoutCard("./assets/img/selection1.png","","New Workout","Create your own HIIT workout plan.","","newWorkout").outerHTML}
     ${createWorkoutCard("./assets/img/selection2.png","","Saved Workout","Access your saved HIIT workout plans.","","savedWorkout").outerHTML}`;
-    document.querySelector("#content").style.marginTop = "10vw";
-    document.querySelector("#logoutButton").addEventListener("click", async () => {
-        localStorage.removeItem("userLoggedIn");
-        localStorage.removeItem("userName");
-        window.location.href = `/`;
-    });
 
     const newWorkoutButton = document.querySelector("#newWorkout");
     const savedWorkoutsButton = document.querySelector("#savedWorkout");
 
     savedWorkoutsButton.addEventListener("click", () => {
-        location.href = "savedWorkouts.html"
+        location.href = "userSavedWorkouts.html"
     });
 
     newWorkoutButton.addEventListener("click", async () => {
         history.pushState({page: "newWorkout"}, "newWorkout", "/newWorkout");
         await newWorkout(username);
     });
-
-    notify("Successfully Logged In.", "green");
 };
 
 async function newWorkout(username) {
     document.querySelector("#content").innerHTML = '';
+
     const selectionArea = document.querySelector("#content");
-    document.querySelector("#content").style.marginTop = "10vw";
     const selectedWorkoutsDiv = document.querySelector("#selectedWorkouts");
+
     if (selectedWorkoutsDiv) selectedWorkoutsDiv.remove();
+
     const nameWorkoutDiv = document.createElement('div');
     nameWorkoutDiv.setAttribute('id', 'nameWorkout');
+
     const label = document.createElement('label');
     label.setAttribute('for', 'workoutName');
     label.textContent = 'Name your workout plan:';
+
     const input = document.createElement('input');
     input.setAttribute('type', 'text');
     input.setAttribute('id', 'workoutName');
     input.setAttribute('name', 'workoutName');
     input.setAttribute('placeholder', 'My Workout Plan');
+
     nameWorkoutDiv.appendChild(label);
     nameWorkoutDiv.appendChild(input);
     selectionArea.appendChild(nameWorkoutDiv);
+
     const workoutNameInput = document.querySelector("#workoutName");
     workoutNameInput.addEventListener("change", async () => {
         const workoutName = workoutNameInput.value.trim();
@@ -122,41 +99,51 @@ async function newWorkout(username) {
 };
 
 async function createPlan(workoutName, username) {
+    let totalWorkoutTime = 0;
     document.querySelector("#content").innerHTML = '';
+
     const selectionArea = document.querySelector("#content");
     document.querySelector("#content").style.marginTop = "2vw";
+
     let selected = document.createElement("div");
     selected.setAttribute("id", "selectedWorkouts");
+
     let workoutCardsDiv = document.createElement("div");
     workoutCardsDiv.setAttribute('id', 'workoutCardsDiv');
+
     let pointer = document.createElement("p");
     pointer.setAttribute('id', 'pointer');
     pointer.textContent = "Select your workouts from below.";
     document.querySelector("#userArea").after(selected);
+
     let workoutInfo = document.createElement("div");
     workoutInfo.setAttribute("id", "workoutInfo");
-    let totalWorkoutTime = 0;
+
     let planParagraph = document.createElement("p");
     planParagraph.textContent = `Plan: ${workoutName}`;
+
     let timeParagraph = document.createElement("p");
     timeParagraph.textContent = "Workout Time: ";
+
     let timeSpan = document.createElement("span");
     timeSpan.setAttribute("id", "totalWorkoutTime");
     timeSpan.style.color = "#b67806";
     timeSpan.textContent = "0 minutes";
     timeParagraph.appendChild(timeSpan);
+
     let createButton = document.createElement("button");
     createButton.setAttribute("id", "createWorkout");
     createButton.textContent = "Create";
+
     workoutInfo.appendChild(planParagraph);
     workoutInfo.appendChild(timeParagraph);
     workoutInfo.appendChild(createButton);
     selected.appendChild(workoutInfo);
     selected.appendChild(workoutCardsDiv);
     selected.appendChild(pointer);
+
     const workouts = await fetch('/workouts');
     let workoutData = await workouts.json();
-    console.log(workoutData);
     const workoutCards = workoutData.map((workout, index) => {
         let imageIndex = index + 1;
         return createWorkoutCard(
@@ -172,40 +159,54 @@ async function createPlan(workoutName, username) {
     workoutCards.forEach(card => {
         selectionArea.append(card);
         card.addEventListener("click", () => {
+
             const workoutTitle = card.querySelector("h1").textContent;
             const workoutId = card.id;
             const workoutTime = parseInt(card.querySelector("p").textContent);
             const workoutSets = card.querySelector("a").textContent;
             const workoutImageSrc = card.querySelector("img").src;
+
             if (!addedWorkouts.has(workoutTitle)) {
                 addedWorkouts.set(workoutTitle, workoutId);
                 totalWorkoutTime += workoutTime;
+
                 document.getElementById("totalWorkoutTime").textContent = totalWorkoutTime + " minutes";
+
                 let workoutDiv = document.createElement("div");
                 workoutDiv.setAttribute("class", "selectedCards");
+
                 let workoutImage = document.createElement("img");
                 workoutImage.src = workoutImageSrc;
                 workoutImage.alt = "Workout Image";
                 workoutDiv.appendChild(workoutImage);
+
                 let textContentDiv = document.createElement("div");
                 textContentDiv.setAttribute("class", "textContent");
+
                 let textContentDetails2 = document.createElement("div");
                 textContentDetails2.setAttribute("id", "textContentDetails2");
+
                 let workoutTimeP = document.createElement("p");
                 workoutTimeP.style.color = "#b67806";
                 workoutTimeP.textContent = `${workoutTime} minutes`;
+
                 textContentDetails2.appendChild(workoutTimeP);
+
                 let textContentDetails1 = document.createElement("div");
                 textContentDetails1.setAttribute("id", "textContentDetails1");
+
                 let workoutTitleH1 = document.createElement("h1");
                 workoutTitleH1.textContent = workoutTitle;
+
                 let workoutRepsP = document.createElement("p");
                 workoutRepsP.textContent = workoutSets;
+
                 textContentDetails1.appendChild(workoutTitleH1);
                 textContentDetails1.appendChild(workoutRepsP);
                 textContentDiv.appendChild(textContentDetails2);
                 textContentDiv.appendChild(textContentDetails1);
                 workoutDiv.appendChild(textContentDiv);
+
                 let removeButton = document.createElement("button");
                 removeButton.textContent = "X";
                 textContentDetails2.appendChild(removeButton);
@@ -228,9 +229,10 @@ async function createPlan(workoutName, username) {
             }
         });
     });
+
     document.querySelector("#createWorkout").addEventListener("click", async (event) => {
         if (addedWorkouts.size === 0) {
-            notify("No workouts added. Please add workouts before creating a plan.", "red");
+            notify("No Workouts added!", "red");
             return;
         }
     
@@ -260,7 +262,7 @@ async function createPlan(workoutName, username) {
                 const planData = await planResponse.json();
                 if(planData && planData.planID) {
                     const planID = planData.planID;
-                    window.location.href = `/workout.html?planID=${planID}`;
+                    window.location.href = `/userWorkoutArea.html?planID=${planID}`;
                     notify("Failed to retrieve plan ID.", "red");
                 }
             } else {
@@ -290,4 +292,19 @@ window.addEventListener('popstate', function(event) {
                 console.log("No such page state exists.");
         }
     }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    sidebarHandler();
+    const check = localStorage.getItem("userLoggedIn");
+    const username = localStorage.getItem("userName");
+
+    if (check  === 'true'){
+        homepage(username);
+    }
+    else{
+        alert("not logged in");
+        window.location.href = `/`;
+    }
+
 });

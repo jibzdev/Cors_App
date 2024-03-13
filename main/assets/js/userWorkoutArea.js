@@ -1,4 +1,6 @@
-import { notify } from './notification.js';
+// WORKING ON FIXING
+
+import { logoutHandler, notify } from './assets.js';
 
 async function fetchWorkoutDetails(id) {
     const response = await fetch(`./getWorkout/${id}`);
@@ -13,8 +15,6 @@ async function fetchWorkoutDetails(id) {
     displayWorkout(workoutDetails[currentWorkoutIndex]);
 
     const PLAY = document.querySelector("#playButton");
-    const BACK = document.querySelector("#backButton");
-    const FORWARD = document.querySelector("#forwardButton");
     let isPlaying = false;
     let workoutInterval;
 
@@ -42,45 +42,10 @@ async function fetchWorkoutDetails(id) {
 
     PLAY.addEventListener('click', togglePlay);
 
-    let debounceBack = false;
-    BACK.addEventListener('click', () => {
-        if (!debounceBack) {
-            debounceBack = true;
-            document.querySelector("#screen").classList.add("fade");
-            if (currentWorkoutIndex > 0) {
-                clearInterval(workoutInterval);
-                currentWorkoutIndex--;
-                displayWorkout(workoutDetails[currentWorkoutIndex]);
-                startWorkout();
-            }
-            else {
-                notify("Cannot go Back", "red");
-            }
-            setTimeout(() => debounceBack = false, 500);
-        }
-    });
-
-    let debounceForward = false;
-    FORWARD.addEventListener('click', () => {
-        if (!debounceForward) {
-            debounceForward = true;
-            document.querySelector("#screen").classList.add("fade");
-            if (currentWorkoutIndex < workoutDetails.length - 1) {
-                clearInterval(workoutInterval);
-                currentWorkoutIndex++;
-                displayWorkout(workoutDetails[currentWorkoutIndex]);
-                startWorkout();
-            }
-            else {
-                notify("Cannot go Forward", "red");
-            }
-            setTimeout(() => debounceForward = false, 500);
-        }
-    });
-
     function createPauseOverlay() {
         const overlay = document.createElement('div');
         overlay.id = 'pauseOverlay';
+        overlay.className = 'overlay';
         overlay.innerHTML = `
             <div id="pauseMessage">Workout Paused</div>
             <button id="resumeButton">Resume</button>
@@ -205,6 +170,7 @@ function displayWorkout(workout) {
 
 document.addEventListener('DOMContentLoaded', async function() {
     activateMenus();
+    logoutHandler();
     document.querySelector("#userNameGreet").innerHTML = `${localStorage.getItem("userName")}`;
     notify("Workout Loaded", "green");
     const params = new URLSearchParams(document.location.search);

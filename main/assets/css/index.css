@@ -1,13 +1,16 @@
-@import url('https://fonts.googleapis.com/css?family=Kanit');
+@import url('https://fonts.googleapis.com/css?family=Kanit'); /*Importing Font*/
 
 *{
     margin: 0;
     padding: 0;
 }
 
+/*Hiding Scrollbar*/
 ::-webkit-scrollbar{
     display: none;
 }
+
+/*body styling and background video*/
 body{
     background-color: #121212;
     color: white;
@@ -21,6 +24,8 @@ body{
     z-index: -9999;
     filter: blur(10px);
 }
+
+/*Center Styling*/
 main{
     position: absolute;
     text-align: center;
@@ -115,47 +120,6 @@ main h1{
     text-decoration: underline;
 }
 
-.notification{
-    position: absolute;
-    margin-top: 30px;
-    margin-right: 10px;
-    top: 0;
-    right: -300px;
-    width: 250px;
-    height: 50px;
-    text-align: center;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: right 0.5s ease;
-    color: white;
-    font-family: "Kanit";
-    text-transform: uppercase;
-}
-
-.notification.slide-in {
-    right: 10px;
-}
-
-
-#googleRegButton {
-    width: 24px;
-    height: 18px;
-    border: 1px solid white;
-    padding: 20px;
-    font-size: 1.5vh;
-    border-radius: 50%;
-    transition: .2s ease-in-out all;
-    cursor: pointer;
-}
-
-
-#googleRegButton:hover {
-    color: #3a3a3a;
-    border: 1px solid #3a3a3a;
-}
-
 #iknewit{
     height: 400px;
 }
@@ -165,3 +129,13 @@ main h1{
         height: 280px;
     }
 }
+
+#sTextP {
+    display: flex;
+    top: 85%;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
