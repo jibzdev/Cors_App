@@ -17,27 +17,30 @@ async function fetchWorkoutDetails(id) {
     const FORWARD = document.querySelector("#forwardButton");
     let isPlaying = false;
     let workoutInterval;
-    PLAY.addEventListener('click', () => {
-        if (currentWorkoutIndex >= workoutDetails.length) {
-            if (confirm("Do you wish to restart the workout?")) {
-                currentWorkoutIndex = 0;
-                displayWorkout(workoutDetails[currentWorkoutIndex]);
-                startWorkout();
-            } else {
-                notify("Workout Finished", "red");
-                isPlaying = false;
-            }
+
+    function togglePlay() {
+        if (isPlaying) {
+            clearInterval(workoutInterval);
+            isPlaying = false;
+            createPauseOverlay();
         } else {
-            document.querySelector("#screen").classList.add("fade");
-            if (isPlaying) {
-                clearInterval(workoutInterval);
-                isPlaying = false;
-            } else {
-                startWorkout();
-                isPlaying = true;
+            if (currentWorkoutIndex >= workoutDetails.length) {
+                if (confirm("Do you wish to restart the workout?")) {
+                    currentWorkoutIndex = 0;
+                    displayWorkout(workoutDetails[currentWorkoutIndex]);
+                } else {
+                    notify("Workout Finished", "red");
+                    return;
+                }
             }
+            removePauseOverlay();
+            startWorkout();
+            isPlaying = true;
         }
-    });
+        document.querySelector("#screen").classList.add("fade");
+    }
+
+    PLAY.addEventListener('click', togglePlay);
 
     let debounceBack = false;
     BACK.addEventListener('click', () => {
@@ -75,8 +78,28 @@ async function fetchWorkoutDetails(id) {
         }
     });
 
-    async function startWorkout() {
+    function createPauseOverlay() {
+        const overlay = document.createElement('div');
+        overlay.id = 'pauseOverlay';
+        overlay.innerHTML = `
+            <div id="pauseMessage">Workout Paused</div>
+            <button id="resumeButton">Resume</button>
+        `;
+        document.body.appendChild(overlay);
+        document.querySelector('#resumeButton').addEventListener('click', () => {
+            removePauseOverlay();
+            startWorkout();
+            isPlaying = true;
+        });
+    }
 
+    function removePauseOverlay() {
+        const overlay = document.querySelector('#pauseOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    async function startWorkout() {
         document.querySelector("#screen").innerHTML = '';
         document.querySelector("#screen").classList.add("fade");
         let workout = workoutDetails[currentWorkoutIndex];
@@ -155,14 +178,13 @@ async function fetchWorkoutDetails(id) {
 }
 
 function displayWorkout(workout) {
-    if (workout === "done"){
-        const workoutInfo = ``;
-        document.querySelector("#upNext").classList = "fade";
-        document.querySelector("#upNext").innerHTML = workoutInfo;  
-    }
-    else if (!workout){
-        document.querySelector("#upNext").style.backgroundColor = "#121212";
-        const workoutInfo = ``;
+    if (!workout){
+        const workoutInfo = `
+        <img src="assets/img/workoutImgs/finished.jpg">
+        <div id="textNext">
+            <p>Final Workout</p>
+        </div>    
+        `;
         document.querySelector("#upNext").classList = "fade";
         document.querySelector("#upNext").innerHTML = workoutInfo;  
     }
@@ -238,7 +260,6 @@ function showAllWorkoutsButton(workoutDetails){
         overlay.appendChild(allWorkoutsDiv);
         document.body.appendChild(overlay);
 
-        // Fix for overlay removal
         overlay.addEventListener("click", function(event) {
             if (event.target === overlay) {
                 overlay.remove();
