@@ -66,13 +66,25 @@ body{
 #leftControls{
     display: flex;
     justify-content: flex-start;
+    cursor: pointer;
 }
-
+#leftControls:hover{
+    font-size: 1vh;
+    border-radius: 50%;
+    background-color: rgba(44, 44, 44, 0.5);
+}  
 #rightControls{
     display: flex;
     justify-content: flex-end;
     margin-right: 5px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: .2s ease-in-out all;
 }
+#rightControls:hover{
+    font-size: 1vh;
+    background-color: rgba(44, 44, 44, 0.5);
+}  
 #screen{
     position: absolute;
     top: 60%;
@@ -151,6 +163,7 @@ body{
     text-align: center;
     justify-content: space-between;
     align-items: center;
+    margin: 5px;
 }
 
 #workoutElementCard img{
@@ -159,7 +172,10 @@ body{
     height: auto;
     display: block;
 }
-
+#workoutElementCard p{
+    margin-right: 15px;
+    color: #b67806;
+}
 #share {
     display: flex;
     align-items: center;
@@ -317,4 +333,63 @@ body{
     display: flex;
     justify-content: center;
     gap: 10px;
+}
+
+#pauseMessage{
+    text-align: center;
+}
+
+#pauseMessage h1{
+    text-transform: uppercase;
+    font-size: 5vh;
+}
+
+#pauseMessage button {
+    border: none;
+    padding: 15px;
+    background: #b67806;
+    color: #ffffff;
+    font-family: "Kanit";
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 2vh;
+    transition: .2s ease-in-out all;
+    cursor: pointer;
+}
+
+#pauseMessage button:hover{
+    background: #ffffff;
+    color: #b67806;
+}
+
+#inWorkSettings {
+    opacity: 0;
+    position: fixed;
+    top: 89%;
+    left: 7vh;
+    transform: translate(-10%, -89%);
+    border-radius: 5px;
+    width: 20vh;
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    background-color: #121212;
+}
+
+#inWorkSettings a{
+    font-family: "Kanit";
+    font-size: 1.5vh;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 2px;
+    transition: .1s ease-in-out all;
+}
+
+#inWorkSettings a:hover{
+  color: white;
+  cursor: pointer;
+  background-color: rgba(44, 44, 44, 0.5);
 }

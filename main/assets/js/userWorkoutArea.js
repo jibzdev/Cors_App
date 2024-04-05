@@ -47,8 +47,10 @@ async function fetchWorkoutDetails(id) {
         overlay.id = 'pauseOverlay';
         overlay.className = 'overlay';
         overlay.innerHTML = `
-            <div id="pauseMessage">Workout Paused</div>
+            <div id="pauseMessage">
+            <h1>Workout Paused</h1>
             <button id="resumeButton">Resume</button>
+            </div>
         `;
         document.body.appendChild(overlay);
         document.querySelector('#resumeButton').addEventListener('click', () => {
@@ -167,44 +169,6 @@ function displayWorkout(workout) {
 
 }
 
-
-document.addEventListener('DOMContentLoaded', async function() {
-    activateMenus();
-    logoutHandler();
-    document.querySelector("#userNameGreet").innerHTML = `${localStorage.getItem("userName")}`;
-    notify("Workout Loaded", "green");
-    const params = new URLSearchParams(document.location.search);
-    const id = params.get('planID');
-    if (id) {
-        try {
-            const response = await fetch(`./getWorkout/${id}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch workout details: ' + response.statusText);
-            }
-            const workoutDetails = await response.json();
-            if (workoutDetails.length === 0) {
-                throw new Error('No workouts found.');
-            }
-            const totalDuration = workoutDetails.reduce((acc, workout) => acc + parseInt(workout.Workout_Duration, 10), 0);
-            let time = document.createElement("h1");
-            time.textContent = totalDuration + " Minutes";
-            time.style.fontSize = "4vh";
-            time.style.color = "#b67806"
-            let pressPlay = document.createElement("p");
-            pressPlay.style.color = "#525252"
-            pressPlay.textContent = "Press play to begin"
-            document.querySelector("#screen").append(time);
-            document.querySelector("#screen").append(pressPlay);
-            fetchWorkoutDetails(id);
-            showAllWorkoutsButton(workoutDetails);
-        } catch (error) {
-            console.error(error.message);
-        }
-    } else {
-        console.error('No PlanID provided in the query parameters.');
-    }
-});
-
 function showAllWorkoutsButton(workoutDetails){
     document.querySelector("#showAllWorkouts").addEventListener("click", function() {
         let overlay = document.createElement("div");
@@ -235,15 +199,22 @@ function showAllWorkoutsButton(workoutDetails){
 }
 
 function activateMenus(){
-    document.querySelector("#menuIcon").addEventListener("click", () => {
-        const sidebar = document.querySelector("#sidebar");
-        sidebar.style.opacity = sidebar.style.opacity == "0" ? "1" : "0";
-        sidebar.classList.toggle("fade");
+    document.querySelector("#leftControls").addEventListener("click", (event) => {
+        event.stopPropagation();
+        const inWorkSettings = document.querySelector("#inWorkSettings");
+        if (inWorkSettings.style.opacity === "1") {
+            inWorkSettings.style.opacity = 0;
+            setTimeout(() => inWorkSettings.classList.remove("fade"), 500);
+            inWorkSettings.classList.add("fade");
+            inWorkSettings.style.opacity = 1;
+        }
     });
-    document.querySelector("#arrow").addEventListener("click", () => {
-        const sidebar2 = document.querySelector("#sidebar2");
-        sidebar2.style.opacity = sidebar2.style.opacity == "0" ? "1" : "0";
-        sidebar2.classList.toggle("fade");
+    document.addEventListener("click", () => {
+        const inWorkSettings = document.querySelector("#inWorkSettings");
+        if (inWorkSettings.style.opacity === "1") {
+            inWorkSettings.style.opacity = 0;
+            setTimeout(() => inWorkSettings.classList.remove("fade"), 500)
+        }
     });
     document.querySelector("#shareWorkout").addEventListener("click", () => {
         const overlay = document.createElement("div");
@@ -294,16 +265,42 @@ function activateMenus(){
         });
         return button;
     }
-    document.addEventListener("click", (event) => {
-        if (!event.target.closest("#controlButtons")) {
-            const sidebar = document.querySelector("#sidebar");
-            const sidebar2 = document.querySelector("#sidebar2");
-            sidebar.style.opacity = "0";
-            sidebar2.style.opacity = "0";
-            setTimeout(() => {
-                sidebar.classList.remove("fade");
-                sidebar2.classList.remove("fade");
-            }, 500);
-        }
-    });
 }
+
+
+document.addEventListener('DOMContentLoaded', async function() {
+    activateMenus();
+    logoutHandler();
+    document.querySelector("#userNameGreet").innerHTML = `${localStorage.getItem("userName")}`;
+    notify("Workout Loaded", "green");
+    const params = new URLSearchParams(document.location.search);
+    const id = params.get('planID');
+    if (id) {
+        try {
+            const response = await fetch(`./getWorkout/${id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch workout details: ' + response.statusText);
+            }
+            const workoutDetails = await response.json();
+            if (workoutDetails.length === 0) {
+                throw new Error('No workouts found.');
+            }
+            const totalDuration = workoutDetails.reduce((acc, workout) => acc + parseInt(workout.Workout_Duration, 10), 0);
+            let time = document.createElement("h1");
+            time.textContent = totalDuration + " Minutes";
+            time.style.fontSize = "4vh";
+            time.style.color = "#b67806"
+            let pressPlay = document.createElement("p");
+            pressPlay.style.color = "#525252"
+            pressPlay.textContent = "Press play to begin"
+            document.querySelector("#screen").append(time);
+            document.querySelector("#screen").append(pressPlay);
+            fetchWorkoutDetails(id);
+            showAllWorkoutsButton(workoutDetails);
+        } catch (error) {
+            console.error(error.message);
+        }
+    } else {
+        console.error('No PlanID provided in the query parameters.');
+    }
+});
