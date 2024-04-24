@@ -1,5 +1,5 @@
 import express from 'express';
-import * as databaseCMDS from './sql.mjs';
+import * as databaseCMDS from './database/sql.mjs';
 import bodyParser from 'body-parser';
 import { readFileSync, writeFileSync } from 'fs';
 
