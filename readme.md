@@ -1,4 +1,4 @@
-Version: 0.8
+Version: 1.1
 
 # CORS APP
 

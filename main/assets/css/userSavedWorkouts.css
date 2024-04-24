@@ -161,3 +161,7 @@ body{
    overflow-x: hidden;
    padding: 25px; 
 }
+
+.deleteButton{
+    background-color: rgb(207, 49, 49) !important;
+}

@@ -16,13 +16,26 @@ function asyncWrap(f) {
   };
 }
 
+// ADMIN FUNCTIONS
+
+async function fetchAllPlans(req, res){
+    const workouts = await databaseCMDS.fetchPlans();
+    res.send(workouts);
+}
+app.get('/plans', asyncWrap(fetchAllPlans));
 
 async function fetchWorkouts(req, res){
     const workouts = await databaseCMDS.fetchWorkouts();
     res.send(workouts);
 }
+app.get('/workouts', asyncWrap(fetchWorkouts));
 
-
+async function logUsers(req, res){
+    const workouts = await databaseCMDS.logUsers();
+    res.send(workouts);
+}
+app.get('/users', asyncWrap(logUsers));
+////////////////////////////////////////////////////////////
 async function sendNewUser(req){
     const data = req.body;
     await console.log("Recieved User Data: ", data);
@@ -76,10 +89,20 @@ app.post('/signup', asyncWrap(sendNewUser));
 app.post('/login', asyncWrap(login));
 
 app.post('/user', asyncWrap(getUserIDHandler));
-
 app.post('/plans', asyncWrap(showUserPlans));
-
-app.get('/workouts', asyncWrap(fetchWorkouts));
+app.delete('/plans/:planID', asyncWrap(async (req, res) => {
+    const planID = req.params.planID;
+    try {
+        const result = await databaseCMDS.deletePlan(planID);
+        if (result) {
+            res.status(200).send('Plan deleted successfully');
+        } else {
+            res.status(404).send('Plan not found');
+        }
+    } catch (error) {
+        console.error("Error deleting plan:", error);
+    }
+}));
 
 app.post('/workouts', asyncWrap(sendNewWorkoutPlan));
 

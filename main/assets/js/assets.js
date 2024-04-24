@@ -73,3 +73,65 @@ export function dayHandler() {
         todayElement.style.color = '#b67806';
     }
 }
+
+export function activateWorkoutMenus(){
+    document.querySelector("#leftControls").addEventListener("click", () => {
+        document.querySelector("#inWorkSettings").classList.add("fade");
+        document.querySelector("#inWorkSettings").style.opacity = 1;
+    });
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest("#leftControls")) {
+            document.querySelector("#inWorkSettings").style.opacity = 0;
+        }
+    });
+    
+    document.querySelector("#arrow").addEventListener("click", () => {
+        const overlay = document.createElement("div");
+        overlay.className = "overlayStyle";
+        const text = document.createElement("h1");
+        text.textContent = "Share this workout with your friends!";
+        text.className = "overlayTextStyle";
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.value = window.location.href;
+        inputField.readOnly = true;
+        inputField.className = "overlayInputFieldStyle";
+
+        const socialMediaContainer = document.createElement("div");
+        socialMediaContainer.className = "socialMediaContainerStyle";
+
+        const facebookButton = createSocialButton("Facebook", "<i class='fab fa-facebook-f'></i>");
+        const instagramButton = createSocialButton("Instagram", "<i class='fab fa-instagram'></i>");
+        const snapchatButton = createSocialButton("Snapchat", "<i class='fab fa-snapchat-ghost'></i>");
+
+        socialMediaContainer.appendChild(facebookButton);
+        socialMediaContainer.appendChild(instagramButton);
+        socialMediaContainer.appendChild(snapchatButton);
+
+        overlay.appendChild(text);
+        overlay.appendChild(inputField);
+        overlay.appendChild(socialMediaContainer);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener("click", () => overlay.remove());
+        inputField.addEventListener("click", (e) => e.stopPropagation());
+    });
+
+    function createSocialButton(platform, iconHTML) {
+        const button = document.createElement("button");
+        button.className = "buttonStyle1";
+        button.innerHTML = iconHTML;
+        button.addEventListener("click", () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Share this workout!`,
+                    url: window.location.href
+                }).then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                console.log(`Share on ${platform}`);
+            }
+        });
+        return button;
+    }
+}

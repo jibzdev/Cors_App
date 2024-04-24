@@ -1,6 +1,6 @@
 // FIXED
 
-import { logoutHandler, sidebarHandler } from "./assets.js";
+import { logoutHandler, notify, sidebarHandler } from "./assets.js";
 
 function greetUser() {
     const userName = localStorage.getItem("userName");
@@ -59,6 +59,12 @@ function displayWorkoutPlans(workoutPlans) {
         loadButton.addEventListener('click', () => window.location.href = `userWorkoutArea.html?planID=${plan.Plan_ID}`);
         cardDiv.appendChild(loadButton);
 
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+        deleteButton.className = 'deleteButton';
+        deleteButton.addEventListener('click', () => deleteWorkoutPlan(plan.Plan_ID));
+        cardDiv.appendChild(deleteButton);
+
         workoutsContainer.appendChild(cardDiv);
     });
 }
@@ -83,6 +89,17 @@ function createWorkoutsList(workouts) {
         workoutsList.appendChild(workoutItem);
     });
     return workoutsList;
+}
+
+async function deleteWorkoutPlan(planID) {
+    const response = await fetch(`/plans/${planID}`, {
+        method: 'DELETE',
+    });
+    if (response.ok) {
+        notify('green','Workout Deleted');
+    } else {
+        notify('red','Failed');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async function(){

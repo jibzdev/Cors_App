@@ -13,10 +13,22 @@ async function connect() {
 
 const connectDB = connect();
 
+// ADMIN FUNCTIONS
 export async function fetchWorkouts(){
     const db = await connectDB;
     return db.all("SELECT * FROM Workouts");
 }
+
+export async function fetchPlans(){
+    const db = await connectDB;
+    return db.all("SELECT * FROM WorkoutPlans");
+}
+
+export async function logUsers(){
+    const db = await connectDB;
+    return db.all("SELECT * FROM Users");
+}
+///////////////////////////////////////////////
 
 export async function getUser(username, password){
     const db = await connectDB;
@@ -83,4 +95,10 @@ export async function getPlan(id){
         FROM PlanWorkouts pw
         JOIN Workouts w ON pw.Workout_ID = w.Workout_ID
         WHERE pw.Plan_ID = ?`, [id]);
+}
+
+export async function deletePlan(planID) {
+    const db = await connectDB;
+    const result = await db.run('DELETE FROM WorkoutPlans WHERE Plan_ID = ?', planID);
+    return result.changes > 0;
 }

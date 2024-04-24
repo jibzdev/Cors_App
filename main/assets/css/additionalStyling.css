@@ -171,18 +171,18 @@
 }
 
 @media (max-width: 768px) {
-  #sidebar{
-    top: 7%;
-    left: 5.8%;
-    transform: translate(-5.8%,-7%);
-  }
+  #sidebar {
+    top: 14%;
+    left: 10%;
+    transform: translate(-14%, -10%);
+}
   #sidebar2{
     top: 6%;
     left: 95%;
     transform: translate(-95%,-6%);
   }
   #userArea{
-      margin: 9vh;
+      margin: 4vh;
   }
   #greet{
       margin-top: 25px;
