@@ -89,6 +89,11 @@ async function fetchWorkoutDetails(id) {
             beepAudio.play();
         }
         countdownInterval = setInterval(() => {
+            if (window.innerWidth <= 768) {
+                screen.style.top = "60%";
+                screen.style.left = "50%";
+                screen.style.transform = "translate(-50%, -60%)";
+            }
             workoutDurationInSeconds--;
             time = workoutDurationInSeconds;
             if (workoutDurationInSeconds <= 3 && workoutDurationInSeconds > 0) {
@@ -97,11 +102,6 @@ async function fetchWorkoutDetails(id) {
             if (workoutDurationInSeconds <= 0) {
                 beepAudioFinal.play();
                 clearInterval(countdownInterval);
-                if (window.innerWidth <= 768) {
-                    screen.style.top = "75%";
-                    screen.style.left = "50%";
-                    screen.style.transform = "translate(-50%, -75%)";
-                }
                 displayWorkout(workoutDetails[currentWorkoutIndex + 1]);
                 workoutContainer.innerHTML = `
                 <img src="/assets/img/gifs/${workoutNameForGif}.gif" alt="Workout In Progress"><br>
@@ -109,6 +109,11 @@ async function fetchWorkoutDetails(id) {
                 `;
                 document.querySelector("#screen").innerHTML = '';
                 document.querySelector("#screen").append(workoutContainer);
+                if (window.innerWidth <= 768) {
+                    screen.style.top = "75%";
+                    screen.style.left = "50%";
+                    screen.style.transform = "translate(-50%, -75%)";
+                }
                 startActualWorkout(workout);
             } else {
                 document.querySelector("#screen").innerHTML = `Prepare for: <p>${workout.Workout_Name}</p><br><p style="font-size:4vh;color:#b67806;">${workoutDurationInSeconds}</p>`;
@@ -117,16 +122,10 @@ async function fetchWorkoutDetails(id) {
     }
 
     async function startActualWorkout(workout) {
-        if (window.innerWidth <= 768) {
-            screen.style.top = "60%";
-            screen.style.left = "50%";
-            screen.style.transform = "translate(-50%, -60%)";
-        }
         const existingTimerContainer = document.getElementById("workoutTimer");
         if (existingTimerContainer) {
             existingTimerContainer.remove();
         }
-
         // let workoutDurationInSeconds = parseInt(workout.Workout_Duration) * 60;
         let workoutDurationInSeconds = 5;
         let workoutTimerContainer = document.createElement("div");
@@ -152,14 +151,14 @@ async function fetchWorkoutDetails(id) {
                 if (currentWorkoutIndex < workoutDetails.length) {
                     startWorkout(time);
                 } else {
-                    notify("Plan Completed!", "green");
-                    document.querySelector("#screen").innerHTML = "<h1>Workout Plan Completed!</h1><p>Press play to replay.</p>";
-                    isPlaying = false;
                     if (window.innerWidth <= 768) {
                         screen.style.top = "60%";
                         screen.style.left = "50%";
                         screen.style.transform = "translate(-50%, -60%)";
                     }
+                    notify("Plan Completed!", "green");
+                    document.querySelector("#screen").innerHTML = "<h1>Workout Plan Completed!</h1><p>Press play to replay.</p>";
+                    isPlaying = false;
                 }
             } else {
                 let minutes = Math.floor(remainingSeconds / 60);
