@@ -260,17 +260,15 @@ body{
   }
 
   #workoutTimer {
-    height: 77px;
+    height: 7.5vh;
     background-color: #0e0e0e;
-    padding: 20px;
+    padding: 22px;
     width: 245px;
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-}
-#workoutTimer p{
-    border-bottom: rgba(255, 255, 255, 0.397) 1px solid;
+    justify-content: center;
+    gap: 10px;
 }
 
 #sectionsForShit {
@@ -365,9 +363,9 @@ body{
 #inWorkSettings {
     opacity: 0;
     position: fixed;
-    top: 89%;
+    top: 92%;
     left: 7vh;
-    transform: translate(-10%, -89%);
+    transform: translate(-10%, -92%);
     border-radius: 5px;
     width: 20vh;
     box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.2);
@@ -396,5 +394,101 @@ body{
 
 #specificTimer{
     font-size: 4vh;
+    color: #ffffff;
+}
+
+#restTimeSelector{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #121212;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 10px;
+    font-family: "Kanit";
+    border-radius: 5px;
+}
+
+#applyRestTimeButton{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    border: none;
+    padding: 15px;
+    background-color: #b67806;
+    color: white;
+    font-family: "Kanit";
+    transition: .2s ease-in all;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.5vh;
+}
+#applyRestTimeButton:hover{
+    background-color: white;
     color: #b67806;
+}
+
+#volumeOverlay{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#volumeOverlay button{
+    border: none;
+    padding: 15px;
+    background-color: #b67806;
+    color: white;
+    font-family: "Kanit";
+    transition: .2s ease-in all;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.5vh;
+}
+#volumeOverlay button:hover{
+    background-color: white;
+    color: #b67806;
+}
+
+#volumeSlider, #volumeSliderBeep{
+    appearance: none;
+    width: 25vh;
+    height: 15px;
+    background: #333;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+#volumeSlider::-webkit-slider-thumb, #volumeSliderBeep::-webkit-slider-thumb {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #b67806;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#volumeSlider:hover, #volumeSliderBeep:hover {
+    opacity: 1;
+}
+
+#iconforTimer{
+    font-size: 3.5vh;
+}
+
+#extraInfo{
+    margin-top: 20px;
+    background-color: #0e0e0e;
+    margin: 10p;
+    padding: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
 }
