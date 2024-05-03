@@ -9,6 +9,7 @@ const app = express();
 app.use(express.static('main'));
 app.use(bodyParser.json());
 
+// Wraps async functions to handle errors
 function asyncWrap(f) {
   return (req, res, next) => {
     Promise.resolve(f(req, res, next))
@@ -18,31 +19,63 @@ function asyncWrap(f) {
 
 // ADMIN FUNCTIONS
 
+// Fetches all workout plans from the database
 async function fetchAllPlans(req, res) {
   const workouts = await databaseCMDS.fetchPlans();
   res.send(workouts);
 }
 app.get('/plans', asyncWrap(fetchAllPlans));
 
+// Fetches all workouts from the database
 async function fetchWorkouts(req, res) {
   const workouts = await databaseCMDS.fetchWorkouts();
   res.send(workouts);
 }
 app.get('/workouts', asyncWrap(fetchWorkouts));
 
+// Logs all users from the database
 async function logUsers(req, res) {
-  const workouts = await databaseCMDS.logUsers();
-  res.send(workouts);
+  const users = await databaseCMDS.logUsers();
+  res.send(users);
 }
 app.get('/users', asyncWrap(logUsers));
+
+// Checks if a username exists in the database
+async function checkUsername(req, res) {
+  const user = await databaseCMDS.checkUser(req.body.username);
+  res.send(user);
+}
+app.post('/checkUser', asyncWrap(checkUsername));
+
+// Updates workout durations for all workouts
+async function updateWorkoutDurations(req, res) {
+  const { duration } = req.body;
+  try {
+    await databaseCMDS.updateAllWorkoutDurations(duration);
+    res.status(200).send('Workout durations updated successfully');
+  } catch (error) {
+    console.error('Error updating workout durations:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+app.post('/updateWorkoutDurations', asyncWrap(updateWorkoutDurations));
+
 /// /////////////////////////////////////////////////////////
 
-async function sendNewUser(req) {
+// Creates a new user in the database
+async function sendNewUser(req, res) {
   const data = req.body;
-  await console.log('Recieved User Data: ', data);
-  databaseCMDS.createUser(data);
+  await console.log('Received User Data: ', data);
+  try {
+    await databaseCMDS.createUser(data);
+    res.status(200).send('User created successfully');
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(400).send('Bad request: ' + error.message);
+  }
 }
 
+// Handles user login by checking credentials
 async function login(req, res) {
   const data = req.body;
   const user = await databaseCMDS.getUser(data.username, data.password);
@@ -54,6 +87,7 @@ async function login(req, res) {
   }
 }
 
+// Retrieves a user ID based on username
 async function getUserIDHandler(req, res) {
   const data = req.body;
   const user = await databaseCMDS.getUserID(data.username);
@@ -64,6 +98,7 @@ async function getUserIDHandler(req, res) {
   }
 }
 
+// Creates a new workout plan and returns the plan ID
 async function sendNewWorkoutPlan(req, res) {
   const data = req.body;
   console.log('Received User Plan: ', data);
@@ -107,6 +142,7 @@ app.delete('/plans/:planID', asyncWrap(async (req, res) => {
 
 app.post('/workouts', asyncWrap(sendNewWorkoutPlan));
 
+// Retrieves a specific workout plan based on ID
 async function getWorkout(req, res) {
   const plan = await databaseCMDS.getPlan(req.params.workoutID);
   res.send(plan);
@@ -115,11 +151,11 @@ async function getWorkout(req, res) {
 app.get('/getWorkout/:workoutID', asyncWrap(getWorkout));
 
 
-// handle Pages
-
+// handle Pages and non existant pages
 const handlePage = (page) => (req, res) => {
   res.sendFile(`${__dirname}/main/${page}.html`);
 };
+app.get('/admin', handlePage('admin'));
 app.get('/homepage', handlePage('userArea'));
 app.get('/newWorkout', handlePage('userArea'));
 app.get('/createPlan', handlePage('userArea'));
@@ -131,5 +167,6 @@ const handleError = () => (req, res) => {
 app.get('*', handleError());
 
 
+// display prompt when server is running
 console.log('Server is running on port 8080');
 app.listen(8080);

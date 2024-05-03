@@ -1,21 +1,71 @@
-<html>
-    <head>
-        <title>Admin</title>
-        <script src="assets/js/admin.js"></script>
-        <link rel="stylesheet" href="assets/css/admin.css">
-        <link rel="shortcut icon" href="assets/img/logo1.png" type="image/x-icon">
-    </head>
-    <body>
-        <main>
-            <section id="menu">
-                <div id="logUsers">
-                    <h1 style="text-align: center;">All Users</h1>
-                </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS App</title>
 
-                <div id="logWorkouts">
-                    <h1 style="text-align: center;">All Workout Plans</h1>
-                </div>
-            </section>
-        </main>
-    </body>
+    <link rel="stylesheet" href="./assets/css/userArea.css">
+    <link rel="stylesheet" href="./assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/additionalStyling.css">
+    <link rel="shortcut icon" href="assets/img/logo1.png" type="image/x-icon">
+
+    <script type="module" src="./assets/js/admin.js"></script>
+    <script type="module" src="./assets/js/assets.js"></script>
+    <script src="https://kit.fontawesome.com/f2057f9f44.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="userArea">
+        <div id="controlButtons">
+            <svg xmlns="http://www.w3.org/2000/svg" id="menuIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+            <div id="sidebar">
+                <a href="/homepage">Home<i class="fa-solid fa-house" style="margin-left: 10px;"></i></a>
+                <a id="logoutButton">Logout<i class="fa-solid fa-right-from-bracket" style="margin-left: 10px;"></i></a>
+            </div>
+        </div>
+        <div id="greet">
+        <h1 id="userNameGreet"></h1>
+        <p>Welcome back to CORS APP.</p>
+        </div>
+
+        <div id="weather">
+        <p id="Mon">Mon</p>
+        <p id="Tue">Tue</p>
+        <p id="Wed">Wed</p>
+        <p id="Thu">Thu</p>
+        <p id="Fri">Fri</p>
+        <p id="Sat">Sat</p>
+        <p id="Sun">Sun</p>
+        </div>
+    </div>
+
+    <main>
+    <section id="menu">
+        <h1 style="text-align: center;">All Users</h1>
+        <div id="logUsers">
+            <div id="titles">
+                <h1>User ID</h1>
+                <h1>Username</h1>
+                <h1>Email</h1>
+                <h1>Date of Birth</h1>
+                <h1>Password</h1>
+            </div>
+        </div>
+
+        <h1 style="text-align: center;">Workouts</h1>
+        <div id="logWorkouts">
+            <div id="titles">
+                <h1>Plan Name</h1>
+                <h1>User ID</h1>
+                <h1>Plan ID</h1>
+            </div>
+        </div>
+
+        <div id="alterWorkouts">
+            <h1>Change all Workouts to 5s</h1>
+            <button id="alterWorkouts">Change Workouts</button>
+        </div>
+    </section>
+</main>
+</body>
 </html>

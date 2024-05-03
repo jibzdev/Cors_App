@@ -1,11 +1,14 @@
-// WORKING ON FIXING
-
 import { activateWorkoutMenus, logoutHandler, notify, sidebarHandler } from './assets.js';
+
+// Audio setup for workout beeps
 const beepAudio = new Audio('/assets/audio/beep.wav');
 const beepAudioFinal = new Audio('/assets/audio/finalbeep.wav');
+
+// Randomly select a song for the workout
 const songs = ['/assets/audio/music1.mp3', '/assets/audio/music2.mp3', '/assets/audio/music3.mp3'];
 const music = new Audio(songs[Math.floor(Math.random() * songs.length)]);
 
+// Fetch workout details from server
 async function fetchWorkoutDetails(id) {
   const response = await fetch(`./getWorkout/${id}`);
   if (!response.ok) {
@@ -18,15 +21,17 @@ async function fetchWorkoutDetails(id) {
   let currentWorkoutIndex = 0;
   displayWorkout(workoutDetails[currentWorkoutIndex]);
 
+  // Setup play button and workout logic
   const playButton = document.querySelector('#playButton');
   let isPlaying = false;
   let isFirstClick = true;
   let workoutInterval;
   let restInterval;
-  let durationInSeconds = 5; // for testing, initial duration in seconds
-  let restDurationInSeconds = getUserDefinedRestTime(); // convert minutes to seconds
+  let durationInSeconds = parseInt(workoutDetails[currentWorkoutIndex].Workout_Duration);
+  let restDurationInSeconds = getUserDefinedRestTime();
   let inRest = false;
 
+  // Handle play button clicks
   playButton.addEventListener('click', () => {
     if (inRest) {
       notify('cant pause in rest', 'red');
@@ -57,6 +62,7 @@ async function fetchWorkoutDetails(id) {
     }
   });
 
+  // Display workout information and manage timers
   function workoutInfo(workout, durationInSeconds, isRest) {
     const div = document.querySelector('#workoutTimer');
     const screen = document.querySelector('#screen');
@@ -79,7 +85,7 @@ async function fetchWorkoutDetails(id) {
         timeRemaining.setAttribute('id', 'specificTimer');
         timeRemaining.innerHTML = `${Math.floor(durationInSeconds / 60)}:${durationInSeconds % 60 < 10 ? '0' + durationInSeconds % 60 : durationInSeconds % 60}`;
         const icon = document.querySelector('p');
-        icon.innerHTML = `<i id="iconforTimer" class="fa-solid fa-clock"></i>`;
+        icon.innerHTML = '<i id="iconforTimer" class="fa-solid fa-clock"></i>';
         div.appendChild(icon);
         div.appendChild(timeRemaining);
 
@@ -88,14 +94,15 @@ async function fetchWorkoutDetails(id) {
                 <img src="/assets/img/gifs/${imagineName}.gif">
                 <p>${workout.Workout_Description}</p>
                 <div id="extraInfo">
-                <p>${workout.Workout_Name}</p>
-                <p>${workout.Workout_Sets}</p>
+                <p><i class="fa-solid fa-pencil" style='transform: rotate(270deg);color: #b67806;'></i> ${workout.Workout_Name}</p>
+                <p><i class="fa-solid fa-dumbbell" style='color: #b67806;'></i> ${workout.Workout_Sets}</p>
                 </div>
                 `;
       }
     }
   }
 
+  // Manage workout intervals
   function startWorkoutInterval() {
     inRest = false;
     const currentWorkout = workoutDetails[currentWorkoutIndex];
@@ -114,17 +121,18 @@ async function fetchWorkoutDetails(id) {
         if (currentWorkoutIndex < workoutDetails.length - 1) {
           currentWorkoutIndex++;
           notify('Rest Period', 'green');
-          durationInSeconds = 5; // reset to initial duration in seconds
+          durationInSeconds = parseInt(workoutDetails[currentWorkoutIndex].Workout_Duration);
           displayWorkout(workoutDetails[currentWorkoutIndex]);
           startRestPeriod();
         } else {
           displayWorkout();
-          workoutInfo(null, null, null); // Call with all null to indicate completion
+          workoutInfo(null, null, null);
         }
       }
     }, 1000);
   }
 
+  // Manage rest intervals
   function startRestPeriod() {
     inRest = true;
     workoutInfo(null, null, restDurationInSeconds);
@@ -140,12 +148,13 @@ async function fetchWorkoutDetails(id) {
 
       if (restDurationInSeconds <= 0) {
         clearInterval(restInterval);
-        restDurationInSeconds = getUserDefinedRestTime(); // reset rest duration in seconds
+        restDurationInSeconds = getUserDefinedRestTime();
         startWorkoutInterval();
       }
     }, 1000);
   }
 
+  // Create pause overlay during workout
   function createPauseOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'pauseOverlay';
@@ -164,6 +173,7 @@ async function fetchWorkoutDetails(id) {
     });
   }
 
+  // Remove pause overlay
   function removePauseOverlay() {
     const overlay = document.querySelector('#pauseOverlay');
     if (overlay) {
@@ -172,6 +182,7 @@ async function fetchWorkoutDetails(id) {
   }
 }
 
+// Get user-defined rest time
 function getUserDefinedRestTime() {
   const adjustRestTimeButton = document.querySelector('#adjustRestTime');
   adjustRestTimeButton.addEventListener('click', (event) => {
@@ -212,9 +223,10 @@ function getUserDefinedRestTime() {
       }
     });
   });
-  return parseInt(adjustRestTimeButton.value) || 5; // CHANGE ME
+  return parseInt(adjustRestTimeButton.value) || 5;
 }
 
+// Display workout details in UI
 function displayWorkout(workout) {
   if (!workout) {
     const workoutInfo = `
@@ -238,6 +250,7 @@ function displayWorkout(workout) {
   }
 }
 
+// Show all workouts in an overlay
 function showAllWorkoutsButton(workoutDetails) {
   document.querySelector('#showAllWorkouts').addEventListener('click', function () {
     const overlay = document.createElement('div');
@@ -252,7 +265,7 @@ function showAllWorkoutsButton(workoutDetails) {
       workoutElement.innerHTML = `
             <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
             <h3>${workout.Workout_Name}</h3>
-            <p>${workout.Workout_Duration} Minutes</p>`;
+            <p>${workout.Workout_Duration / 60} Minutes</p>`;
       allWorkoutsDiv.appendChild(workoutElement);
     });
 
@@ -267,6 +280,7 @@ function showAllWorkoutsButton(workoutDetails) {
   });
 }
 
+// Adjust music volume
 function adjustMusic() {
   seMusic(localStorage.getItem('userVolume'));
   const button = document.querySelector('#adjustVolume');
@@ -274,12 +288,12 @@ function adjustMusic() {
     const overlay = document.createElement('div');
     overlay.id = 'volumeOverlay';
     overlay.className = 'overlay';
-    
+
     const label = document.createElement('label');
     label.htmlFor = 'volumeSlider';
     label.textContent = 'Music';
     overlay.appendChild(label);
-    
+
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = '0';
@@ -315,17 +329,19 @@ function adjustMusic() {
     });
   });
 
+  // Set music volume
   function seMusic(volumeLevel) {
     music.volume = volumeLevel;
   }
 }
 
+// Adjust beep volume
 function adjustBeep() {
   seMusic(localStorage.getItem('userVolumeBeep'));
   const button = document.querySelector('#adjustVolume');
   button.addEventListener('click', function () {
     const overlay = document.querySelector('#volumeOverlay');
-    
+
     const label = document.createElement('label');
     label.htmlFor = 'volumeSliderBeep';
     label.textContent = 'Coutndown';
@@ -362,6 +378,7 @@ function adjustBeep() {
     });
   });
 
+  // Set beep volume
   function seMusic(volumeLevel) {
     beepAudio.volume = volumeLevel;
     beepAudioFinal.volume = volumeLevel;
@@ -397,7 +414,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         const totalDuration = workoutDetails.reduce((acc, workout) => acc + parseInt(workout.Workout_Duration, 10), 0);
         const time = document.createElement('h1');
-        time.textContent = totalDuration + ' Minutes';
+        time.textContent = totalDuration / 60 + ' Minutes';
         time.style.fontSize = '4vh';
         time.style.color = '#b67806';
         const pressPlay = document.createElement('p');

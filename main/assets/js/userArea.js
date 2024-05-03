@@ -1,8 +1,6 @@
-// FIXED
-
 import { notify, logoutHandler, sidebarHandler, dayHandler } from './assets.js';
 
-
+// Function to create a workout card element
 function createWorkoutCard(imageSrc, category, title, description, workoutDuration, id) {
   const workoutCard = document.createElement('div');
   workoutCard.classList.add('workoutCards');
@@ -38,7 +36,7 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
   return workoutCard;
 }
 
-
+// Function to handle homepage setup
 function homepage(username) {
   notify('Successfully Logged In.', 'green');
   history.pushState({ page: 'homepage' }, 'homepage', '/homepage');
@@ -63,6 +61,7 @@ function homepage(username) {
   });
 }
 
+// Function to handle new workout creation
 function newWorkout(username) {
   document.querySelector('#content').innerHTML = '';
 
@@ -98,6 +97,7 @@ function newWorkout(username) {
   });
 }
 
+// Function to create a workout plan
 async function createPlan(workoutName, username) {
   let totalWorkoutTime = 0;
   document.querySelector('#content').innerHTML = '';
@@ -151,7 +151,7 @@ async function createPlan(workoutName, username) {
             workout.Workout_Sets,
             workout.Workout_Name,
             workout.Workout_Description,
-            `${workout.Workout_Duration} Minutes`,
+            `${workout.Workout_Duration / 60} Minutes`,
             `${workout.Workout_ID}`,
     );
   });
@@ -252,12 +252,15 @@ async function createPlan(workoutName, username) {
         Plan_Name: workoutName,
         Workouts: workoutIds,
       };
+      console.log(planPayload);
       const planResponse = await fetch('/workouts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(planPayload),
       });
       if (planResponse.ok) {
+        console.log(planResponse);
+        debugger;
         const planData = await planResponse.json();
         if (planData && planData.planID) {
           const planID = planData.planID;
@@ -273,6 +276,7 @@ async function createPlan(workoutName, username) {
   });
 }
 
+// Event listener for handling browser back and forward operations
 window.addEventListener('popstate', function (event) {
   if (event.state) {
     const username = localStorage.getItem('userName');
@@ -292,6 +296,7 @@ window.addEventListener('popstate', function (event) {
   }
 });
 
+// Initial setup when the document is loaded
 document.addEventListener('DOMContentLoaded', () => {
   sidebarHandler();
   const check = localStorage.getItem('userLoggedIn');

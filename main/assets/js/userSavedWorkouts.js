@@ -1,12 +1,12 @@
-// FIXED
-
 import { logoutHandler, notify, sidebarHandler, dayHandler } from './assets.js';
 
+// Greets the user by displaying their name
 function greetUser() {
   const userName = localStorage.getItem('userName');
   document.querySelector('#userNameGreet').textContent = `Hello ${userName}`;
 }
 
+// Fetches user data from the server using the username stored in localStorage
 async function fetchUserData() {
   const username = localStorage.getItem('userName');
   const payload = { username };
@@ -18,9 +18,8 @@ async function fetchUserData() {
   return response.json();
 }
 
-// eslint-disable-next-line camelcase
+// Fetches workout plans for a given user ID from the server
 async function fetchWorkoutPlans(User_ID) {
-  // eslint-disable-next-line camelcase
   const payload = { User_ID };
   const response = await fetch('/plans', {
     method: 'POST',
@@ -30,6 +29,7 @@ async function fetchWorkoutPlans(User_ID) {
   return response.json();
 }
 
+// Displays workout plans in the UI
 function displayWorkoutPlans(workoutPlans) {
   const workoutsContainer = document.querySelector('#content');
 
@@ -71,6 +71,7 @@ function displayWorkoutPlans(workoutPlans) {
   });
 }
 
+// Creates an overlay for displaying workout details
 function createOverlay() {
   const overlay = document.createElement('div');
   overlay.setAttribute('class', 'overlay');
@@ -78,6 +79,7 @@ function createOverlay() {
   return overlay;
 }
 
+// Creates a list of workouts to be displayed in the overlay
 function createWorkoutsList(workouts) {
   const workoutsList = document.createElement('div');
   workoutsList.setAttribute('class', 'workoutLists');
@@ -93,6 +95,7 @@ function createWorkoutsList(workouts) {
   return workoutsList;
 }
 
+// Deletes a workout plan from the server and reloads the page
 async function deleteWorkoutPlan(planID) {
   const response = await fetch(`/plans/${planID}`, {
     method: 'DELETE',
@@ -104,6 +107,7 @@ async function deleteWorkoutPlan(planID) {
   }
 }
 
+// Initializes the page, checks login status, and loads user data and workout plans
 document.addEventListener('DOMContentLoaded', async function () {
   history.pushState('savedWorkouts', 'savedWorkouts', '/savedWorkouts');
   logoutHandler();

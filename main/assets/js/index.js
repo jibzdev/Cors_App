@@ -1,7 +1,6 @@
-// FIXED
-
 import { notify } from './assets.js';
 
+// Toggles the menu icon based on window width
 function addOrRemoveMenuIcon() {
   const navbar = document.querySelector('nav');
   const windowWidth = window.innerWidth;
@@ -31,6 +30,7 @@ function addOrRemoveMenuIcon() {
   }
 }
 
+// Creates an input field with an icon
 function createInputWithIcon(iconClass, type, placeholder, id) {
   const div = document.createElement('div');
   div.className = 'input-with-icon';
@@ -46,6 +46,7 @@ function createInputWithIcon(iconClass, type, placeholder, id) {
   return div;
 }
 
+// Creates a button with specified attributes
 function createButton(id, className, text) {
   const button = document.createElement('button');
   button.id = id;
@@ -54,6 +55,7 @@ function createButton(id, className, text) {
   return button;
 }
 
+// Handles the signup process
 function signup() {
   const main = document.querySelector('main');
   main.innerHTML = '';
@@ -94,6 +96,7 @@ function signup() {
 
   loginButton.addEventListener('click', login);
 
+  // Validates and submits the signup form
   function validateSignUp() {
     main.querySelector('#confirmSignup').addEventListener('click', async () => {
       const usernameField = main.querySelector('#username');
@@ -113,6 +116,13 @@ function signup() {
         return;
       }
 
+      // Email validation regex
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!emailRegex.test(email)) {
+        notify('Invalid email format', 'red');
+        return;
+      }
+
       if (password !== confirmPassword) {
         notify('Password Does Not Match', 'red');
         return;
@@ -124,23 +134,34 @@ function signup() {
         password,
         dob,
       };
-      notify('Signed Up Successfully!', 'green');
-      usernameField.value = '';
-      emailField.value = '';
-      passwordField.value = '';
-      confirmPasswordField.value = '';
-      dobField.value = '';
-      await fetch('/signup', {
+      console.log(payload);
+
+      const response = await fetch('/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+
+      if (response.ok) {
+        notify('Signed Up Successfully!', 'green');
+          usernameField.value = '';
+          emailField.value = '';
+          passwordField.value = '';
+          confirmPasswordField.value = '';
+          dobField.value = '';
+          login();
+      } else if (response.status === 400) {
+        notify('Username already exists', 'red');
+      } else {
+        notify('Failed to sign up. Please try again.', 'red');
+      }
     });
   }
 
   validateSignUp();
 }
 
+// Handles the login process
 function login() {
   const main = document.querySelector('main');
   main.innerHTML = '';
@@ -176,6 +197,7 @@ function login() {
 
   signupButton.addEventListener('click', signup);
   const confirmLoginButton = main.querySelector('#confirmLogin');
+  // Attempts to log in with provided credentials
   async function attemptLogin() {
     const username = main.querySelector('#username').value.trim();
     const password = main.querySelector('#password').value.trim();
@@ -213,6 +235,7 @@ function login() {
   });
 }
 
+// Initializes the application once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   addOrRemoveMenuIcon();
   const loginButton = document.querySelector('#begin');

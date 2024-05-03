@@ -107,6 +107,10 @@ body{
         max-width: 35vh;
         height: 20vh;
     }
+    #screen{
+        top: 75%;
+        transform: translate(-50%,-75%);
+    }
   }
 
   #upNext {

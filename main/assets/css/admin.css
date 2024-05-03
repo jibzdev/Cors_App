@@ -10,6 +10,30 @@ body{
     font-family: "Kanit";
 }
 
+main{
+    margin-top: 50px;
+}
+
+#titles{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#logUsers{
+    margin: 20px;
+    overflow-y: scroll;
+    height: 150px;
+    border: white solid 1px;
+    margin-bottom: 50px;
+    border-radius: 5px;
+}
+#logWorkouts{
+    border-radius: 5px;
+    margin: 20px;
+    overflow-y: scroll;
+    height: 150px;
+    border: white solid 1px;
+}
 .planCard{
     display: flex;
     justify-content: space-between;
@@ -22,4 +46,24 @@ body{
     align-items: center;
     justify-content: space-between;
     margin: 10px;
+}
+#alterWorkouts{
+    text-align: center;
+}
+
+#alterWorkouts button{
+    border: none;
+    padding: 15px;
+    background-color: #b67806;
+    color: white;
+    font-family: "Kanit";
+    transition: .2s ease-in all;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.5vh;
+    text-align: center;
+}
+#alterWorkouts button:hover{
+    background-color: white;
+    color: #b67806;
 }
