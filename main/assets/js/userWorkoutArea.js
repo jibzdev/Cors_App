@@ -30,21 +30,25 @@ async function fetchWorkoutDetails(id) {
   let durationInSeconds = parseInt(workoutDetails[currentWorkoutIndex].Workout_Duration);
   let restDurationInSeconds = getUserDefinedRestTime();
   let inRest = false;
+  let inCountdown = false;
 
-  // Handle play button clicks
   playButton.addEventListener('click', () => {
     if (inRest) {
-      notify('cant pause in rest', 'red');
+      notify('Cannot pause whilst Resting', 'red');
+    } else if (inCountdown) {
+      notify('Cannot pause during preworkout', 'red');
     } else {
       if (!isPlaying) {
         if (isFirstClick) {
           isFirstClick = false;
+          inCountdown = true;
           let preWorkoutCountdown = 3;
           const countdownInterval = setInterval(() => {
-            document.querySelector('#screen').innerHTML = `Workout starts in ${preWorkoutCountdown}...`;
+            document.querySelector('#screen').innerHTML = `<h1>Workout starts in ${preWorkoutCountdown}</h1>`;
             preWorkoutCountdown--;
             if (preWorkoutCountdown < 0) {
               clearInterval(countdownInterval);
+              inCountdown = false;
               isPlaying = true;
               startWorkoutInterval();
             }
@@ -68,7 +72,7 @@ async function fetchWorkoutDetails(id) {
     const screen = document.querySelector('#screen');
 
     if (workout === null && durationInSeconds === null && isRest === null) {
-      screen.innerHTML = 'Workout Completed, Press Play To Restart.';
+      screen.innerHTML = '<h1>Workout Completed, Press Play To Restart.</h1>';
       playButton.addEventListener('click', () => {
         location.reload();
       });
@@ -76,7 +80,7 @@ async function fetchWorkoutDetails(id) {
       if (workout === null && durationInSeconds === null) {
         div.innerHTML = '';
         screen.innerHTML = `
-                <p>${isRest} Seconds</p>
+                <h1>${isRest} Seconds</h1>
                 `;
       } else {
         div.innerHTML = '';
@@ -89,7 +93,7 @@ async function fetchWorkoutDetails(id) {
         div.appendChild(icon);
         div.appendChild(timeRemaining);
 
-        const imagineName = workout.Workout_Name.toLowerCase().replace(/\s/g, '');
+        const imagineName = workout.Workout_Name.toLowerCase().replace(/[\s\-]/g, '');
         screen.innerHTML = `
                 <img src="/assets/img/gifs/${imagineName}.gif">
                 <p>${workout.Workout_Description}</p>
