@@ -259,8 +259,6 @@ async function createPlan(workoutName, username) {
         body: JSON.stringify(planPayload),
       });
       if (planResponse.ok) {
-        console.log(planResponse);
-        debugger;
         const planData = await planResponse.json();
         if (planData && planData.planID) {
           const planID = planData.planID;

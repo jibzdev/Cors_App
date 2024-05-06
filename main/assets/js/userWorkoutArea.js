@@ -74,6 +74,7 @@ async function fetchWorkoutDetails(id) {
     if (workout === null && durationInSeconds === null && isRest === null) {
       screen.innerHTML = '<h1>Workout Completed, Press Play To Restart.</h1>';
       playButton.addEventListener('click', () => {
+        document.body.innerHTML = ``;
         location.reload();
       });
     } else {
