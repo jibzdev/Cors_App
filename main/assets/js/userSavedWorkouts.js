@@ -53,7 +53,7 @@ function displayWorkoutPlans(workoutPlans) {
     planName.appendChild(infoIcon);
 
     const duration = document.createElement('p');
-    duration.textContent = `Duration: ${plan.Total_Workout_Time} Minutes`;
+    duration.textContent = `Duration: ${plan.Total_Workout_Time / 60} Minutes`;
     cardDiv.appendChild(duration);
 
     const loadButton = document.createElement('button');
