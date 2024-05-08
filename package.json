@@ -1,6 +1,6 @@
 {
     "name": "Web Programming - HIIT Web App",
-    "version": "1.0.0",
+    "version": "1.1.3",
     "description": "High Intensity Interval Tranining Web Application for Second year Web Programming.",
     "type": "module",
     "main": "server.mjs",

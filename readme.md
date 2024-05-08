@@ -1,4 +1,4 @@
-Version: 1.3
+Version: 1.1.3
 
 # Setup
 
@@ -31,7 +31,7 @@ the admin user can access `localhost:8080/admin`
 
 ## Coursework Description
 
-This coursework project is all about building a web application for managing workout plans. It's designed to help users keep track of their fitness routines and make adjustments as needed. The app is pretty straightforward but packs a lot of features under the hood. Everything from creating and modifying workout plans to tracking your progress over time is included. It's built to be user-friendly so that even if you're not a tech whiz, you'll find it easy to navigate and use.
+This coursework is all about building a HIIT (High Intensity Interval Training) application for managing workout plans. It's designed to help users keep track of their fitness routines and make adjustments as needed. The app is pretty straightforward but packs a lot of features under the hood. Everything from creating and modifying workout plans to tracking your progress over time is included. It's built to be user-friendly so that even if you're not a tech whiz, you'll find it easy to navigate and use.
 
 ## Key features
 
@@ -60,16 +60,18 @@ These features ensure that users have a comprehensive and user-friendly experien
 ## Additional Features (If More Time Was Available)
 
 1. **Code Optimization for Enhanced Performance**:
-    - Clean up the current code to remove repeated parts and make it easier to manage by using functions and parts that can be reused. This will make the app work smoother and perform better.
-    - If i had more time to work on the project i would have made sure i do not use innerHTML alot because there are better ways of going about it , i prevented using innerHTML alot however the userWorkoutArea.js i had to implement it because i endede up going crazy and i needed to save time so i had to comprimise. Also i ended up using ALOT OF ID's which looking over my code i could have done a million times better. I had alot of stuff going on in my life during this coursework therefore it really did kill alot of my time.
+   - Clean up the current code to remove repeated parts and make it easier to manage by using functions and parts that can be reused. This will make the app work smoother and perform better.
+   - If i had more time to work on the project i would have made sure i do not use innerHTML alot because there are better ways of going about it , i prevented using innerHTML alot however the userWorkoutArea.js i had to implement it because i endede up going crazy and i needed to save time so i had to comprimise. Also i ended up using ALOT OF ID's which looking over my code i could have done a million times better. I had alot of stuff going on in my life during this coursework therefore it really did kill alot of my time.
+   - Alot more could have been done to improve the quality and speed of the web app, using one page for the entire app would have been beneficial to prevent code being repeated over different pages, and would have look overall much cleaner.
+   - Better 
 
 2. **Enhanced Security Measures**:
    - Implement encryption for sensitive user information, especially passwords, to ensure data privacy and security.
-   - Introduce comprehensive security protocols to safeguard against unauthorized access and data breaches.
+   - Introduce comprehensive security protocols to safeguard against unauthorized access.
 
 3. **Expanded Administrative Control**:
    - Provide administrators with enhanced capabilities to manage user accounts and workout plans.
-   - Allow staff to create and manage other staff accounts, enabling better oversight and delegation of responsibilities.
+   - Allow staff to create and manage other staff accounts, enabling better oversight.
    - Implement features for administrators to monitor user activities and modify user information as needed.
 
 4. **User Profile Customization**:
@@ -86,7 +88,7 @@ These features ensure that users have a comprehensive and user-friendly experien
     - Provide options to modify the intensity of workouts, such as changing weights or speeds, to better suit the user's fitness level.
     - Include functionality for users to save these customizations as part of their personal workout plans, which can be reused or further modified in the future.
 
-** CORE REQUIREMENTS MET **
+**CORE REQUIREMENTS MET**
 - Build a custom HIIT workout from scratch. ✓
     - Create multiple activities, where each activity has: ✓
         - a name (e.g. Squats, Lunges, Rest) ✓
