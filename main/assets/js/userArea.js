@@ -38,7 +38,6 @@ function createWorkoutCard(imageSrc, category, title, description, workoutDurati
 
 // Function to handle homepage setup
 function homepage(username) {
-  notify('Successfully Logged In.', 'green');
   history.pushState({ page: 'homepage' }, 'homepage', '/homepage');
   logoutHandler();
   dayHandler();
@@ -105,7 +104,7 @@ function newWorkout(username) {
 
 // Function to create a workout plan
 async function createPlan(workoutName, username) {
-  let totalWorkoutTime = 0;
+  let totalWorkoutTime = { value: 0 }; // Changed to an object to maintain reference
   const customArea = document.createElement('section');
   customArea.id = `customArea`;
   const selectionArea = document.querySelector('#content');
@@ -243,9 +242,9 @@ function addCardEventListener(card, addedWorkouts, totalWorkoutTime, selected, p
 
     if (!addedWorkouts.has(workoutTitle)) {
       addedWorkouts.set(workoutTitle, workoutId);
-      totalWorkoutTime += workoutTime;
+      totalWorkoutTime.value += workoutTime; // Correctly updating the object property
 
-      document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
+      document.querySelector('#totalWorkoutTime').textContent = totalWorkoutTime.value + ' minutes';
 
       const workoutDiv = document.createElement('div');
       workoutDiv.setAttribute('class', 'selectedCards');
@@ -297,8 +296,8 @@ function addCardEventListener(card, addedWorkouts, totalWorkoutTime, selected, p
       }
       removeButton.addEventListener('click', () => {
         addedWorkouts.delete(workoutTitle);
-        totalWorkoutTime -= workoutTime;
-        document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
+        totalWorkoutTime.value -= workoutTime;
+        document.querySelector('#totalWorkoutTime').textContent = totalWorkoutTime.value + ' minutes';
         notify(`Removed ${workoutTitle}`, 'red');
         workoutDiv.remove();
       });
