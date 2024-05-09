@@ -46,13 +46,19 @@ function homepage(username) {
   document.querySelector('#userNameGreet').innerHTML = `Hello ${username}`;
   document.querySelector('#content').innerHTML = `
     ${createWorkoutCard('./assets/img/selection1.png', '', 'New Workout', 'Create your own HIIT workout plan.', '', 'newWorkout').outerHTML}
-    ${createWorkoutCard('./assets/img/selection2.png', '', 'Saved Workout', 'Access your saved HIIT workout plans.', '', 'savedWorkout').outerHTML}`;
+    ${createWorkoutCard('./assets/img/selection2.png', '', 'Saved Workout', 'Access your saved HIIT workout plans.', '', 'savedWorkout').outerHTML}
+    ${createWorkoutCard('./assets/img/selection3.png', '', 'Create Workout', 'Design your perfect optimized workout.', '', 'createNewWorkout').outerHTML}`;
 
   const newWorkoutButton = document.querySelector('#newWorkout');
   const savedWorkoutsButton = document.querySelector('#savedWorkout');
+  const createNewWorkoutButton = document.querySelector('#createNewWorkout');
 
   savedWorkoutsButton.addEventListener('click', () => {
-    location.href = 'userSavedWorkouts.html';
+    location.href = '/savedWorkouts';
+  });
+
+  createNewWorkoutButton.addEventListener('click', () => {
+    location.href = '/createNewWorkout';
   });
 
   newWorkoutButton.addEventListener('click', async () => {
@@ -100,16 +106,20 @@ function newWorkout(username) {
 // Function to create a workout plan
 async function createPlan(workoutName, username) {
   let totalWorkoutTime = 0;
-  document.querySelector('#content').innerHTML = '';
-
+  const customArea = document.createElement('section');
+  customArea.id = `customArea`;
   const selectionArea = document.querySelector('#content');
+  selectionArea.innerHTML = ``;
+  selectionArea.append(customArea);
   document.querySelector('#content').style.marginTop = '2vw';
 
   const selected = document.createElement('div');
   selected.setAttribute('id', 'selectedWorkouts');
+  document.querySelector('#content').append(selected);
 
   const workoutCardsDiv = document.createElement('div');
   workoutCardsDiv.setAttribute('id', 'workoutCardsDiv');
+  selectionArea.appendChild(workoutCardsDiv);
 
   let pointer = document.createElement('p');
   pointer.setAttribute('id', 'pointer');
@@ -139,12 +149,21 @@ async function createPlan(workoutName, username) {
   workoutInfo.appendChild(timeParagraph);
   workoutInfo.appendChild(createButton);
   selected.appendChild(workoutInfo);
-  selected.appendChild(workoutCardsDiv);
   selected.appendChild(pointer);
-
   const workouts = await fetch('/workouts');
   const workoutData = await workouts.json();
-  const workoutCards = workoutData.map((workout, index) => {
+  const customWorkoutCards = workoutData.filter(workout => workout.isCustom === "TRUE").map((workout, index) => {
+    const imageIndex = index + 1;
+    return createWorkoutCard(
+            `./assets/img/selection3.png`,
+            workout.Workout_Sets,
+            workout.Workout_Name,
+            workout.Workout_Description,
+            `${workout.Workout_Duration / 60} Minutes`,
+            `${workout.Workout_ID}`,
+    );
+  });
+  const regularWorkoutCards = workoutData.filter(workout => workout.isCustom !== "TRUE").map((workout, index) => {
     const imageIndex = index + 1;
     return createWorkoutCard(
             `./assets/img/workoutImgs/${imageIndex}.jpg`,
@@ -156,77 +175,17 @@ async function createPlan(workoutName, username) {
     );
   });
   const addedWorkouts = new Map();
-  workoutCards.forEach(card => {
-    selectionArea.append(card);
-    card.addEventListener('click', () => {
-      const workoutTitle = card.querySelector('h1').textContent;
-      const workoutId = card.id;
-      const workoutTime = parseInt(card.querySelector('p').textContent);
-      const workoutSets = card.querySelector('a').textContent;
-      const workoutImageSrc = card.querySelector('img').src;
-
-      if (!addedWorkouts.has(workoutTitle)) {
-        addedWorkouts.set(workoutTitle, workoutId);
-        totalWorkoutTime += workoutTime;
-
-        document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
-
-        const workoutDiv = document.createElement('div');
-        workoutDiv.setAttribute('class', 'selectedCards');
-
-        const workoutImage = document.createElement('img');
-        workoutImage.src = workoutImageSrc;
-        workoutImage.alt = 'Workout Image';
-        workoutDiv.appendChild(workoutImage);
-
-        const textContentDiv = document.createElement('div');
-        textContentDiv.setAttribute('class', 'textContent');
-
-        const textContentDetails2 = document.createElement('div');
-        textContentDetails2.setAttribute('id', 'textContentDetails2');
-
-        const workoutTimeP = document.createElement('p');
-        workoutTimeP.style.color = '#b67806';
-        workoutTimeP.textContent = `${workoutTime} minutes`;
-
-        textContentDetails2.appendChild(workoutTimeP);
-
-        const textContentDetails1 = document.createElement('div');
-        textContentDetails1.setAttribute('id', 'textContentDetails1');
-
-        const workoutTitleH1 = document.createElement('h1');
-        workoutTitleH1.textContent = workoutTitle;
-
-        const workoutRepsP = document.createElement('p');
-        workoutRepsP.textContent = workoutSets;
-
-        textContentDetails1.appendChild(workoutTitleH1);
-        textContentDetails1.appendChild(workoutRepsP);
-        textContentDiv.appendChild(textContentDetails2);
-        textContentDiv.appendChild(textContentDetails1);
-        workoutDiv.appendChild(textContentDiv);
-
-        const removeButton = document.createElement('button');
-        removeButton.textContent = 'X';
-        textContentDetails2.appendChild(removeButton);
-        workoutCardsDiv.appendChild(workoutDiv);
-
-        notify(`Added ${workoutTitle}`, 'green');
-        if (pointer) {
-          pointer.remove();
-          pointer = null;
-        }
-        removeButton.addEventListener('click', () => {
-          addedWorkouts.delete(workoutTitle);
-          totalWorkoutTime -= workoutTime;
-          document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
-          notify(`Removed ${workoutTitle}`, 'red');
-          workoutDiv.remove();
-        });
-      } else {
-        notify(`${workoutTitle} has already been added.`, 'red');
-      }
+  if (customWorkoutCards.length === 0) {
+    customArea.innerHTML = `<p style="font-family: 'Kanit';color: grey;">No custom workouts available.</p>`;
+  } else {
+    customWorkoutCards.forEach(card => {
+      customArea.append(card);
+      addCardEventListener(card, addedWorkouts, totalWorkoutTime, selected, pointer);
     });
+  }
+  regularWorkoutCards.forEach(card => {
+    workoutCardsDiv.append(card);
+    addCardEventListener(card, addedWorkouts, totalWorkoutTime, selected, pointer);
   });
 
   document.querySelector('#createWorkout').addEventListener('click', async () => {
@@ -262,7 +221,7 @@ async function createPlan(workoutName, username) {
         const planData = await planResponse.json();
         if (planData && planData.planID) {
           const planID = planData.planID;
-          window.location.href = `/userWorkoutArea.html?planID=${planID}`;
+          window.location.href = `/assets/pages/userWorkoutArea.html?planID=${planID}`;
           notify('Failed to retrieve plan ID.', 'red');
         }
       } else {
@@ -270,6 +229,81 @@ async function createPlan(workoutName, username) {
       }
     } else {
       notify('Error fetching user data', 'red');
+    }
+  });
+}
+
+function addCardEventListener(card, addedWorkouts, totalWorkoutTime, selected, pointer) {
+  card.addEventListener('click', () => {
+    const workoutTitle = card.querySelector('h1').textContent;
+    const workoutId = card.id;
+    const workoutTime = parseInt(card.querySelector('p').textContent);
+    const workoutSets = card.querySelector('a').textContent;
+    const workoutImageSrc = card.querySelector('img').src;
+
+    if (!addedWorkouts.has(workoutTitle)) {
+      addedWorkouts.set(workoutTitle, workoutId);
+      totalWorkoutTime += workoutTime;
+
+      document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
+
+      const workoutDiv = document.createElement('div');
+      workoutDiv.setAttribute('class', 'selectedCards');
+
+      const workoutImage = document.createElement('img');
+      workoutImage.src = workoutImageSrc;
+      workoutImage.alt = 'Workout Image';
+      workoutDiv.appendChild(workoutImage);
+
+      const textContentDiv = document.createElement('div');
+      textContentDiv.setAttribute('class', 'textContent');
+
+      const textContentDetails2 = document.createElement('div');
+      textContentDetails2.setAttribute('id', 'textContentDetails2');
+
+      const workoutTimeP = document.createElement('p');
+      workoutTimeP.style.color = '#b67806';
+      workoutTimeP.textContent = `${workoutTime} minutes`;
+
+      textContentDetails2.appendChild(workoutTimeP);
+
+      const textContentDetails1 = document.createElement('div');
+      textContentDetails1.setAttribute('id', 'textContentDetails1');
+
+      const workoutTitleH1 = document.createElement('h1');
+      workoutTitleH1.textContent = workoutTitle;
+
+      const workoutRepsP = document.createElement('p');
+      workoutRepsP.textContent = workoutSets;
+
+      textContentDetails1.appendChild(workoutTitleH1);
+      textContentDetails1.appendChild(workoutRepsP);
+      textContentDiv.appendChild(textContentDetails2);
+      textContentDiv.appendChild(textContentDetails1);
+      workoutDiv.appendChild(textContentDiv);
+
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'X';
+      textContentDetails2.appendChild(removeButton);
+      let poo = document.createElement("div");
+      poo.id = "changeMe";
+      poo.appendChild(workoutDiv);
+      selected.append(poo);
+
+      notify(`Added ${workoutTitle}`, 'green');
+      if (pointer) {
+        pointer.remove();
+        pointer = null;
+      }
+      removeButton.addEventListener('click', () => {
+        addedWorkouts.delete(workoutTitle);
+        totalWorkoutTime -= workoutTime;
+        document.getElementById('totalWorkoutTime').textContent = totalWorkoutTime + ' minutes';
+        notify(`Removed ${workoutTitle}`, 'red');
+        workoutDiv.remove();
+      });
+    } else {
+      notify(`${workoutTitle} has already been added.`, 'red');
     }
   });
 }

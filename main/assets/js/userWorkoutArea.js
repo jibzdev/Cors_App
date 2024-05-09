@@ -10,7 +10,7 @@ const music = new Audio(songs[Math.floor(Math.random() * songs.length)]);
 
 // Fetch workout details from server
 async function fetchWorkoutDetails(id) {
-  const response = await fetch(`./getWorkout/${id}`);
+  const response = await fetch(`/getWorkout/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch workout details: ' + response.statusText);
   }
@@ -94,9 +94,12 @@ async function fetchWorkoutDetails(id) {
         div.appendChild(icon);
         div.appendChild(timeRemaining);
 
-        const imagineName = workout.Workout_Name.toLowerCase().replace(/[\s\-]/g, '');
+        const validWorkouts = ['backflicks', 'battleropes', 'burpees', 'diamondpushups', 'highknees', 'lunges', 'mountainclimbers', 'planks', 'pushups', 'russiantwists', 'skippingrope', 'sprintintervals', 'squats'];
+        const workoutNameFormatted = workout.Workout_Name.toLowerCase().replace(/[\s\-]/g, '');
+        const imageName = validWorkouts.includes(workoutNameFormatted) ? workoutNameFormatted : 'default';
+
         screen.innerHTML = `
-                <img src="/assets/img/gifs/${imagineName}.gif">
+                <img src="/assets/img/gifs/${imageName}.gif">
                 <p>${workout.Workout_Description}</p>
                 <div id="extraInfo">
                 <p><i class="fa-solid fa-pencil" style='transform: rotate(270deg);color: #b67806;'></i> ${workout.Workout_Name}</p>
@@ -235,7 +238,7 @@ function getUserDefinedRestTime() {
 function displayWorkout(workout) {
   if (!workout) {
     const workoutInfo = `
-        <img src="assets/img/workoutImgs/finished.jpg">
+        <img src="/assets/img/workoutImgs/finished.jpg">
         <div id="textNext">
             <p>Final Workout</p>
         </div>    
@@ -243,8 +246,9 @@ function displayWorkout(workout) {
     document.querySelector('#upNext').classList = 'fade';
     document.querySelector('#upNext').innerHTML = workoutInfo;
   } else {
+    const workoutImageSrc = workout.Workout_ID > 13 ? '/assets/img/selection3.png' : `/assets/img/workoutImgs/${workout.Workout_ID}.jpg`;
     const workoutInfo = `
-        <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
+        <img src="${workoutImageSrc}">
         <div id="textNext">
             <h1>Up Next</h1>
             <p>${workout.Workout_Name}</p>
@@ -268,7 +272,7 @@ function showAllWorkoutsButton(workoutDetails) {
       const workoutElement = document.createElement('div');
       workoutElement.id = 'workoutElementCard';
       workoutElement.innerHTML = `
-            <img src="assets/img/workoutImgs/${workout.Workout_ID}.jpg">
+            <img src="/assets/img/workoutImgs/${workout.Workout_ID}.jpg">
             <h3>${workout.Workout_Name}</h3>
             <p>${workout.Workout_Duration / 60} Minutes</p>`;
       allWorkoutsDiv.appendChild(workoutElement);
@@ -409,7 +413,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const id = params.get('planID');
     if (id) {
       try {
-        const response = await fetch(`./getWorkout/${id}`);
+        const response = await fetch(`/getWorkout/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch workout details: ' + response.statusText);
         }

@@ -65,7 +65,7 @@ app.post('/updateWorkoutDurations', asyncWrap(updateWorkoutDurations));
 // Creates a new user in the database
 async function sendNewUser(req, res) {
   const data = req.body;
-  await console.log('Received User Data: ', data);
+  await console.log('Created User: ', data);
   try {
     await databaseCMDS.createUser(data);
     res.status(200).send('User created successfully');
@@ -101,7 +101,7 @@ async function getUserIDHandler(req, res) {
 // Creates a new workout plan and returns the plan ID
 async function sendNewWorkoutPlan(req, res) {
   const data = req.body;
-  console.log('Received User Plan: ', data);
+  console.log('Created Plan: ', data);
   try {
     const planID = await databaseCMDS.createPlan(data);
     if (planID) {
@@ -151,14 +151,36 @@ async function getWorkout(req, res) {
 app.get('/getWorkout/:workoutID', asyncWrap(getWorkout));
 
 
+
+// Create new Workout
+async function sendNewWorkout(req, res) {
+  const data = req.body;
+  console.log('Created Workout: ', data);
+  try {
+    const workoutID = await databaseCMDS.createWorkout(data);
+    if (workoutID) {
+      res.status(200).json({ message: "Workout Created", workoutID });
+    } else {
+      throw new Error('Workout ID not returned');
+    }
+  } catch (error) {
+    console.error('Error creating workout:', error);
+    res.status(500).send('Failed to create workout due to an internal error.');
+  }
+}
+
+app.post('/createWorkout', asyncWrap(sendNewWorkout));
+
 // handle Pages and non existant pages
 const handlePage = (page) => (req, res) => {
-  res.sendFile(`${__dirname}/main/${page}.html`);
+  res.sendFile(`${__dirname}/main/assets/pages/${page}.html`);
 };
+
 app.get('/admin', handlePage('admin'));
 app.get('/homepage', handlePage('userArea'));
 app.get('/newWorkout', handlePage('userArea'));
 app.get('/createPlan', handlePage('userArea'));
+app.get('/createNewWorkout', handlePage('createWorkout'));
 app.get('/savedWorkouts', handlePage('userSavedWorkouts'));
 
 const handleError = () => (req, res) => {

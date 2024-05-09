@@ -58,7 +58,7 @@ function displayWorkoutPlans(workoutPlans) {
 
     const loadButton = document.createElement('button');
     loadButton.textContent = 'Load';
-    loadButton.addEventListener('click', () => { window.location.href = `userWorkoutArea.html?planID=${plan.Plan_ID}`; });
+    loadButton.addEventListener('click', () => { window.location.href = `/assets/pages/userWorkoutArea.html?planID=${plan.Plan_ID}`; });
     cardDiv.appendChild(loadButton);
 
     const deleteButton = document.createElement('button');

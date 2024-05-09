@@ -114,11 +114,11 @@
 
 #content {
     display: flex;
-    flex-wrap: wrap;
-    align-content: center;
     justify-content: center;
     gap: 20px;
-    margin-top: 10vw;
+    align-content: center;
+    flex-wrap: wrap;
+    margin-top: 20vh;
 }
 
 
@@ -262,14 +262,41 @@
 
 #workoutCardsDiv{
     display: flex;
-    justify-content: center;
     align-items: center;
+    align-content: center;
+    justify-content: center;
     flex-wrap: wrap;
-    flex-direction: column;
+    gap: 25px;
 }
 
 #pointer{
     font-family: "Kanit";
     color: grey;
     margin: 25px;
+}
+
+#customArea{
+    border-bottom: #b67806 1px solid;
+    width: 91%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-bottom: 25px;
+    padding: 25px;
+    gap: 20px;
+}
+
+#changeMe{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#newWorkout img, #savedWorkout img, #createNewWorkout img{
+    width: 240.75px;
+    height: 175px;
 }

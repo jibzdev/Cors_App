@@ -1,0 +1,88 @@
+#workoutForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-family: "Kanit";
+}
+
+#workoutForm input {
+    background: none;
+    border: rgb(70, 70, 70) solid 1px;
+    width: 250px;
+    height: 20px;
+    padding: 5px;
+    outline: none;
+    color: white;
+    border-radius: 5px;
+    transition: .2s ease-in-out all;
+    cursor: pointer;
+    font-family: "Kanit";
+}
+#workoutForm label{
+    font-size: 1.7vh;
+}
+
+#workoutForm textarea{
+    border: rgb(70, 70, 70) solid 1px;
+    background: #121212;
+    width: 350px;
+    height: 120px;
+    overflow: hidden;
+    resize: none;
+    color: white;
+    font-family: "Kanit";
+}
+#workoutForm button{
+    padding: 15px;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    transition: .2s ease-in-out;
+    font-size: 1.6vh;
+    font-family: "Kanit";
+    cursor: pointer;
+}
+
+#workoutForm button:hover {
+    color: rgb(190, 135, 32);
+}
+#content2{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-top: 10vh;
+    gap: 15vh;
+}
+
+@media (max-width: 768px) {
+    #content2 {
+        flex-direction: column;
+    }
+}
+
+#mockupCustomCard img{
+    border-radius: 10px 10px 0 0;
+    height: 300px;
+    width: 300px;
+    margin-bottom: -5px;
+}
+
+#infoDiv{
+    background-color: #2b2b2b;
+    border-radius: 0 0 10px 10px;
+    padding: 15px;
+}
+
+.duration{
+    background-color: #1b1b1b;
+    text-align: center;
+}
+
+.sets{
+    color: orange;
+}

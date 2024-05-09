@@ -221,7 +221,7 @@ function login() {
     if (response.ok) {
       localStorage.setItem('userLoggedIn', 'true');
       localStorage.setItem('userName', payload.username);
-      location.href = 'userArea.html';
+      location.href = '/homepage';
     } else {
       notify('Incorrect Details.', 'red');
     }

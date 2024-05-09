@@ -131,3 +131,9 @@ export async function deletePlan(planID) {
   const result = await db.run('DELETE FROM WorkoutPlans WHERE Plan_ID = ?', planID);
   return result.changes > 0;
 }
+
+// createing new workout
+export async function createWorkout(workoutDetails) {
+  const db = await connectDB;
+  return db.run('INSERT INTO Workouts (Workout_Name, Workout_Description, Workout_Duration, Workout_Sets, isCustom) VALUES (?, ?, ?, ?, ?)', [workoutDetails.workoutName, workoutDetails.workoutDescription, workoutDetails.workoutDuration, workoutDetails.workoutSets, workoutDetails.isCustom]);
+}
